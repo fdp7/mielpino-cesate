@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Minus, Plus, X } from "lucide-react";
@@ -22,7 +23,13 @@ interface CartProps {
 }
 
 const Cart = ({ isOpen, onOpenChange, items, onUpdateQuantity, onRemoveItem }: CartProps) => {
+  const navigate = useNavigate();
   const subtotal = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+  const handlePayment = () => {
+    navigate("/checkout", { state: { cartItems: items } });
+    onOpenChange(false);
+  };
 
   return (
     <Sheet open={isOpen} onOpenChange={onOpenChange}>
@@ -105,7 +112,10 @@ const Cart = ({ isOpen, onOpenChange, items, onUpdateQuantity, onRemoveItem }: C
                 </p>
               </div>
               
-              <Button className="w-full bg-mava-orange hover:bg-mava-orange/90 text-white font-semibold py-3 rounded-full">
+              <Button 
+                className="w-full bg-mava-orange hover:bg-mava-orange/90 text-white font-semibold py-3 rounded-full"
+                onClick={handlePayment}
+              >
                 Payment
               </Button>
             </div>
