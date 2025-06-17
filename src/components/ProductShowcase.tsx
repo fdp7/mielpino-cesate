@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Can3D from "./Can3D";
@@ -40,6 +41,7 @@ const products: Product[] = [
 ];
 
 const ProductShowcase = () => {
+  const navigate = useNavigate();
   const [currentProductIndex, setCurrentProductIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
 
@@ -181,6 +183,7 @@ const ProductShowcase = () => {
         {/* Product Button */}
         <div className="mt-12">
           <Button 
+            onClick={() => navigate(`/product/${currentProduct.id}`)}
             className={`${currentProduct.btnColor} hover:opacity-90 text-white font-semibold px-8 py-4 rounded-full text-lg transition-all duration-500 ${
               isAnimating ? 'scale-95 opacity-50' : 'scale-100 opacity-100'
             }`}
