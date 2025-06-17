@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import Can3D from "./Can3D";
 
 interface Product {
   id: string;
@@ -155,12 +156,12 @@ const ProductShowcase = () => {
             <ChevronLeft className="h-6 w-6 text-foreground" />
           </Button>
 
-          {/* Product Can */}
+          {/* Product Can - 3D */}
           <div className={`transition-all duration-500 ${isAnimating ? 'scale-95 opacity-50' : 'scale-100 opacity-100'}`}>
-            <img 
-              src={currentProduct.canImage} 
-              alt={currentProduct.flavor}
-              className="w-64 h-auto md:w-80 drop-shadow-2xl"
+            <Can3D 
+              color={currentProduct.bgColor}
+              flavor={currentProduct.flavor}
+              isAnimating={isAnimating}
             />
           </div>
 
