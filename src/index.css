@@ -37,20 +37,23 @@
     --radius: 0.5rem;
 
     --sidebar-background: 0 0% 98%;
-
     --sidebar-foreground: 240 5.3% 26.1%;
-
     --sidebar-primary: 240 5.9% 10%;
-
     --sidebar-primary-foreground: 0 0% 98%;
-
     --sidebar-accent: 240 4.8% 95.9%;
-
     --sidebar-accent-foreground: 240 5.9% 10%;
-
     --sidebar-border: 220 13% 91%;
-
     --sidebar-ring: 217.2 91.2% 59.8%;
+
+    /* MAVA Brand Colors */
+    --mava-sage: 115 30% 70%;
+    --mava-coral: 10 80% 70%;
+    --mava-yellow: 45 100% 70%;
+    --mava-orange: 25 90% 65%;
+    --mava-blue: 210 80% 70%;
+    --mava-green: 130 60% 45%;
+    --mava-mint: 150 50% 75%;
+    --mava-pink: 340 70% 75%;
   }
 
   .dark {
