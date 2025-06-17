@@ -5,6 +5,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { ArrowLeft, Minus, Plus } from "lucide-react";
 import Can3D from "@/components/Can3D";
 import Header from "@/components/Header";
+import Cart from "@/components/Cart";
 
 interface Product {
   id: string;
@@ -15,6 +16,15 @@ interface Product {
   price: string;
   subtitle: string;
   description: string;
+}
+
+interface CartItem {
+  id: string;
+  name: string;
+  flavor: string;
+  size: string;
+  price: number;
+  quantity: number;
 }
 
 const products: Record<string, Product> = {
@@ -55,6 +65,8 @@ const ProductDetail = () => {
   const navigate = useNavigate();
   const [quantity, setQuantity] = useState(1);
   const [selectedSize, setSelectedSize] = useState("12 x 355ml");
+  const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [isCartOpen, setIsCartOpen] = useState(false);
 
   const product = productId ? products[productId] : null;
 
@@ -65,6 +77,45 @@ const ProductDetail = () => {
 
   const handleQuantityChange = (delta: number) => {
     setQuantity(prev => Math.max(1, prev + delta));
+  };
+
+  const handleAddToCart = () => {
+    if (!product) return;
+    
+    const newItem: CartItem = {
+      id: `${product.id}-${selectedSize}`,
+      name: product.name,
+      flavor: product.flavor,
+      size: selectedSize,
+      price: parseFloat(product.price.replace('$', '')),
+      quantity: quantity
+    };
+
+    setCartItems(prev => {
+      const existingItem = prev.find(item => item.id === newItem.id);
+      if (existingItem) {
+        return prev.map(item =>
+          item.id === newItem.id
+            ? { ...item, quantity: item.quantity + quantity }
+            : item
+        );
+      }
+      return [...prev, newItem];
+    });
+    
+    setIsCartOpen(true);
+  };
+
+  const handleUpdateCartQuantity = (id: string, newQuantity: number) => {
+    setCartItems(prev =>
+      prev.map(item =>
+        item.id === id ? { ...item, quantity: newQuantity } : item
+      )
+    );
+  };
+
+  const handleRemoveCartItem = (id: string) => {
+    setCartItems(prev => prev.filter(item => item.id !== id));
   };
 
   return (
@@ -168,6 +219,7 @@ const ProductDetail = () => {
               {/* Add to cart button */}
               <Button 
                 className={`w-full ${product.btnColor} hover:opacity-90 text-white font-semibold py-4 text-lg rounded-xl transition-all duration-300`}
+                onClick={handleAddToCart}
               >
                 Add to cart
               </Button>
@@ -203,6 +255,14 @@ const ProductDetail = () => {
           </div>
         </div>
       </div>
+      
+      <Cart
+        isOpen={isCartOpen}
+        onOpenChange={setIsCartOpen}
+        items={cartItems}
+        onUpdateQuantity={handleUpdateCartQuantity}
+        onRemoveItem={handleRemoveCartItem}
+      />
     </div>
   );
 };
