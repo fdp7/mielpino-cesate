@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import Can3D from "./Can3D";
 
 const ScrollSection = () => {
   const [scrollY, setScrollY] = useState(0);
@@ -12,13 +11,13 @@ const ScrollSection = () => {
       const currentScrollY = window.scrollY;
       setScrollY(currentScrollY);
       
-      // Show first card when user scrolls to this section
-      if (currentScrollY > window.innerHeight * 1.2) {
+      // Show first card when user scrolls to this section  
+      if (currentScrollY > window.innerHeight * 1.4) {
         setShowFirstCard(true);
       }
       
       // Show second card when user scrolls further
-      if (currentScrollY > window.innerHeight * 1.6) {
+      if (currentScrollY > window.innerHeight * 1.8) {
         setShowSecondCard(true);
       }
     };
@@ -28,7 +27,7 @@ const ScrollSection = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-mava-green relative overflow-hidden">
+    <div className="min-h-screen bg-mava-sage relative overflow-hidden">
       {/* Background decorative elements */}
       <div className="absolute inset-0 overflow-hidden">
         {/* Decorative wave */}
@@ -57,19 +56,6 @@ const ScrollSection = () => {
           </div>
         </div>
 
-        {/* 3D Can with scroll animation */}
-        <div 
-          className="transition-transform duration-500 ease-out"
-          style={{
-            transform: `translateY(${Math.min(scrollY * 0.1, 100)}px)`
-          }}
-        >
-          <Can3D 
-            color="bg-mava-green"
-            flavor="Energy Infusion"
-            isAnimating={false}
-          />
-        </div>
       </div>
 
       {/* Sliding cards */}

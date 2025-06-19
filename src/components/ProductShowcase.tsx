@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -44,8 +44,18 @@ const ProductShowcase = () => {
   const navigate = useNavigate();
   const [currentProductIndex, setCurrentProductIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [scrollY, setScrollY] = useState(0);
 
   const currentProduct = products[currentProductIndex];
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollY(window.scrollY);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const handlePrevious = () => {
     if (isAnimating) return;
@@ -70,7 +80,7 @@ const ProductShowcase = () => {
   };
 
   return (
-    <div className={`min-h-screen relative overflow-hidden transition-all duration-700 ease-in-out ${currentProduct.bgColor}`}>
+    <div className={`min-h-screen relative overflow-hidden ${currentProduct.bgColor}`}>
       {/* Background Decorative Elements */}
       <div className="absolute inset-0 overflow-hidden">
         {/* Strawberry-like shape with patterns */}
@@ -158,8 +168,13 @@ const ProductShowcase = () => {
             <ChevronLeft className="h-6 w-6 text-foreground" />
           </Button>
 
-          {/* Product Can - 3D */}
-          <div className={`transition-all duration-500 ${isAnimating ? 'scale-95 opacity-50' : 'scale-100 opacity-100'}`}>
+          {/* Product Can - 3D with scroll animation */}
+          <div 
+            className={`transition-all duration-500 ${isAnimating ? 'scale-95 opacity-50' : 'scale-100 opacity-100'}`}
+            style={{
+              transform: `translateY(${Math.min(scrollY * 0.3, 400)}px)`
+            }}
+          >
             <Can3D 
               color={currentProduct.bgColor}
               flavor={currentProduct.flavor}
