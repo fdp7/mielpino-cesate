@@ -5,8 +5,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { ArrowLeft } from "lucide-react";
 import Header from "@/components/Header";
+import confetti from "canvas-confetti";
 
 interface CartItem {
   id: string;
@@ -23,9 +25,9 @@ interface CheckoutData {
   lastName: string;
   address: string;
   city: string;
+  province: string;
   postalCode: string;
   phone: string;
-  paymentMethod: string;
 }
 
 const Checkout = () => {
@@ -33,16 +35,16 @@ const Checkout = () => {
   const location = useLocation();
   const cartItems: CartItem[] = location.state?.cartItems || [];
   
-  const [paymentMethod, setPaymentMethod] = useState("cash");
+  const [showSuccessDialog, setShowSuccessDialog] = useState(false);
   const [formData, setFormData] = useState<CheckoutData>({
     email: "",
     firstName: "",
     lastName: "",
     address: "",
     city: "",
+    province: "",
     postalCode: "",
-    phone: "",
-    paymentMethod: "cash"
+    phone: ""
   });
 
   const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
@@ -56,9 +58,20 @@ const Checkout = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission
-    console.log("Order submitted:", { ...formData, cartItems, total });
-    // Navigate to success page or handle payment
+    
+    // Trigger confetti
+    confetti({
+      particleCount: 100,
+      spread: 70,
+      origin: { y: 0.6 }
+    });
+    
+    // Show success dialog
+    setShowSuccessDialog(true);
+  };
+
+  const handleBackToHome = () => {
+    navigate("/");
   };
 
   return (
@@ -79,36 +92,8 @@ const Checkout = () => {
         <div className="grid lg:grid-cols-2 gap-8">
           {/* Left side - Checkout form */}
           <div className="space-y-6">
-            <h1 className="text-2xl font-bold">Express checkout</h1>
+            <h1 className="text-2xl font-bold">Checkout</h1>
             
-            {/* Payment method buttons */}
-            <div className="grid grid-cols-3 gap-4">
-              <Button
-                variant={paymentMethod === "cash" ? "default" : "outline"}
-                onClick={() => setPaymentMethod("cash")}
-                className="h-12"
-              >
-                Cash
-              </Button>
-              <Button
-                variant={paymentMethod === "paypal" ? "default" : "outline"}
-                onClick={() => setPaymentMethod("paypal")}
-                className="h-12 bg-yellow-500 hover:bg-yellow-600 text-white"
-                style={{ backgroundColor: paymentMethod === "paypal" ? "#0070ba" : undefined }}
-              >
-                PayPal
-              </Button>
-              <Button
-                variant={paymentMethod === "revolut" ? "default" : "outline"}
-                onClick={() => setPaymentMethod("revolut")}
-                className="h-12"
-              >
-                Revolut
-              </Button>
-            </div>
-
-            <div className="text-center text-muted-foreground">OR</div>
-
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* Contact section */}
               <div className="space-y-4">
@@ -135,19 +120,6 @@ const Checkout = () => {
               <div className="space-y-4">
                 <h2 className="text-lg font-semibold">Delivery</h2>
                 
-                <div>
-                  <Label htmlFor="country">Country</Label>
-                  <Select defaultValue="canada">
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="canada">Canada</SelectItem>
-                      <SelectItem value="us">United States</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <Label htmlFor="firstName">First name</Label>
@@ -191,7 +163,7 @@ const Checkout = () => {
                   </div>
                   <div>
                     <Label htmlFor="province">Province</Label>
-                    <Select>
+                    <Select value={formData.province} onValueChange={(value) => handleInputChange("province", value)} required>
                       <SelectTrigger>
                         <SelectValue placeholder="Province" />
                       </SelectTrigger>
@@ -299,6 +271,29 @@ const Checkout = () => {
           </div>
         </div>
       </div>
+      
+      {/* Success Dialog */}
+      <Dialog open={showSuccessDialog} onOpenChange={() => {}}>
+        <DialogContent className="sm:max-w-md" onPointerDownOutside={(e) => e.preventDefault()}>
+          <DialogTitle className="text-center text-2xl font-bold text-primary">Grazie!</DialogTitle>
+          <div className="text-center space-y-4 py-6">
+            <div>
+              <p className="text-lg font-semibold">Data di consegna</p>
+              <p className="text-muted-foreground">Settembre 2025</p>
+            </div>
+            <div>
+              <p className="text-lg font-semibold">Importo totale</p>
+              <p className="text-2xl font-bold">CAD ${total.toFixed(2)}</p>
+            </div>
+            <Button 
+              onClick={handleBackToHome}
+              className="w-full bg-primary hover:bg-primary/90 mt-6"
+            >
+              Back to home
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
