@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Can3D from "./Can3D";
 
@@ -45,12 +46,25 @@ const ProductShowcase = () => {
   const [currentProductIndex, setCurrentProductIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
   const [scrollY, setScrollY] = useState(0);
+  const [showFirstCard, setShowFirstCard] = useState(false);
+  const [showSecondCard, setShowSecondCard] = useState(false);
 
   const currentProduct = products[currentProductIndex];
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrollY(window.scrollY);
+      const currentScrollY = window.scrollY;
+      setScrollY(currentScrollY);
+      
+      // Show first card when user scrolls down
+      if (currentScrollY > window.innerHeight * 0.8) {
+        setShowFirstCard(true);
+      }
+      
+      // Show second card when user scrolls further
+      if (currentScrollY > window.innerHeight * 1.2) {
+        setShowSecondCard(true);
+      }
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -80,7 +94,7 @@ const ProductShowcase = () => {
   };
 
   return (
-    <div className={`min-h-screen relative overflow-hidden ${currentProduct.bgColor}`}>
+    <div className={`min-h-[200vh] relative overflow-hidden ${currentProduct.bgColor}`}>
       {/* Background Decorative Elements */}
       <div className="absolute inset-0 overflow-hidden">
         {/* Strawberry-like shape with patterns */}
@@ -172,7 +186,7 @@ const ProductShowcase = () => {
           <div 
             className={`transition-all duration-500 ${isAnimating ? 'scale-95 opacity-50' : 'scale-100 opacity-100'}`}
             style={{
-              transform: `translateY(${Math.min(scrollY * 0.3, 400)}px)`
+              transform: `translateY(${Math.min(scrollY * 0.5, window.innerHeight * 0.8)}px)`
             }}
           >
             <Can3D 
@@ -206,6 +220,64 @@ const ProductShowcase = () => {
             {currentProduct.flavor}
           </Button>
         </div>
+
+        {/* Content Section that appears when scrolling */}
+        <div 
+          className="absolute top-full left-1/2 transform -translate-x-1/2 text-center"
+          style={{
+            transform: `translateX(-50%) translateY(${-scrollY * 0.3}px)`
+          }}
+        >
+          <div className="inline-block bg-background text-mava-green px-8 py-3 rounded-full font-semibold text-lg mb-6">
+            SANS CRASH
+          </div>
+          <div className="text-background text-center max-w-md mx-auto">
+            <p className="text-xl font-medium mb-2">Une vague d'énergie tout en douceur.</p>
+            <p className="text-lg opacity-90">Pour t'activer sans contrecoup.</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Sliding cards */}
+      <div className="absolute right-8 top-1/2 transform -translate-y-1/2 space-y-8">
+        {/* First card */}
+        <Card 
+          className={`w-80 bg-background/95 backdrop-blur-sm shadow-lg transition-all duration-700 ease-out ${
+            showFirstCard ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'
+          }`}
+        >
+          <CardContent className="p-6">
+            <h3 className="text-xl font-semibold text-mava-green mb-3">Énergie Naturelle</h3>
+            <p className="text-muted-foreground mb-4">
+              Une formule unique qui te donne de l'énergie progressive et durable, 
+              sans les effets secondaires des boissons énergisantes traditionnelles.
+            </p>
+            <div className="flex items-center space-x-2">
+              <div className="w-3 h-3 bg-mava-green rounded-full"></div>
+              <span className="text-sm font-medium">100% Naturel</span>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Second card */}
+        <Card 
+          className={`w-80 bg-background/95 backdrop-blur-sm shadow-lg transition-all duration-700 ease-out ${
+            showSecondCard ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'
+          }`}
+          style={{ transitionDelay: '200ms' }}
+        >
+          <CardContent className="p-6">
+            <h3 className="text-xl font-semibold text-mava-green mb-3">Performance Optimale</h3>
+            <p className="text-muted-foreground mb-4">
+              Améliore ta concentration et tes performances sans stress ni nervosité. 
+              L'énergie parfaite pour tes journées les plus intenses.
+            </p>
+            <div className="flex items-center space-x-2">
+              <div className="w-3 h-3 bg-mava-orange rounded-full"></div>
+              <span className="text-sm font-medium">Longue Durée</span>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
