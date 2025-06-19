@@ -56,14 +56,18 @@ const ProductShowcase = () => {
       const currentScrollY = window.scrollY;
       setScrollY(currentScrollY);
       
-      // Show first card when user scrolls down
-      if (currentScrollY > window.innerHeight * 0.8) {
+      // Show cards only after can has disappeared (scrolled past viewport height)
+      if (currentScrollY > window.innerHeight) {
         setShowFirstCard(true);
+      } else {
+        setShowFirstCard(false);
       }
       
-      // Show second card when user scrolls further
-      if (currentScrollY > window.innerHeight * 1.2) {
+      // Show second card after first card is visible
+      if (currentScrollY > window.innerHeight + 200) {
         setShowSecondCard(true);
+      } else {
+        setShowSecondCard(false);
       }
     };
 
@@ -94,7 +98,8 @@ const ProductShowcase = () => {
   };
 
   return (
-    <div className={`min-h-[200vh] relative overflow-hidden ${currentProduct.bgColor}`}>
+    <>
+    <div className={`min-h-screen relative overflow-hidden ${currentProduct.bgColor}`}>
       {/* Background Decorative Elements */}
       <div className="absolute inset-0 overflow-hidden">
         {/* Strawberry-like shape with patterns */}
@@ -186,7 +191,7 @@ const ProductShowcase = () => {
           <div 
             className={`transition-all duration-500 ${isAnimating ? 'scale-95 opacity-50' : 'scale-100 opacity-100'}`}
             style={{
-              transform: `translateY(${Math.min(scrollY * 0.5, window.innerHeight * 0.8)}px)`
+              transform: `translateY(${scrollY}px)`
             }}
           >
             <Can3D 
@@ -210,7 +215,12 @@ const ProductShowcase = () => {
         </div>
 
         {/* Product Button */}
-        <div className="mt-12">
+        <div 
+          className="mt-12"
+          style={{
+            transform: `translateY(${scrollY}px)`
+          }}
+        >
           <Button 
             onClick={() => navigate(`/product/${currentProduct.id}`)}
             className={`${currentProduct.btnColor} hover:opacity-90 text-white font-semibold px-8 py-4 rounded-full text-lg transition-all duration-500 ${
@@ -221,25 +231,10 @@ const ProductShowcase = () => {
           </Button>
         </div>
 
-        {/* Content Section that appears when scrolling */}
-        <div 
-          className="absolute top-full left-1/2 transform -translate-x-1/2 text-center"
-          style={{
-            transform: `translateX(-50%) translateY(${-scrollY * 0.3}px)`
-          }}
-        >
-          <div className="inline-block bg-background text-mava-green px-8 py-3 rounded-full font-semibold text-lg mb-6">
-            SANS CRASH
-          </div>
-          <div className="text-background text-center max-w-md mx-auto">
-            <p className="text-xl font-medium mb-2">Une vague d'énergie tout en douceur.</p>
-            <p className="text-lg opacity-90">Pour t'activer sans contrecoup.</p>
-          </div>
-        </div>
       </div>
 
-      {/* Sliding cards */}
-      <div className="absolute right-8 top-1/2 transform -translate-y-1/2 space-y-8">
+      {/* Sliding cards - fixed position */}
+      <div className="fixed right-8 top-1/2 transform -translate-y-1/2 space-y-8 z-20">
         {/* First card */}
         <Card 
           className={`w-80 bg-background/95 backdrop-blur-sm shadow-lg transition-all duration-700 ease-out ${
@@ -280,6 +275,10 @@ const ProductShowcase = () => {
         </Card>
       </div>
     </div>
+    
+    {/* Scroll area to enable scrolling */}
+    <div className="h-screen"></div>
+    </>
   );
 };
 
