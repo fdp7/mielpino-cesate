@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight, Heart, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import Header from "@/components/Header";
 
 const recipes = [
@@ -125,31 +126,6 @@ const Learn = () => {
     <div className="min-h-screen bg-background">
       <Header />
       
-      {/* Hero Section */}
-      <section className="relative h-screen flex items-center justify-center bg-gradient-to-br from-muted to-background">
-        <div className="max-w-4xl mx-auto px-6 text-center">
-          <h1 className="text-6xl font-bold text-foreground mb-6">
-            Learn with MAVA
-          </h1>
-          <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-            Discover nutritious recipes, understand ingredient benefits, and build healthy eating habits with our interactive learning platform.
-          </p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
-            <div className="p-6 rounded-lg bg-card">
-              <h3 className="text-xl font-semibold mb-3">Nutritional Values</h3>
-              <p className="text-muted-foreground">Learn about calories, proteins, and essential nutrients in every ingredient.</p>
-            </div>
-            <div className="p-6 rounded-lg bg-card">
-              <h3 className="text-xl font-semibold mb-3">Recipe Discovery</h3>
-              <p className="text-muted-foreground">Explore new recipes tailored to your dietary preferences and goals.</p>
-            </div>
-            <div className="p-6 rounded-lg bg-card">
-              <h3 className="text-xl font-semibold mb-3">Health Insights</h3>
-              <p className="text-muted-foreground">Understand how different foods impact your daily wellness routine.</p>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* Content Section */}
       <section className="py-20 px-6">
@@ -163,34 +139,56 @@ const Learn = () => {
               />
             </div>
             <div>
-              <h2 className="text-4xl font-bold text-foreground mb-6">
-                Nutritional Information
+              <h2 className="text-2xl font-bold text-foreground mb-6 uppercase">
+                Valeur Quotidienne
               </h2>
-              <div className="space-y-4">
-                <div className="grid grid-cols-2 gap-4 p-4 bg-card rounded-lg">
-                  <div>
-                    <span className="font-semibold">Calories</span>
-                    <div className="text-2xl font-bold">50</div>
-                  </div>
-                  <div>
-                    <span className="font-semibold">% Daily Value</span>
-                    <div className="text-sm text-muted-foreground">Based on 2000 calories</div>
-                  </div>
-                </div>
-                <div className="grid grid-cols-3 gap-4 p-4 bg-card rounded-lg text-sm">
-                  <div>
-                    <div className="font-semibold">Lipides</div>
-                    <div>0g</div>
-                  </div>
-                  <div>
-                    <div className="font-semibold">Glucides</div>
-                    <div>13g</div>
-                  </div>
-                  <div>
-                    <div className="font-semibold">Protéines</div>
-                    <div>0g</div>
-                  </div>
-                </div>
+              <div className="bg-card rounded-lg p-6">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="font-bold text-foreground text-base">Teneur</TableHead>
+                      <TableHead className="font-bold text-foreground text-base">% Valeur quotidienne</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    <TableRow>
+                      <TableCell className="font-semibold">Calories</TableCell>
+                      <TableCell className="font-bold text-lg">50</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell>Lipides</TableCell>
+                      <TableCell>0g    0%</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell>Glucides</TableCell>
+                      <TableCell>13g</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell>Sucres</TableCell>
+                      <TableCell>13g    13%</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell>Protéines</TableCell>
+                      <TableCell>0g</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell>Cholestérol</TableCell>
+                      <TableCell>0mg</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell>Sodium</TableCell>
+                      <TableCell>0mg    0%</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell>Potassium</TableCell>
+                      <TableCell>10mg    1%</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell>Calcium</TableCell>
+                      <TableCell>10mg    1%</TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
               </div>
             </div>
           </div>
