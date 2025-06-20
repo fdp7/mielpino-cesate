@@ -303,6 +303,9 @@ const ProductShowcase = () => {
         </Card>
       </div>
     </div>
+    
+    {/* Scroll area to enable scrolling transitions */}
+    <div className="h-screen"></div>
     </>
   );
 };
