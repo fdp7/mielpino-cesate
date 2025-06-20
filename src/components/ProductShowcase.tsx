@@ -305,7 +305,7 @@ const ProductShowcase = () => {
     </div>
     
     {/* Scroll area to enable scrolling transitions */}
-    <div className="h-screen"></div>
+    <div className={`h-screen ${currentProduct.bgColor}`}></div>
     </>
   );
 };
