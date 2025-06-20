@@ -48,6 +48,7 @@ const ProductShowcase = () => {
   const [scrollY, setScrollY] = useState(0);
   const [showFirstCard, setShowFirstCard] = useState(false);
   const [showSecondCard, setShowSecondCard] = useState(false);
+  const [showThirdCard, setShowThirdCard] = useState(false);
 
   const currentProduct = products[currentProductIndex];
 
@@ -68,6 +69,13 @@ const ProductShowcase = () => {
         setShowSecondCard(true);
       } else {
         setShowSecondCard(false);
+      }
+      
+      // Show third card after second card is visible
+      if (currentScrollY > window.innerHeight + 400) {
+        setShowThirdCard(true);
+      } else {
+        setShowThirdCard(false);
       }
     };
 
@@ -273,11 +281,28 @@ const ProductShowcase = () => {
             </div>
           </CardContent>
         </Card>
+
+        {/* Third card */}
+        <Card 
+          className={`w-80 bg-background/95 backdrop-blur-sm shadow-lg transition-all duration-700 ease-out ${
+            showThirdCard ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'
+          }`}
+          style={{ transitionDelay: '400ms' }}
+        >
+          <CardContent className="p-6">
+            <h3 className="text-xl font-semibold text-mava-green mb-3">Sans Crash</h3>
+            <p className="text-muted-foreground mb-4">
+              Une vague d'énergie tout en douceur pour t'activer sans contrecoup. 
+              Fini les chutes d'énergie brutales.
+            </p>
+            <div className="flex items-center space-x-2">
+              <div className="w-3 h-3 bg-mava-blue rounded-full"></div>
+              <span className="text-sm font-medium">Énergie Stable</span>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
-    
-    {/* Scroll area to enable scrolling */}
-    <div className="h-screen"></div>
     </>
   );
 };
