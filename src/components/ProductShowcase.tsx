@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Can3D from "./Can3D";
+import { Link } from "react-router-dom";
 
 interface Product {
   id: string;
@@ -17,28 +18,20 @@ interface Product {
 const products: Product[] = [
   {
     id: "melon-mint",
-    name: "MAVA",
-    flavor: "Melon & Mint",
+    name: "MIELPINO CHIARO",
+    flavor: "Millefiori",
     canImage: "/lovable-uploads/a1e4091c-22b1-4ea4-aee2-4559fec15b82.png",
     bgColor: "bg-mava-sage",
     btnColor: "bg-mava-green"
   },
   {
     id: "berry-blast",
-    name: "MAVA",
-    flavor: "Berry Blast",
+    name: "MIELPINO SCURO",
+    flavor: "Rovo e Mirtillo",
     canImage: "/lovable-uploads/a1e4091c-22b1-4ea4-aee2-4559fec15b82.png",
     bgColor: "bg-mava-coral",
     btnColor: "bg-mava-pink"
   },
-  {
-    id: "citrus-burst",
-    name: "MAVA",
-    flavor: "Citrus Burst",
-    canImage: "/lovable-uploads/a1e4091c-22b1-4ea4-aee2-4559fec15b82.png",
-    bgColor: "bg-mava-yellow",
-    btnColor: "bg-mava-orange"
-  }
 ];
 
 const ProductShowcase = () => {
@@ -56,25 +49,16 @@ const ProductShowcase = () => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
       setScrollY(currentScrollY);
-      
-      // Show cards only after can has disappeared (scrolled past viewport height)
-      if (currentScrollY > window.innerHeight) {
+
+      // Tutte le card appariranno quando si raggiunge una certa altezza
+      if (currentScrollY > window.innerHeight * 0.5 && currentScrollY < window.innerHeight * 1.8) {
         setShowFirstCard(true);
-      } else {
-        setShowFirstCard(false);
-      }
-      
-      // Show second card after first card is visible
-      if (currentScrollY > window.innerHeight + 200) {
         setShowSecondCard(true);
-      } else {
-        setShowSecondCard(false);
-      }
-      
-      // Show third card after second card is visible
-      if (currentScrollY > window.innerHeight + 400) {
         setShowThirdCard(true);
       } else {
+        // Nascondi tutte le card quando si arriva in fondo
+        setShowFirstCard(false);
+        setShowSecondCard(false);
         setShowThirdCard(false);
       }
     };
@@ -303,9 +287,43 @@ const ProductShowcase = () => {
         </Card>
       </div>
     </div>
-    
-    {/* Scroll area to enable scrolling transitions */}
-    <div className={`h-screen ${currentProduct.bgColor}`}></div>
+
+    {/* Scroll area modificata per creare continuità visiva */}
+    <div className={`h-screen ${currentProduct.bgColor} relative`}>
+      {/* Elementi decorativi ripetuti dalla prima sezione per creare continuità */}
+      <div className="absolute inset-0 overflow-hidden opacity-30">
+        <div className="absolute top-20 right-1/4 w-24 h-24 bg-mava-orange rounded-full border-4 border-background/30"></div>
+        <div className="absolute top-1/3 left-20 w-28 h-28">
+          <div className="w-full h-full bg-mava-coral rounded-full relative"></div>
+        </div>
+        <div className="absolute bottom-1/4 right-32 w-20 h-32 bg-mava-green transform rotate-12 rounded-full opacity-70"></div>
+      </div>
+
+      {/* Contenuto informativo nella seconda sezione */}
+      <div className="relative z-10 container mx-auto px-4 py-16 flex flex-col items-center">
+        <Link
+            to="/learn"
+            className="hover:opacity-80 transition-opacity"
+            onClick={() => {
+              // Scorre in cima alla pagina dopo la navigazione
+              setTimeout(() => {
+                window.scrollTo(0, 0);
+              }, 0);
+            }}
+        >
+          <h2 className="text-4xl font-bold text-foreground mb-8 mt-20">Scopri MIELPINO</h2>
+        </Link>
+        <div className="grid md:grid-cols-2 gap-12 items-center">
+          <div className="space-y-6">
+            <h3 className="text-2xl font-semibold text-foreground">100% Naturale</h3>
+            <p className="text-lg text-muted-foreground">
+              Il nostro miele è raccolto con cura dalle api che popolano i boschi di pino della Brianza,
+              garantendo un prodotto puro e ricco di proprietà benefiche.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
     </>
   );
 };
