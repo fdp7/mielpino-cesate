@@ -5,42 +5,29 @@ import { Link } from "react-router-dom";
 const Header = () => {
   return (
     <header className="w-full px-6 py-4">
-      <div className="max-w-7xl mx-auto flex items-center justify-between">
-        {/* Logo */}
-        <Link to="/" className="text-4xl font-bold text-foreground tracking-tight hover:opacity-80">
-          MIELPINO
-        </Link>
+      <div className="max-w-7xl mx-auto flex items-center">
+        {/* Logo (a sinistra) */}
+        <div className="flex-1">
+          <Link to="/" className="text-4xl font-bold text-foreground tracking-tight hover:text-mava-yellow transition-all duration-300">
+            MIELPINO
+          </Link>
+        </div>
 
-        {/* Navigation */}
-        <nav className="hidden md:flex items-center justify-between space-x-6">
-          {/*<Button */}
-          {/*  variant="ghost" */}
-          {/*  className="rounded-full px-6 py-2 text-foreground hover:bg-muted"*/}
-          {/*>*/}
-          {/*  Shop ↓*/}
-          {/*</Button>*/}
-          <Button 
+        {/* Navigation (centro) */}
+        <div className="flex-1 flex justify-center">
+          <Button
             variant="ghost" 
             className="rounded-full px-6 py-2 text-foreground hover:bg-muted"
             asChild
           >
-            <Link to="/learn">Conosci il miele?</Link>
+            <Link to="/learn">Scopri di più</Link>
           </Button>
-          {/*<Button */}
-          {/*  variant="ghost" */}
-          {/*  className="rounded-full px-6 py-2 text-foreground hover:bg-muted"*/}
-          {/*>*/}
-          {/*  Subscription*/}
-          {/*</Button>*/}
-          {/*<Button */}
-          {/*  variant="ghost" */}
-          {/*  className="rounded-full px-6 py-2 text-foreground hover:bg-muted"*/}
-          {/*>*/}
-          {/*  Fr*/}
-          {/*</Button>*/}
-        </nav>
+        </div>
 
-        {/* Right side icons */}
+        {/* Spazio vuoto a destra (per mantenere il bilanciamento) */}
+        <div className="flex-1"></div>
+
+        {/* Right side icons (commentati) */}
         {/*<div className="flex items-center space-x-3">*/}
         {/*  <Button*/}
         {/*    variant="ghost"*/}

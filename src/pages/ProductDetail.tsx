@@ -64,7 +64,7 @@ const ProductDetail = () => {
   const { productId } = useParams<{ productId: string }>();
   const navigate = useNavigate();
   const [quantity, setQuantity] = useState(1);
-  const [selectedSize, setSelectedSize] = useState("12 x 355ml");
+  const [selectedSize, setSelectedSize] = useState("1");
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
 
@@ -184,9 +184,8 @@ const ProductDetail = () => {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="12 x 355ml">12 x 355ml</SelectItem>
-                    <SelectItem value="6 x 355ml">6 x 355ml</SelectItem>
-                    <SelectItem value="24 x 355ml">24 x 355ml</SelectItem>
+                    <SelectItem value="0.5">500 gr</SelectItem>
+                    <SelectItem value="1">1 kg</SelectItem>
                   </SelectContent>
                 </Select>
               </div>

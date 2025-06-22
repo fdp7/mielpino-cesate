@@ -33,14 +33,14 @@ const Cart = ({ isOpen, onOpenChange, items, onUpdateQuantity, onRemoveItem }: C
 
   return (
     <Sheet open={isOpen} onOpenChange={onOpenChange}>
-      <SheetContent className="w-full sm:max-w-lg">
+      <SheetContent className="w-full sm:max-w-lg flex flex-col">
         <SheetHeader>
           <SheetTitle className="text-xl font-semibold">Cart</SheetTitle>
         </SheetHeader>
         
-        <div className="flex flex-col h-full">
+        <div className="flex flex-col h-[calc(100%-180px)] overflow-hidden mb-0">
           {/* Cart Items */}
-          <div className="flex-1 overflow-y-auto py-6">
+          <div className="flex-1 overflow-y-auto py-3">
             {items.length === 0 ? (
               <p className="text-center text-muted-foreground">Your cart is empty</p>
             ) : (
@@ -98,29 +98,29 @@ const Cart = ({ isOpen, onOpenChange, items, onUpdateQuantity, onRemoveItem }: C
               </div>
             )}
           </div>
-          
-          {/* Cart Footer */}
-          {items.length > 0 && (
-            <div className="border-t pt-4 space-y-4">
-              <div className="space-y-2">
-                <div className="flex justify-between text-lg font-semibold">
-                  <span>Subtotal</span>
-                  <span>${subtotal.toFixed(2)}</span>
-                </div>
-                <p className="text-sm text-muted-foreground">
-                  Taxes and shipping costs calculated at checkout
-                </p>
-              </div>
-              
-              <Button 
-                className="w-full bg-mava-orange hover:bg-mava-orange/90 text-white font-semibold py-3 rounded-full"
-                onClick={handlePayment}
-              >
-                Payment
-              </Button>
-            </div>
-          )}
         </div>
+
+        {/* Cart Footer - posizionato con altezza fissa in fondo */}
+        {items.length > 0 && (
+          <div className="border-t pt-2 mt-auto sticky bottom-0 bg-white">
+            <div className="space-y-1 mb-2">
+              <div className="flex justify-between text-lg font-semibold">
+                <span>Subtotal</span>
+                <span>${subtotal.toFixed(2)}</span>
+              </div>
+              <p className="text-sm text-muted-foreground">
+                Taxes and shipping costs calculated at checkout
+              </p>
+            </div>
+
+            <Button
+              className="w-full bg-mava-orange hover:bg-mava-orange/90 text-white font-semibold py-2 rounded-full"
+              onClick={handlePayment}
+            >
+              Payment
+            </Button>
+          </div>
+        )}
       </SheetContent>
     </Sheet>
   );

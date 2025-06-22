@@ -39,9 +39,8 @@ const ProductShowcase = () => {
   const [currentProductIndex, setCurrentProductIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
   const [scrollY, setScrollY] = useState(0);
-  const [showFirstCard, setShowFirstCard] = useState(false);
-  const [showSecondCard, setShowSecondCard] = useState(false);
-  const [showThirdCard, setShowThirdCard] = useState(false);
+  const [showCards, setShowCards] = useState(false);
+  const [showBigText, setShowBigText] = useState(false);
 
   const currentProduct = products[currentProductIndex];
 
@@ -50,16 +49,26 @@ const ProductShowcase = () => {
       const currentScrollY = window.scrollY;
       setScrollY(currentScrollY);
 
-      // Tutte le card appariranno quando si raggiunge una certa altezza
-      if (currentScrollY > window.innerHeight * 0.5 && currentScrollY < window.innerHeight * 1.8) {
-        setShowFirstCard(true);
-        setShowSecondCard(true);
-        setShowThirdCard(true);
-      } else {
-        // Nascondi tutte le card quando si arriva in fondo
-        setShowFirstCard(false);
-        setShowSecondCard(false);
-        setShowThirdCard(false);
+      // Calcola le altezze di soglia in base all'altezza della finestra
+      const cardAppearThreshold = window.innerHeight * 0.3;
+      const cardDisappearThreshold = window.innerHeight * 0.9; // Ridotto da 1.5 a 0.9
+      const bigTextAppearThreshold = window.innerHeight * 1.1; // Ridotto da 1.8 a 1.1
+
+      // Prima fase: le card appaiono quando si inizia a scorrere
+      if (currentScrollY > cardAppearThreshold && currentScrollY < cardDisappearThreshold) {
+        setShowCards(true);
+        setShowBigText(false);
+      }
+      // Seconda fase: le card scompaiono verso sinistra quando si continua a scorrere
+      else if (currentScrollY > cardDisappearThreshold) {
+        setShowCards(false);
+        // Mostra i testi grandi dopo che le card sono scomparse
+        setTimeout(() => setShowBigText(true), 500);
+      }
+      // Quando si torna su, ripristina lo stato
+      else if (currentScrollY < cardAppearThreshold) {
+        setShowCards(false);
+        setShowBigText(false);
       }
     };
 
@@ -91,7 +100,7 @@ const ProductShowcase = () => {
 
   return (
     <>
-    <div className={`min-h-screen relative overflow-hidden ${currentProduct.bgColor}`}>
+    <div className={`min-h-[150vh] relative overflow-hidden ${currentProduct.bgColor}`}>
       {/* Background Decorative Elements */}
       <div className="absolute inset-0 overflow-hidden">
         {/* Strawberry-like shape with patterns */}
@@ -164,29 +173,29 @@ const ProductShowcase = () => {
       </div>
 
       {/* Main Content */}
-      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen pt-20 pb-32">
+      <div className="relative z-30 flex flex-col items-center justify-center min-h-screen pt-20 pb-32 sticky top-0">
         {/* Navigation Arrows */}
-        <div className="flex items-center justify-center space-x-8 md:space-x-32">
+        <div className="flex items-center justify-center space-x-8 md:space-x-32 relative z-50">
           <Button
             variant="ghost"
             size="icon"
             onClick={handlePrevious}
             className={`w-12 h-12 rounded-full bg-background/80 hover:bg-background transition-all duration-300 ${
               isAnimating ? 'opacity-50 cursor-not-allowed' : ''
-            }`}
+            } relative z-50`}
             disabled={isAnimating}
           >
             <ChevronLeft className="h-6 w-6 text-foreground" />
           </Button>
 
           {/* Product Can - 3D with scroll animation */}
-          <div 
+          <div
             className={`transition-all duration-500 ${isAnimating ? 'scale-95 opacity-50' : 'scale-100 opacity-100'}`}
-            style={{
-              transform: `translateY(${scrollY}px)`
-            }}
+            // style={{
+            //   transform: `translateY(${scrollY}px)`
+            // }}
           >
-            <Can3D 
+            <Can3D
               color={currentProduct.bgColor}
               flavor={currentProduct.flavor}
               isAnimating={isAnimating}
@@ -199,7 +208,7 @@ const ProductShowcase = () => {
             onClick={handleNext}
             className={`w-12 h-12 rounded-full bg-background/80 hover:bg-background transition-all duration-300 ${
               isAnimating ? 'opacity-50 cursor-not-allowed' : ''
-            }`}
+            } relative z-50`}
             disabled={isAnimating}
           >
             <ChevronRight className="h-6 w-6 text-foreground" />
@@ -207,89 +216,106 @@ const ProductShowcase = () => {
         </div>
 
         {/* Product Button */}
-        <div 
+        <div
           className="mt-12"
           style={{
-            transform: `translateY(${scrollY}px)`
+            transform: `translateY(${Math.min(scrollY * 0.5, 120)}px)`
           }}
         >
-          <Button 
+          <Button
             onClick={() => navigate(`/product/${currentProduct.id}`)}
             className={`${currentProduct.btnColor} hover:opacity-90 text-white font-semibold px-8 py-4 rounded-full text-lg transition-all duration-500 ${
               isAnimating ? 'scale-95 opacity-50' : 'scale-100 opacity-100'
-            }`}
+            } relative z-40`}
           >
             {currentProduct.flavor}
           </Button>
         </div>
-
       </div>
 
-      {/* Sliding cards - fixed position */}
-      <div className="fixed right-8 top-1/2 transform -translate-y-1/2 space-y-8 z-20">
-        {/* First card */}
-        <Card 
-          className={`w-80 bg-background/95 backdrop-blur-sm shadow-lg transition-all duration-700 ease-out ${
-            showFirstCard ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'
-          }`}
-        >
-          <CardContent className="p-6">
-            <h3 className="text-xl font-semibold text-mava-green mb-3">Énergie Naturelle</h3>
-            <p className="text-muted-foreground mb-4">
-              Une formule unique qui te donne de l'énergie progressive et durable, 
-              sans les effets secondaires des boissons énergisantes traditionnelles.
-            </p>
-            <div className="flex items-center space-x-2">
-              <div className="w-3 h-3 bg-mava-green rounded-full"></div>
-              <span className="text-sm font-medium">100% Naturel</span>
-            </div>
-          </CardContent>
-        </Card>
+      {/* Spazio vuoto per consentire lo scorrimento - ridotto a metà */}
+      <div className="h-[50vh]"></div>
 
-        {/* Second card */}
-        <Card 
-          className={`w-80 bg-background/95 backdrop-blur-sm shadow-lg transition-all duration-700 ease-out ${
-            showSecondCard ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'
-          }`}
-          style={{ transitionDelay: '200ms' }}
-        >
-          <CardContent className="p-6">
-            <h3 className="text-xl font-semibold text-mava-green mb-3">Performance Optimale</h3>
-            <p className="text-muted-foreground mb-4">
-              Améliore ta concentration et tes performances sans stress ni nervosité. 
-              L'énergie parfaite pour tes journées les plus intenses.
-            </p>
-            <div className="flex items-center space-x-2">
-              <div className="w-3 h-3 bg-mava-orange rounded-full"></div>
-              <span className="text-sm font-medium">Longue Durée</span>
-            </div>
-          </CardContent>
-        </Card>
+      {/* Horizontal cards layout - ora usa un posizionamento che evita di interferire con i pulsanti di navigazione */}
+      <div className="fixed top-2/3 left-0 right-0 transform -translate-y-1/2 z-20">
+        <div className="max-w-7xl mx-auto flex justify-between px-4">
+          {/* Left Card */}
+          <Card
+            className={`w-72 bg-background/95 backdrop-blur-sm shadow-lg transition-all duration-700 ease-out ${
+              showCards 
+                ? 'translate-x-0 opacity-100' 
+                : scrollY > window.innerHeight * 0.8 
+                  ? '-translate-x-full opacity-0' 
+                  : '-translate-x-full opacity-0'
+            }`}
+            style={{ transitionDelay: '0ms' }}
+          >
+            <CardContent className="p-6">
+              <h3 className="text-xl font-semibold text-mava-green mb-3">Énergie Naturelle</h3>
+              <p className="text-muted-foreground mb-4">
+                Une formule unique qui te donne de l'énergie progressive et durable,
+                sans les effets secondaires des boissons énergisantes traditionnelles.
+              </p>
+              <div className="flex items-center space-x-2">
+                <div className="w-3 h-3 bg-mava-green rounded-full"></div>
+                <span className="text-sm font-medium">100% Naturel</span>
+              </div>
+            </CardContent>
+          </Card>
 
-        {/* Third card */}
-        <Card 
-          className={`w-80 bg-background/95 backdrop-blur-sm shadow-lg transition-all duration-700 ease-out ${
-            showThirdCard ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'
-          }`}
-          style={{ transitionDelay: '400ms' }}
-        >
-          <CardContent className="p-6">
-            <h3 className="text-xl font-semibold text-mava-green mb-3">Sans Crash</h3>
-            <p className="text-muted-foreground mb-4">
-              Une vague d'énergie tout en douceur pour t'activer sans contrecoup. 
-              Fini les chutes d'énergie brutales.
-            </p>
-            <div className="flex items-center space-x-2">
-              <div className="w-3 h-3 bg-mava-blue rounded-full"></div>
-              <span className="text-sm font-medium">Énergie Stable</span>
-            </div>
-          </CardContent>
-        </Card>
+          {/* Center Card */}
+          <Card
+            className={`w-72 bg-background/95 backdrop-blur-sm shadow-lg transition-all duration-700 ease-out ${
+              showCards
+                ? 'translate-x-0 opacity-100'
+                : scrollY > window.innerHeight * 0.8
+                  ? '-translate-x-full opacity-0'
+                  : 'translate-x-full opacity-0'
+            }`}
+            style={{ transitionDelay: '150ms' }}
+          >
+            <CardContent className="p-6">
+              <h3 className="text-xl font-semibold text-mava-green mb-3">Performance Optimale</h3>
+              <p className="text-muted-foreground mb-4">
+                Améliore ta concentration et tes performances sans stress ni nervosité.
+                L'énergie parfaite pour tes journées les plus intenses.
+              </p>
+              <div className="flex items-center space-x-2">
+                <div className="w-3 h-3 bg-mava-orange rounded-full"></div>
+                <span className="text-sm font-medium">Longue Durée</span>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Right Card */}
+          <Card
+            className={`w-72 bg-background/95 backdrop-blur-sm shadow-lg transition-all duration-700 ease-out ${
+              showCards
+                ? 'translate-x-0 opacity-100'
+                : scrollY > window.innerHeight * 0.8
+                  ? '-translate-x-full opacity-0'
+                  : 'translate-x-full opacity-0'
+            }`}
+            style={{ transitionDelay: '300ms' }}
+          >
+            <CardContent className="p-6">
+              <h3 className="text-xl font-semibold text-mava-green mb-3">Sans Crash</h3>
+              <p className="text-muted-foreground mb-4">
+                Une vague d'énergie tout en douceur pour t'activer sans contrecoup.
+                Fini les chutes d'énergie brutales.
+              </p>
+              <div className="flex items-center space-x-2">
+                <div className="w-3 h-3 bg-mava-blue rounded-full"></div>
+                <span className="text-sm font-medium">Énergie Stable</span>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </div>
 
-    {/* Scroll area modificata per creare continuità visiva */}
-    <div className={`h-screen ${currentProduct.bgColor} relative`}>
+    {/* Sezione con testo grande */}
+    <div className={`h-screen ${currentProduct.bgColor} relative flex flex-col items-center justify-center`}>
       {/* Elementi decorativi ripetuti dalla prima sezione per creare continuità */}
       <div className="absolute inset-0 overflow-hidden opacity-30">
         <div className="absolute top-20 right-1/4 w-24 h-24 bg-mava-orange rounded-full border-4 border-background/30"></div>
@@ -299,29 +325,32 @@ const ProductShowcase = () => {
         <div className="absolute bottom-1/4 right-32 w-20 h-32 bg-mava-green transform rotate-12 rounded-full opacity-70"></div>
       </div>
 
-      {/* Contenuto informativo nella seconda sezione */}
-      <div className="relative z-10 container mx-auto px-4 py-16 flex flex-col items-center">
+      {/* Testi grandi che appaiono quando si scorre verso il basso */}
+      <div className={`w-full transition-all duration-1000 ease-in-out ${
+        showBigText ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-32'
+      }`}>
+        {/* SCOPRI MIELPINO - testo grande con link a /learn */}
         <Link
-            to="/learn"
-            className="hover:opacity-80 transition-opacity"
-            onClick={() => {
-              // Scorre in cima alla pagina dopo la navigazione
-              setTimeout(() => {
-                window.scrollTo(0, 0);
-              }, 0);
-            }}
+          to="/learn"
+          className="relative z-10 w-full text-center transition-all duration-300 block"
+          onClick={() => {
+            setTimeout(() => window.scrollTo(0, 0), 0);
+          }}
         >
-          <h2 className="text-4xl font-bold text-foreground mb-8 mt-20">Scopri MIELPINO</h2>
+          <h2 className="text-8xl md:text-[12vw] lg:text-[15vw] font-extrabold text-foreground hover:text-mava-yellow leading-none tracking-tight">
+            SCOPRI MIELPINO
+          </h2>
         </Link>
-        <div className="grid md:grid-cols-2 gap-12 items-center">
-          <div className="space-y-6">
-            <h3 className="text-2xl font-semibold text-foreground">100% Naturale</h3>
-            <p className="text-lg text-muted-foreground">
-              Il nostro miele è raccolto con cura dalle api che popolano i boschi di pino della Brianza,
-              garantendo un prodotto puro e ricco di proprietà benefiche.
-            </p>
-          </div>
-        </div>
+
+        {/* ACQUISTA - testo grande con scroll to top */}
+        <button
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          className="relative z-10 w-full text-center transition-all duration-300 block mt-8"
+        >
+          <h2 className="text-8xl md:text-[12vw] lg:text-[15vw] font-extrabold text-foreground hover:text-mava-yellow leading-none tracking-tight">
+            ACQUISTA
+          </h2>
+        </button>
       </div>
     </div>
     </>
@@ -329,3 +358,4 @@ const ProductShowcase = () => {
 };
 
 export default ProductShowcase;
+

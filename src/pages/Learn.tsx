@@ -196,39 +196,35 @@ const Learn = () => {
       </section>
 
       {/* Swipe Section */}
-      {showSwipeSection && (
-        <section className="py-20 px-6 bg-muted/30">
-          <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-4xl font-bold text-foreground mb-6">
-              Discover Your Next Recipe
-            </h2>
-            <p className="text-xl text-muted-foreground mb-12">
-              Swipe right to save recipes you love, swipe left to skip
-            </p>
-            
-            <div className="relative">
-              <SwipeCard 
-                recipe={recipes[currentRecipeIndex]} 
-                onSwipe={handleSwipe}
-              />
-            </div>
+      <section className="py-20 px-6 bg-muted/30">
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="text-4xl font-bold text-foreground mb-6">
+            Discover Your Next Recipe
+          </h2>
+          <p className="text-xl text-muted-foreground mb-12">
+            Swipe right to save recipes you love, swipe left to skip
+          </p>
 
-            <div className="mt-8 flex items-center justify-center space-x-4 text-sm text-muted-foreground">
-              <div className="flex items-center space-x-2">
-                <X className="h-4 w-4 text-destructive" />
-                <span>Skip</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Heart className="h-4 w-4 text-green-500" />
-                <span>Save</span>
-              </div>
+          <div className="relative">
+            <SwipeCard
+              recipe={recipes[currentRecipeIndex]}
+              onSwipe={handleSwipe}
+            />
+          </div>
+
+          <div className="mt-8 flex items-center justify-center space-x-4 text-sm text-muted-foreground">
+            <div className="flex items-center space-x-2">
+              <X className="h-4 w-4 text-destructive" />
+              <span>Skip</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <Heart className="h-4 w-4 text-green-500" />
+              <span>Save</span>
             </div>
           </div>
-        </section>
-      )}
+        </div>
+      </section>
 
-      {/* Additional scroll space */}
-      <div className="h-screen"></div>
     </div>
   );
 };
