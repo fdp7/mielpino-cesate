@@ -9,6 +9,7 @@ import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { ArrowLeft } from "lucide-react";
 import Header from "@/components/Header";
 import confetti from "canvas-confetti";
+import {submitOrder} from "@/api/cart.ts";
 
 interface CartItem {
   id: string;
@@ -65,9 +66,49 @@ const Checkout = () => {
       spread: 70,
       origin: { y: 0.6 }
     });
-    
+
     // Show success dialog
     setShowSuccessDialog(true);
+  };
+
+  const handleSubmitOrder = async () => {
+    try {
+      setIsSubmitting(true);
+
+      const order = {
+        user_email: email,
+        total: calculateTotal(),
+        status: 'pending',
+        shipping_address: `${address}, ${city}, ${cap}`
+      };
+
+      const orderId = await submitOrder(order, cartItems);
+
+      // toast({
+      //   title: "Ordine completato!",
+      //   description: `Il tuo ordine #${orderId} è stato registrato.`
+      // });
+
+      // Trigger confetti
+      confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 }
+      });
+
+      // Show success dialog
+      setShowSuccessDialog(true);
+
+      // Pulisci carrello e redirect
+    } catch (error) {
+      toast({
+        title: "Errore",
+        description: "Si è verificato un errore durante l'invio dell'ordine.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleBackToHome = () => {
