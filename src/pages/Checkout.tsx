@@ -9,16 +9,8 @@ import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { ArrowLeft } from "lucide-react";
 import Header from "@/components/Header";
 import confetti from "canvas-confetti";
-import {submitOrder} from "@/api/cart.ts";
-
-interface CartItem {
-  id: string;
-  name: string;
-  flavor: string;
-  size: string;
-  price: number;
-  quantity: number;
-}
+import {Order, submitOrder} from "@/api/cart.ts";
+import { CartItem } from "@/api/cart.ts";
 
 interface CheckoutData {
   email: string;
@@ -37,6 +29,8 @@ const Checkout = () => {
   const cartItems: CartItem[] = location.state?.cartItems || [];
   
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [orderId, setOrderId] = useState<number | null>(null);
   const [formData, setFormData] = useState<CheckoutData>({
     email: "",
     firstName: "",
@@ -48,64 +42,62 @@ const Checkout = () => {
     phone: ""
   });
 
-  const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-  const shipping = subtotal > 100 ? 0 : 7.40; // Free shipping over $100
-  const taxes = subtotal * 0.05; // 5% tax
+  // Calcolo corretto dei totali
+  const subtotal = cartItems.reduce((sum, item) => {
+    const sizeValue = item.size ? parseFloat(item.size) : 1;
+    const itemPrice = typeof item.price === 'number' ? item.price : 0;
+    return sum + (itemPrice * item.quantity * sizeValue);
+  }, 0);
+
+  const shipping = subtotal > 100 ? 0 : 7.40; // Spedizione gratuita sopra i 100€
+  const taxes = subtotal * 0.05; // 5% di tasse
   const total = subtotal + shipping + taxes;
 
   const handleInputChange = (field: keyof CheckoutData, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Trigger confetti
-    confetti({
-      particleCount: 100,
-      spread: 70,
-      origin: { y: 0.6 }
-    });
-
-    // Show success dialog
-    setShowSuccessDialog(true);
-  };
-
-  const handleSubmitOrder = async () => {
     try {
       setIsSubmitting(true);
 
-      const order = {
-        user_email: email,
-        total: calculateTotal(),
+      // Creazione dell'ordine con i dati del cliente
+      const order: Order = {
+        total: total,
         status: 'pending',
-        shipping_address: `${address}, ${city}, ${cap}`
+        created_at: new Date().toISOString(),
+        checkout_info: {
+          email: formData.email,
+          first_name: formData.firstName,
+          last_name: formData.lastName,
+          phone: formData.phone,
+          address: formData.address,
+          city: formData.city,
+          postal_code: formData.postalCode
+        }
       };
 
-      const orderId = await submitOrder(order, cartItems);
+      // Invio dell'ordine all'API
+      const newOrderId = await submitOrder(order, cartItems);
+      setOrderId(newOrderId);
 
-      // toast({
-      //   title: "Ordine completato!",
-      //   description: `Il tuo ordine #${orderId} è stato registrato.`
-      // });
+      // Pulisci il carrello dal localStorage
+      localStorage.removeItem('cart');
 
-      // Trigger confetti
+      // Effetto confetti
       confetti({
         particleCount: 100,
         spread: 70,
         origin: { y: 0.6 }
       });
 
-      // Show success dialog
+      // Mostra il dialogo di successo
       setShowSuccessDialog(true);
 
-      // Pulisci carrello e redirect
     } catch (error) {
-      toast({
-        title: "Errore",
-        description: "Si è verificato un errore durante l'invio dell'ordine.",
-        variant: "destructive"
-      });
+      console.error("Errore nell'invio dell'ordine:", error);
     } finally {
       setIsSubmitting(false);
     }
@@ -127,7 +119,7 @@ const Checkout = () => {
           className="mb-6"
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
-          Back to cart
+          Torna al carrello
         </Button>
 
         <div className="grid lg:grid-cols-2 gap-8">
@@ -139,10 +131,7 @@ const Checkout = () => {
               {/* Contact section */}
               <div className="space-y-4">
                 <div className="flex justify-between items-center">
-                  <h2 className="text-lg font-semibold">Contact</h2>
-                  <Button variant="link" className="text-sm text-primary">
-                    Log in
-                  </Button>
+                  <h2 className="text-lg font-semibold">Contatto</h2>
                 </div>
                 
                 <div>
@@ -159,11 +148,11 @@ const Checkout = () => {
 
               {/* Delivery section */}
               <div className="space-y-4">
-                <h2 className="text-lg font-semibold">Delivery</h2>
-                
+                <h2 className="text-lg font-semibold">Indirizzo di consegna</h2>
+
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="firstName">First name</Label>
+                    <Label htmlFor="firstName">Nome</Label>
                     <Input
                       id="firstName"
                       value={formData.firstName}
@@ -172,7 +161,7 @@ const Checkout = () => {
                     />
                   </div>
                   <div>
-                    <Label htmlFor="lastName">Last name</Label>
+                    <Label htmlFor="lastName">Cognome</Label>
                     <Input
                       id="lastName"
                       value={formData.lastName}
@@ -183,7 +172,7 @@ const Checkout = () => {
                 </div>
 
                 <div>
-                  <Label htmlFor="address">Address</Label>
+                  <Label htmlFor="address">Indirizzo</Label>
                   <Input
                     id="address"
                     value={formData.address}
@@ -194,7 +183,7 @@ const Checkout = () => {
 
                 <div className="grid grid-cols-3 gap-4">
                   <div>
-                    <Label htmlFor="city">City</Label>
+                    <Label htmlFor="city">Città</Label>
                     <Input
                       id="city"
                       value={formData.city}
@@ -203,21 +192,21 @@ const Checkout = () => {
                     />
                   </div>
                   <div>
-                    <Label htmlFor="province">Province</Label>
+                    <Label htmlFor="province">Provincia</Label>
                     <Select value={formData.province} onValueChange={(value) => handleInputChange("province", value)} required>
                       <SelectTrigger>
-                        <SelectValue placeholder="Province" />
+                        <SelectValue placeholder="Provincia" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="alberta">Alberta</SelectItem>
-                        <SelectItem value="bc">British Columbia</SelectItem>
-                        <SelectItem value="ontario">Ontario</SelectItem>
-                        <SelectItem value="quebec">Quebec</SelectItem>
+                        <SelectItem value="mi">Milano</SelectItem>
+                        <SelectItem value="to">Torino</SelectItem>
+                        <SelectItem value="rm">Roma</SelectItem>
+                        <SelectItem value="na">Napoli</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
                   <div>
-                    <Label htmlFor="postalCode">Postal code</Label>
+                    <Label htmlFor="postalCode">CAP</Label>
                     <Input
                       id="postalCode"
                       value={formData.postalCode}
@@ -228,7 +217,7 @@ const Checkout = () => {
                 </div>
 
                 <div>
-                  <Label htmlFor="phone">Phone</Label>
+                  <Label htmlFor="phone">Telefono</Label>
                   <Input
                     id="phone"
                     type="tel"
@@ -239,8 +228,12 @@ const Checkout = () => {
                 </div>
               </div>
 
-              <Button type="submit" className="w-full bg-primary hover:bg-primary/90">
-                Complete order
+              <Button
+                type="submit"
+                className="w-full bg-primary hover:bg-primary/90"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? "Elaborazione..." : "Completa ordine"}
               </Button>
             </form>
           </div>
@@ -249,38 +242,44 @@ const Checkout = () => {
           <div className="lg:sticky lg:top-24 h-fit">
             <Card>
               <CardHeader>
-                <CardTitle>Order Summary</CardTitle>
+                <CardTitle>Riepilogo ordine</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 {/* Cart items */}
-                {cartItems.map((item) => (
-                  <div key={item.id} className="flex items-center gap-4">
-                    <div className="relative">
-                      <div className="w-16 h-16 rounded-lg bg-mava-orange flex items-center justify-center">
-                        <span className="text-white font-bold">12</span>
+                {cartItems.map((item) => {
+                  const sizeValue = item.size ? parseFloat(item.size) : 1;
+                  const sizeLabel = sizeValue === 0.5 ? "500g" : "1kg";
+                  const itemPrice = typeof item.price === 'number' ? item.price : 0;
+
+                  return (
+                    <div key={item.id} className="flex items-center gap-4">
+                      <div className="relative">
+                        <div className="w-16 h-16 rounded-lg bg-mava-orange flex items-center justify-center">
+                          <span className="text-white font-bold">12</span>
+                        </div>
+                        <div className="absolute -top-2 -right-2 w-6 h-6 bg-muted rounded-full flex items-center justify-center text-xs font-medium">
+                          {item.quantity}
+                        </div>
                       </div>
-                      <div className="absolute -top-2 -right-2 w-6 h-6 bg-muted rounded-full flex items-center justify-center text-xs font-medium">
-                        {item.quantity}
+                      <div className="flex-1">
+                        <h3 className="font-medium">{item.name}</h3>
+                        <p className="text-sm text-muted-foreground">{sizeLabel}</p>
+                      </div>
+                      <div className="text-right">
+                        <span className="font-medium">
+                          €{(itemPrice * sizeValue * item.quantity).toFixed(2)}
+                        </span>
                       </div>
                     </div>
-                    <div className="flex-1">
-                      <h3 className="font-medium">{item.flavor}</h3>
-                      <p className="text-sm text-muted-foreground">{item.size}</p>
-                    </div>
-                    <div className="text-right">
-                      <span className="font-medium">
-                        ${(item.price * item.quantity).toFixed(2)}
-                      </span>
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
 
                 <hr />
 
                 {/* Gift card/discount code */}
                 <div className="flex gap-2">
-                  <Input placeholder="Gift card or discount code" className="flex-1" />
-                  <Button variant="outline">Apply</Button>
+                  <Input placeholder="Codice sconto" className="flex-1" />
+                  <Button variant="outline">Applica</Button>
                 </div>
 
                 <hr />
@@ -288,23 +287,23 @@ const Checkout = () => {
                 {/* Totals */}
                 <div className="space-y-2">
                   <div className="flex justify-between">
-                    <span>Subtotal</span>
-                    <span>${subtotal.toFixed(2)}</span>
+                    <span>Subtotale</span>
+                    <span>€{subtotal.toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>Shipping</span>
+                    <span>Spedizione</span>
                     <span className="text-muted-foreground">
-                      {shipping === 0 ? "Free" : `$${shipping.toFixed(2)}`}
+                      {shipping === 0 ? "Gratuita" : `€${shipping.toFixed(2)}`}
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span>Estimated taxes</span>
-                    <span>${taxes.toFixed(2)}</span>
+                    <span>IVA (5%)</span>
+                    <span>€{taxes.toFixed(2)}</span>
                   </div>
                   <hr />
                   <div className="flex justify-between text-lg font-semibold">
-                    <span>Total</span>
-                    <span>CAD ${total.toFixed(2)}</span>
+                    <span>Totale</span>
+                    <span>€{total.toFixed(2)}</span>
                   </div>
                 </div>
               </CardContent>
@@ -319,18 +318,22 @@ const Checkout = () => {
           <DialogTitle className="text-center text-2xl font-bold text-primary">Grazie!</DialogTitle>
           <div className="text-center space-y-4 py-6">
             <div>
-              <p className="text-lg font-semibold">Data di consegna</p>
-              <p className="text-muted-foreground">Settembre 2025</p>
+              <p className="text-lg font-semibold">Data di consegna prevista</p>
+              <p className="text-muted-foreground">Entro 3-5 giorni lavorativi</p>
+            </div>
+            <div>
+              <p className="text-lg font-semibold">Numero ordine</p>
+              <p className="text-muted-foreground">#{orderId || "000000"}</p>
             </div>
             <div>
               <p className="text-lg font-semibold">Importo totale</p>
-              <p className="text-2xl font-bold">CAD ${total.toFixed(2)}</p>
+              <p className="text-2xl font-bold">€{total.toFixed(2)}</p>
             </div>
             <Button 
               onClick={handleBackToHome}
               className="w-full bg-primary hover:bg-primary/90 mt-6"
             >
-              Back to home
+              Torna alla home
             </Button>
           </div>
         </DialogContent>

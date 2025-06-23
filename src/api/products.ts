@@ -8,6 +8,8 @@ export type Product = {
   image_url: string;
   stock: number;
   created_at?: string;
+  bg_color?: string;
+  btn_color?: string;
 };
 
 export async function getProducts(): Promise<Product[]> {
@@ -28,4 +30,13 @@ export async function getProductById(id: number): Promise<Product | null> {
 
   if (error) throw error;
   return data;
+}
+
+export async function updateProductStock(productId: number, newStock: number): Promise<void> {
+  const { error } = await supabase
+    .from('products')
+    .update({ stock: newStock })
+    .eq('id', productId);
+
+  if (error) throw error;
 }

@@ -1,18 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Minus, Plus, X } from "lucide-react";
-
-interface CartItem {
-  id: string;
-  name: string;
-  flavor: string;
-  size: string;
-  price: number;
-  quantity: number;
-  image?: string;
-}
+import { getProductById } from "@/api/products.ts";
+import { CartItem } from "@/api/cart.ts";
 
 interface CartProps {
   isOpen: boolean;
@@ -24,101 +16,183 @@ interface CartProps {
 
 const Cart = ({ isOpen, onOpenChange, items, onUpdateQuantity, onRemoveItem }: CartProps) => {
   const navigate = useNavigate();
-  const subtotal = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  const [stockWarnings, setStockWarnings] = useState<{[productId: number]: number}>({});
 
-  const handlePayment = () => {
+  // Calcolo del subtotale corretto considerando la dimensione
+  const subtotal = items.reduce((sum, item) => {
+    const sizeValue = item.size ? parseFloat(item.size) : 1;
+    const itemPrice = typeof item.price === 'number' ? item.price : 0;
+    return sum + (itemPrice * item.quantity * sizeValue);
+  }, 0);
+
+  // Verifica lo stock disponibile quando il carrello si apre o cambia
+  useEffect(() => {
+    const checkStock = async () => {
+      const warnings: {[productId: number]: number} = {};
+
+      for (const item of items) {
+        try {
+          const product = await getProductById(item.productId);
+          // Considera la dimensione quando verifica la disponibilità
+          const sizeValue = item.size ? parseFloat(item.size) : 1;
+          if (product && (item.quantity * sizeValue) > product.stock) {
+            warnings[item.productId] = product.stock;
+          }
+        } catch (error) {
+          console.error(`Errore nel recupero del prodotto ${item.productId}:`, error);
+        }
+      }
+
+      setStockWarnings(warnings);
+    };
+
+    if (isOpen && items.length > 0) {
+      checkStock();
+    }
+  }, [isOpen, items]);
+
+  const handleQuantityChange = (id: string, delta: number) => {
+    // Trova l'item nel carrello
+    const item = items.find(item => item.id === id);
+    if (!item) return;
+
+    // Calcola la nuova quantità
+    const newQuantity = Math.max(1, item.quantity + delta);
+
+    // Verifica disponibilità stock
+    const sizeValue = item.size ? parseFloat(item.size) : 1;
+    if (delta > 0 && stockWarnings[item.productId] && (newQuantity * sizeValue) > stockWarnings[item.productId]) {
+      console.warn(`Disponibili solo ${stockWarnings[item.productId]} kg`);
+      return;
+    }
+
+    // Aggiorna la quantità
+    onUpdateQuantity(id, newQuantity);
+  };
+
+  const handleProceedToCheckout = () => {
+    if (items.length === 0) return;
+
+    // Navigazione al checkout con gli articoli del carrello
     navigate("/checkout", { state: { cartItems: items } });
     onOpenChange(false);
+  };
+
+  const getSizeLabel = (size: string): string => {
+    const sizeValue = parseFloat(size);
+    return sizeValue === 0.5 ? "500g" : "1kg";
   };
 
   return (
     <Sheet open={isOpen} onOpenChange={onOpenChange}>
       <SheetContent className="w-full sm:max-w-lg flex flex-col">
         <SheetHeader>
-          <SheetTitle className="text-xl font-semibold">Cart</SheetTitle>
+          <SheetTitle className="text-xl font-semibold">Carrello</SheetTitle>
         </SheetHeader>
-        
+
         <div className="flex flex-col h-[calc(100%-180px)] overflow-hidden mb-0">
-          {/* Cart Items */}
+          {/* Elementi del carrello */}
           <div className="flex-1 overflow-y-auto py-3">
             {items.length === 0 ? (
-              <p className="text-center text-muted-foreground">Your cart is empty</p>
+              <p className="text-center text-muted-foreground">Il tuo carrello è vuoto</p>
             ) : (
               <div className="space-y-4">
-                {items.map((item) => (
-                  <div key={item.id} className="flex items-center gap-4 p-4 rounded-lg border">
-                    {/* Product Image */}
-                    <div className="w-16 h-16 rounded-full bg-mava-orange flex items-center justify-center flex-shrink-0">
-                      <span className="text-2xl font-bold text-white">12</span>
-                    </div>
-                    
-                    {/* Product Details */}
-                    <div className="flex-1">
-                      <h3 className="font-medium">{item.flavor}</h3>
-                      <p className="text-sm text-muted-foreground">{item.size}</p>
-                      
-                      {/* Quantity Controls */}
-                      <div className="flex items-center gap-2 mt-2">
+                {items.map((item) => {
+                  const sizeValue = item.size ? parseFloat(item.size) : 1;
+                  const sizeLabel = getSizeLabel(item.size || "1");
+                  const stockRequired = item.quantity * sizeValue;
+                  const hasWarning = stockWarnings[item.productId] !== undefined;
+
+                  return (
+                    <div key={item.id} className="flex items-center gap-4 p-4 rounded-lg border relative">
+                      {hasWarning && (
+                        <div className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full">
+                          Disponibili: {stockWarnings[item.productId]} kg
+                        </div>
+                      )}
+
+                      {/* Immagine prodotto */}
+                      <div className="w-16 h-16 rounded-full bg-mava-orange flex items-center justify-center flex-shrink-0">
+                        <span className="text-2xl font-bold text-white">12</span>
+                      </div>
+
+                      {/* Dettagli prodotto */}
+                      <div className="flex-1">
+                        <h3 className="font-medium">{item.name}</h3>
+                        <p className="text-sm text-muted-foreground">
+                          {sizeLabel} × {item.quantity} = {stockRequired} kg
+                        </p>
+
+                        {/* Controlli quantità */}
+                        <div className="flex items-center gap-2 mt-2">
+                          <Button
+                            variant="outline"
+                            size="icon"
+                            className="h-8 w-8"
+                            onClick={() => handleQuantityChange(item.id, -1)}
+                          >
+                            <Minus className="h-4 w-4" />
+                          </Button>
+                          <span className="w-8 text-center">{item.quantity}</span>
+                          <Button
+                            variant="outline"
+                            size="icon"
+                            className="h-8 w-8"
+                            onClick={() => handleQuantityChange(item.id, 1)}
+                          >
+                            <Plus className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </div>
+
+                      {/* Prezzo e rimuovi */}
+                      <div className="text-right">
+                        <div className="font-medium">
+                          €{(typeof item.price === 'number' ? item.price * sizeValue : 0).toFixed(2)} × {item.quantity}
+                        </div>
                         <Button
-                          variant="outline"
+                          variant="ghost"
                           size="icon"
-                          className="h-8 w-8"
-                          onClick={() => onUpdateQuantity(item.id, Math.max(1, item.quantity - 1))}
+                          className="h-6 w-6 mt-1"
+                          onClick={() => onRemoveItem(item.id)}
                         >
-                          <Minus className="h-4 w-4" />
-                        </Button>
-                        <span className="w-8 text-center">{item.quantity}</span>
-                        <Button
-                          variant="outline"
-                          size="icon"
-                          className="h-8 w-8"
-                          onClick={() => onUpdateQuantity(item.id, item.quantity + 1)}
-                        >
-                          <Plus className="h-4 w-4" />
+                          <X className="h-4 w-4" />
                         </Button>
                       </div>
                     </div>
-                    
-                    {/* Price and Remove */}
-                    <div className="text-right">
-                      <div className="font-medium">
-                        ${item.price.toFixed(2)} x {item.quantity}
-                      </div>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-6 w-6 mt-1"
-                        onClick={() => onRemoveItem(item.id)}
-                      >
-                        <X className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             )}
           </div>
         </div>
 
-        {/* Cart Footer - posizionato con altezza fissa in fondo */}
+        {/* Footer carrello */}
         {items.length > 0 && (
           <div className="border-t pt-2 mt-auto sticky bottom-0 bg-white">
             <div className="space-y-1 mb-2">
               <div className="flex justify-between text-lg font-semibold">
-                <span>Subtotal</span>
-                <span>${subtotal.toFixed(2)}</span>
+                <span>Subtotale</span>
+                <span>€{subtotal.toFixed(2)}</span>
               </div>
               <p className="text-sm text-muted-foreground">
-                Taxes and shipping costs calculated at checkout
+                Tasse e costi di spedizione calcolati al checkout
               </p>
             </div>
 
             <Button
               className="w-full bg-mava-orange hover:bg-mava-orange/90 text-white font-semibold py-2 rounded-full"
-              onClick={handlePayment}
+              onClick={handleProceedToCheckout}
+              disabled={Object.keys(stockWarnings).length > 0}
             >
-              Payment
+              Procedi al checkout
             </Button>
+
+            {Object.keys(stockWarnings).length > 0 && (
+              <p className="text-destructive text-sm mt-2 text-center">
+                Alcuni prodotti non hanno stock sufficiente
+              </p>
+            )}
           </div>
         )}
       </SheetContent>

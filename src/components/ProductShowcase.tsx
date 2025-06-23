@@ -5,36 +5,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Can3D from "./Can3D";
 import { Link } from "react-router-dom";
+import { Product } from "@/api/products";
 
-interface Product {
-  id: string;
-  name: string;
-  flavor: string;
-  canImage: string;
-  bgColor: string;
-  btnColor: string;
-}
-
-const products: Product[] = [
-  {
-    id: "melon-mint",
-    name: "MIELPINO CHIARO",
-    flavor: "Millefiori",
-    canImage: "/lovable-uploads/a1e4091c-22b1-4ea4-aee2-4559fec15b82.png",
-    bgColor: "bg-mava-sage",
-    btnColor: "bg-mava-green"
-  },
-  {
-    id: "berry-blast",
-    name: "MIELPINO SCURO",
-    flavor: "Rovo e Mirtillo",
-    canImage: "/lovable-uploads/a1e4091c-22b1-4ea4-aee2-4559fec15b82.png",
-    bgColor: "bg-mava-coral",
-    btnColor: "bg-mava-pink"
-  },
-];
-
-const ProductShowcase = () => {
+const ProductShowcase = ({products}: {products: Product[]}) => {
   const navigate = useNavigate();
   const [currentProductIndex, setCurrentProductIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
@@ -42,7 +15,7 @@ const ProductShowcase = () => {
   const [showCards, setShowCards] = useState(false);
   const [showBigText, setShowBigText] = useState(false);
 
-  const currentProduct = products[currentProductIndex];
+  const currentProduct = products && products.length > 0 ? products[currentProductIndex] : null
 
   useEffect(() => {
     const handleScroll = () => {
@@ -51,8 +24,8 @@ const ProductShowcase = () => {
 
       // Calcola le altezze di soglia in base all'altezza della finestra
       const cardAppearThreshold = window.innerHeight * 0.3;
-      const cardDisappearThreshold = window.innerHeight * 0.9; // Ridotto da 1.5 a 0.9
-      const bigTextAppearThreshold = window.innerHeight * 1.1; // Ridotto da 1.8 a 1.1
+      const cardDisappearThreshold = window.innerHeight * 0.9;
+      const bigTextAppearThreshold = window.innerHeight * 1.1;
 
       // Prima fase: le card appaiono quando si inizia a scorrere
       if (currentScrollY > cardAppearThreshold && currentScrollY < cardDisappearThreshold) {
@@ -98,9 +71,13 @@ const ProductShowcase = () => {
     }, 300);
   };
 
+  if (!currentProduct) {
+    return <div className="flex items-center justify-center h-screen">Nessun prodotto disponibile</div>;
+  }
+
   return (
     <>
-    <div className={`min-h-[150vh] relative overflow-hidden ${currentProduct.bgColor}`}>
+    <div className={`min-h-[150vh] relative overflow-hidden ${currentProduct.bg_color}`}>
       {/* Background Decorative Elements */}
       <div className="absolute inset-0 overflow-hidden">
         {/* Strawberry-like shape with patterns */}
@@ -196,8 +173,8 @@ const ProductShowcase = () => {
             // }}
           >
             <Can3D
-              color={currentProduct.bgColor}
-              flavor={currentProduct.flavor}
+              color={currentProduct.bg_color}
+              flavor={currentProduct.description}
               isAnimating={isAnimating}
             />
           </div>
@@ -224,11 +201,11 @@ const ProductShowcase = () => {
         >
           <Button
             onClick={() => navigate(`/product/${currentProduct.id}`)}
-            className={`${currentProduct.btnColor} hover:opacity-90 text-white font-semibold px-8 py-4 rounded-full text-lg transition-all duration-500 ${
+            className={`${currentProduct.btn_color} hover:opacity-90 text-white font-semibold px-8 py-4 rounded-full text-lg transition-all duration-500 ${
               isAnimating ? 'scale-95 opacity-50' : 'scale-100 opacity-100'
             } relative z-40`}
           >
-            {currentProduct.flavor}
+            {currentProduct.name}
           </Button>
         </div>
       </div>
@@ -315,7 +292,7 @@ const ProductShowcase = () => {
     </div>
 
     {/* Sezione con testo grande */}
-    <div className={`h-screen ${currentProduct.bgColor} relative flex flex-col items-center justify-center`}>
+    <div className={`h-screen ${currentProduct.bg_color} relative flex flex-col items-center justify-center`}>
       {/* Elementi decorativi ripetuti dalla prima sezione per creare continuità */}
       <div className="absolute inset-0 overflow-hidden opacity-30">
         <div className="absolute top-20 right-1/4 w-24 h-24 bg-mava-orange rounded-full border-4 border-background/30"></div>

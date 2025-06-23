@@ -10,12 +10,23 @@ const Index = () => {
     useEffect(() => {
         const loadProducts = async () => {
             try {
-                const data = await getProducts();
-                setProducts(data);
+                setLoading(true); // Indica che il caricamento è in corso
+
+                // Chiamata all'API per recuperare i prodotti
+                const productsData = await getProducts();
+
+                // Verifica dei dati ricevuti
+                console.log("Prodotti caricati:", productsData);
+
+                if (productsData && productsData.length > 0) {
+                    setProducts(productsData);
+                } else {
+                    console.warn("Nessun prodotto trovato nel database");
+                }
             } catch (error) {
-                console.error("Errore nel caricamento dei prodotti:", error);
+                console.error("Errore durante il caricamento dei prodotti:", error);
             } finally {
-                setLoading(false);
+                setLoading(false); // Indica che il caricamento è terminato
             }
         };
 
@@ -25,7 +36,13 @@ const Index = () => {
     return (
         <div className="min-h-screen">
           <Header />
-          <ProductShowcase />
+            {loading ? (
+                <div className="flex items-center justify-center h-screen">
+                    <p>Caricamento prodotti...</p>
+                </div>
+            ) : (
+                <ProductShowcase products={products} />
+            )}
         </div>
     );
 };
