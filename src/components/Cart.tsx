@@ -112,9 +112,17 @@ const Cart = ({ isOpen, onOpenChange, items, onUpdateQuantity, onRemoveItem }: C
                       )}
 
                       {/* Immagine prodotto */}
-                      <div className="w-16 h-16 rounded-full bg-mava-orange flex items-center justify-center flex-shrink-0">
-                        <span className="text-2xl font-bold text-white">12</span>
-                      </div>
+                      {item.image_url ? (
+                          <img
+                              src={item.image_url}
+                              alt={item.name}
+                              className="w-16 h-16 rounded-lg object-cover flex-shrink-0"
+                          />
+                      ) : (
+                          <div className="w-16 h-16 rounded-lg bg-mava-orange flex items-center justify-center flex-shrink-0">
+                            <span className="text-2xl font-bold text-white">{item.name.charAt(0)}</span>
+                          </div>
+                      )}
 
                       {/* Dettagli prodotto */}
                       <div className="flex-1">

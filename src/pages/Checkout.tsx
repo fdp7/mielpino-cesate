@@ -9,7 +9,7 @@ import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { ArrowLeft } from "lucide-react";
 import Header from "@/components/Header";
 import confetti from "canvas-confetti";
-import {Order, submitOrder} from "@/api/cart.ts";
+import {Order, submitOrder, getOrderPositionInQueue} from "@/api/cart.ts";
 import { CartItem } from "@/api/cart.ts";
 
 interface CheckoutData {
@@ -27,7 +27,8 @@ const Checkout = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const cartItems: CartItem[] = location.state?.cartItems || [];
-  
+
+  const [queuePosition, setQueuePosition] = useState<number | null>(null);
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [orderId, setOrderId] = useState<number | null>(null);
@@ -83,6 +84,9 @@ const Checkout = () => {
       const newOrderId = await submitOrder(order, cartItems);
       setOrderId(newOrderId);
 
+      const position = await getOrderPositionInQueue(newOrderId);
+      setQueuePosition(position);
+
       // Pulisci il carrello dal localStorage
       localStorage.removeItem('cart');
 
@@ -97,7 +101,7 @@ const Checkout = () => {
       setShowSuccessDialog(true);
 
     } catch (error) {
-      console.error("Errore nell'invio dell'ordine:", error);
+      console.error("Errore nell'invio dell'ordine. Contatta fdpierro@gmail.com per effettuare l'ordine", error);
     } finally {
       setIsSubmitting(false);
     }
@@ -319,11 +323,11 @@ const Checkout = () => {
           <div className="text-center space-y-4 py-6">
             <div>
               <p className="text-lg font-semibold">Data di consegna prevista</p>
-              <p className="text-muted-foreground">Entro 3-5 giorni lavorativi</p>
+              <p className="text-muted-foreground">Entro 14 giorni</p>
             </div>
             <div>
-              <p className="text-lg font-semibold">Numero ordine</p>
-              <p className="text-muted-foreground">#{orderId || "000000"}</p>
+              <p className="text-lg font-semibold">Ordine in coda</p>
+              <p className="text-muted-foreground">#{queuePosition || "1"}</p>
             </div>
             <div>
               <p className="text-lg font-semibold">Importo totale</p>

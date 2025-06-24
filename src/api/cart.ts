@@ -85,3 +85,31 @@ export async function submitOrder(order: Order, items: CartItem[]): Promise<numb
     throw error;
   }
 }
+
+export async function getOrderPositionInQueue(orderId: number): Promise<number> {
+  try {
+    // Ottieni la data di creazione dell'ordine corrente
+    const { data: orderData, error: orderError } = await supabase
+        .from('orders')
+        .select('created_at')
+        .eq('id', orderId)
+        .single();
+
+    if (orderError) throw orderError;
+
+    // Conta quanti ordini in stato "pending" sono stati creati prima di questo ordine
+    const { count, error: countError } = await supabase
+        .from('orders')
+        .select('id', { count: 'exact', head: true })
+        .eq('status', 'pending')
+        .lt('created_at', orderData.created_at);
+
+    if (countError) throw countError;
+
+    // La posizione in coda è il numero di ordini pending + 1
+    return (count || 0) + 1;
+  } catch (error) {
+    console.error("Errore nel calcolo della posizione in coda:", error);
+    return 1; // Default nel caso di errore
+  }
+}
