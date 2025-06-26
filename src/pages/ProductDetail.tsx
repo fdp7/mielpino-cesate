@@ -4,7 +4,9 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ArrowLeft, Minus, Plus, Package } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import Can3D from "@/components/Can3D";
+import { Canvas } from "@react-three/fiber";
+import { OrbitControls } from "@react-three/drei";
+import { MieleJar3D } from "@/components/MieleJar3D.tsx";
 import Header from "@/components/Header";
 import Cart from "@/components/Cart";
 import {getProductById, Product} from "@/api/products.ts";
@@ -20,6 +22,18 @@ const ProductDetail = () => {
   const [selectedSize, setSelectedSize] = useState("1");
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
+
+  // Funzione per calcolare il livello di miele (da 0 a 100) in base allo stock
+  const getHoneyLevel = () => {
+    if (!product) return 0;
+    // Assumiamo che lo stock massimo sia 100kg, quindi convertiamo direttamente
+    return Math.min(150, Math.max(0, product.stock));
+  };
+
+  const getHoneyColor = () => {
+    if (!product || !product.honey_color) return "#ffb000"; // Colore predefinito
+    return product.honey_color;
+  };
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -226,13 +240,28 @@ const ProductDetail = () => {
           </Button>
 
           <div className="grid md:grid-cols-2 gap-8 items-start">
-            {/* Lato sinistro - Visualizzazione prodotto 3D */}
+            {/* Lato sinistro - MieleJar3D */}
             <div className="flex justify-center">
-              <Can3D
-                  color={product.bg_color || "bg-background"}
-                  flavor={product.description}
-                  isAnimating={false}
-              />
+              <div className="h-96 w-full">
+                <Canvas camera={{ position: [3, 2, 5], fov: 50 }}>
+                  <ambientLight intensity={0.6} />
+                  <directionalLight position={[10, 10, 5]} intensity={1} />
+                  <pointLight position={[-10, -10, -5]} intensity={0.3} color="#ffb000" />
+
+                  <MieleJar3D
+                      honeyLevel={getHoneyLevel()}
+                      honeyColor={getHoneyColor()}
+                        labelImageUrl={product.image_url || ""}
+                  />
+
+                  <OrbitControls
+                      enablePan={false}
+                      enableZoom={true}
+                      minDistance={3}
+                      maxDistance={8}
+                  />
+                </Canvas>
+              </div>
             </div>
 
             {/* Lato destro - Dettagli prodotto e azioni */}

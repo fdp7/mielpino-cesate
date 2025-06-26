@@ -1,2 +1,6 @@
-inviare email conferma ordine a me: opzionale
-inviare email conferma ordine al cliente
+- inviare email conferma ordine a me: opzionale
+- inviare email conferma ordine al cliente
+- usare etichette reali
+- fix card ricette
+- contenuti reali landing page
+- contenuti reali learn

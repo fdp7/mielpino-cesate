@@ -3,7 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import Can3D from "./Can3D";
+import { Canvas } from "@react-three/fiber";
+import { OrbitControls } from "@react-three/drei";
+import { MieleJar3D } from "./MieleJar3D.tsx";
 import { Link } from "react-router-dom";
 import { Product } from "@/api/products";
 
@@ -16,6 +18,18 @@ const ProductShowcase = ({products}: {products: Product[]}) => {
   const [showBigText, setShowBigText] = useState(false);
 
   const currentProduct = products && products.length > 0 ? products[currentProductIndex] : null
+
+  // Calcola il livello di miele in base allo stock (da 0 a 100)
+  const getHoneyLevel = () => {
+    if (!currentProduct) return 0;
+    // Assumiamo che lo stock massimo sia 100kg, quindi convertiamo direttamente
+    return Math.min(150, Math.max(0, currentProduct.stock));
+  };
+
+  const getHoneyColor = () => {
+    if (!currentProduct || !currentProduct.honey_color) return "#ffb000"; // Colore predefinito
+    return currentProduct.honey_color;
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -166,17 +180,36 @@ const ProductShowcase = ({products}: {products: Product[]}) => {
           </Button>
 
           {/* Product Can - 3D with scroll animation */}
+          {/*<div*/}
+          {/*  className={`transition-all duration-500 ${isAnimating ? 'scale-95 opacity-50' : 'scale-100 opacity-100'}`}*/}
+          {/*  // style={{*/}
+          {/*  //   transform: `translateY(${scrollY}px)`*/}
+          {/*  // }}*/}
+          {/*>*/}
+          {/*  <Can3D*/}
+          {/*    color={currentProduct.bg_color}*/}
+          {/*    flavor={currentProduct.description}*/}
+          {/*    isAnimating={isAnimating}*/}
+          {/*  />*/}
+          {/*</div>*/}
+
+          {/* MieleJar3D */}
           <div
-            className={`transition-all duration-500 ${isAnimating ? 'scale-95 opacity-50' : 'scale-100 opacity-100'}`}
-            // style={{
-            //   transform: `translateY(${scrollY}px)`
-            // }}
+              className={`transition-all duration-500 h-96 w-64 ${isAnimating ? 'scale-95 opacity-50' : 'scale-100 opacity-100'}`}
           >
-            <Can3D
-              color={currentProduct.bg_color}
-              flavor={currentProduct.description}
-              isAnimating={isAnimating}
-            />
+            <Canvas camera={{ position: [3, 2, 5], fov: 50 }}>
+              <ambientLight intensity={0.6} />
+              <directionalLight position={[10, 10, 5]} intensity={1} />
+              <pointLight position={[-10, -10, -5]} intensity={0.3} color="#ffb000" />
+
+              <MieleJar3D
+                  honeyLevel={getHoneyLevel()}
+                  honeyColor={getHoneyColor()}
+                  labelImageUrl={currentProduct.image_url}
+              />
+
+              <OrbitControls enablePan={false} enableZoom={true} minDistance={3} maxDistance={8} />
+            </Canvas>
           </div>
 
           <Button

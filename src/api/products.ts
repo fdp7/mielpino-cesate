@@ -10,6 +10,7 @@ export type Product = {
   created_at?: string;
   bg_color?: string;
   btn_color?: string;
+  honey_color?: string;
 };
 
 export async function getProducts(): Promise<Product[]> {

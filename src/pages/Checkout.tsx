@@ -18,9 +18,8 @@ interface CheckoutData {
   lastName: string;
   address: string;
   city: string;
-  province: string;
   postalCode: string;
-  phone: string;
+  phone?: string;
 }
 
 const Checkout = () => {
@@ -38,7 +37,6 @@ const Checkout = () => {
     lastName: "",
     address: "",
     city: "",
-    province: "",
     postalCode: "",
     phone: ""
   });
@@ -51,7 +49,7 @@ const Checkout = () => {
   }, 0);
 
   const shipping = subtotal > 100 ? 0 : 7.40; // Spedizione gratuita sopra i 100€
-  const taxes = subtotal * 0.05; // 5% di tasse
+  const taxes = 0 //subtotal * 0.05; // 5% di tasse
   const total = subtotal + shipping + taxes;
 
   const handleInputChange = (field: keyof CheckoutData, value: string) => {
@@ -73,7 +71,7 @@ const Checkout = () => {
           email: formData.email,
           first_name: formData.firstName,
           last_name: formData.lastName,
-          phone: formData.phone,
+          phone: formData.phone ? formData.phone : "",
           address: formData.address,
           city: formData.city,
           postal_code: formData.postalCode
@@ -185,7 +183,7 @@ const Checkout = () => {
                   />
                 </div>
 
-                <div className="grid grid-cols-3 gap-4">
+                <div className="grid grid-cols-2 gap-4">
                   <div>
                     <Label htmlFor="city">Città</Label>
                     <Input
@@ -194,20 +192,6 @@ const Checkout = () => {
                       onChange={(e) => handleInputChange("city", e.target.value)}
                       required
                     />
-                  </div>
-                  <div>
-                    <Label htmlFor="province">Provincia</Label>
-                    <Select value={formData.province} onValueChange={(value) => handleInputChange("province", value)} required>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Provincia" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="mi">Milano</SelectItem>
-                        <SelectItem value="to">Torino</SelectItem>
-                        <SelectItem value="rm">Roma</SelectItem>
-                        <SelectItem value="na">Napoli</SelectItem>
-                      </SelectContent>
-                    </Select>
                   </div>
                   <div>
                     <Label htmlFor="postalCode">CAP</Label>
@@ -227,7 +211,6 @@ const Checkout = () => {
                     type="tel"
                     value={formData.phone}
                     onChange={(e) => handleInputChange("phone", e.target.value)}
-                    required
                   />
                 </div>
               </div>
@@ -258,10 +241,10 @@ const Checkout = () => {
                   return (
                     <div key={item.id} className="flex items-center gap-4">
                       <div className="relative">
-                        <div className="w-16 h-16 rounded-lg bg-mava-orange flex items-center justify-center">
-                          <span className="text-white font-bold">12</span>
+                        <div className="w-16 h-16 rounded-lg bg-muted flex items-center justify-center">
+                            <img src={item.image_url} className="w-full h-full object-cover rounded-lg" />
                         </div>
-                        <div className="absolute -top-2 -right-2 w-6 h-6 bg-muted rounded-full flex items-center justify-center text-xs font-medium">
+                        <div className="absolute -top-1 -right-1 w-6 h-6 bg-mava-orange rounded-full flex items-center justify-center text-xs font-medium">
                           {item.quantity}
                         </div>
                       </div>
@@ -299,10 +282,6 @@ const Checkout = () => {
                     <span className="text-muted-foreground">
                       {shipping === 0 ? "Gratuita" : `€${shipping.toFixed(2)}`}
                     </span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>IVA (5%)</span>
-                    <span>€{taxes.toFixed(2)}</span>
                   </div>
                   <hr />
                   <div className="flex justify-between text-lg font-semibold">
