@@ -1,231 +1,254 @@
 import { useState, useEffect } from "react";
-import { ChevronLeft, ChevronRight, Heart, X } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import Header from "@/components/Header";
+import { getRecipes, Recipe } from "@/api/recipes.ts";
 
-const recipes = [
-  {
-    id: 1,
-    title: "Bread and Honey",
-    image: "/lovable-uploads/a1e4091c-22b1-4ea4-aee2-4559fec15b82.png",
-    description: "Classic comfort combination"
-  },
-  {
-    id: 2,
-    title: "Avocado Toast",
-    image: "/lovable-uploads/a1e4091c-22b1-4ea4-aee2-4559fec15b82.png",
-    description: "Healthy morning start"
-  },
-  {
-    id: 3,
-    title: "Oatmeal Bowl",
-    image: "/lovable-uploads/a1e4091c-22b1-4ea4-aee2-4559fec15b82.png",
-    description: "Nutritious breakfast option"
-  },
-  {
-    id: 4,
-    title: "Green Smoothie",
-    image: "/lovable-uploads/a1e4091c-22b1-4ea4-aee2-4559fec15b82.png",
-    description: "Vitamin-packed drink"
-  },
-  {
-    id: 5,
-    title: "Quinoa Salad",
-    image: "/lovable-uploads/a1e4091c-22b1-4ea4-aee2-4559fec15b82.png",
-    description: "Protein-rich meal"
-  }
-];
-
-const SwipeCard = ({ recipe, onSwipe }: { recipe: any, onSwipe: (direction: 'left' | 'right') => void }) => {
+const Learn = () => {
+  // Risolto il problema con ESLint sostituendo 'any' con un tipo specifico
+  const [recipes, setRecipes] = useState<Recipe[]>([]);
+  const [currentRecipeIndex, setCurrentRecipeIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
-  const [animationDirection, setAnimationDirection] = useState<'left' | 'right' | null>(null);
 
-  const handleSwipe = (direction: 'left' | 'right') => {
+  useEffect(() => {
+    const loadRecipes = async () => {
+      try {
+        const recipesData = await getRecipes();
+        setRecipes(recipesData);
+      } catch (error) {
+        console.error("Errore nel caricamento delle ricette:", error);
+      }
+    };
+
+    loadRecipes();
+  }, []);
+
+  const handlePrevious = () => {
+    if (isAnimating || recipes.length === 0) return;
     setIsAnimating(true);
-    setAnimationDirection(direction);
     setTimeout(() => {
-      onSwipe(direction);
+      setCurrentRecipeIndex((prev) =>
+          prev === 0 ? recipes.length - 1 : prev - 1
+      );
       setIsAnimating(false);
-      setAnimationDirection(null);
+    }, 300);
+  };
+
+  const handleNext = () => {
+    if (isAnimating || recipes.length === 0) return;
+    setIsAnimating(true);
+    setTimeout(() => {
+      setCurrentRecipeIndex((prev) =>
+          (prev + 1) % recipes.length
+      );
+      setIsAnimating(false);
     }, 300);
   };
 
   return (
-    <div className="relative w-80 h-96 mx-auto">
-      <Card className={`absolute inset-0 transition-all duration-300 ${
-        isAnimating 
-          ? animationDirection === 'left' 
-            ? 'translate-x-[-100%] rotate-[-15deg] opacity-0' 
-            : 'translate-x-[100%] rotate-[15deg] opacity-0'
-          : 'translate-x-0 rotate-0 opacity-100'
-      }`}>
-        <CardContent className="p-0 h-full flex flex-col">
-          <div className="flex-1 relative overflow-hidden rounded-t-lg">
-            <img 
-              src={recipe.image} 
-              alt={recipe.title}
-              className="w-full h-full object-cover"
-            />
-          </div>
-          <div className="p-6">
-            <h3 className="text-2xl font-bold text-foreground mb-2">{recipe.title}</h3>
-            <p className="text-muted-foreground">{recipe.description}</p>
-          </div>
-        </CardContent>
-      </Card>
-      
-      {/* Swipe buttons */}
-      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-4">
-        <Button
-          variant="outline"
-          size="icon"
-          className="rounded-full w-12 h-12 bg-background hover:bg-muted"
-          onClick={() => handleSwipe('left')}
-          disabled={isAnimating}
-        >
-          <X className="h-6 w-6 text-destructive" />
-        </Button>
-        <Button
-          variant="outline"
-          size="icon"
-          className="rounded-full w-12 h-12 bg-background hover:bg-muted"
-          onClick={() => handleSwipe('right')}
-          disabled={isAnimating}
-        >
-          <Heart className="h-6 w-6 text-green-500" />
-        </Button>
-      </div>
-    </div>
-  );
-};
+      <div className="min-h-screen bg-background">
+        <Header />
 
-const Learn = () => {
-  const [currentRecipeIndex, setCurrentRecipeIndex] = useState(0);
-  const [showSwipeSection, setShowSwipeSection] = useState(false);
+        <div className="container mx-auto px-4 py-8 pt-24">
+          <h1 className="text-4xl font-bold mb-12 text-center">Scopri il nostro miele</h1>
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollY = window.scrollY;
-      if (scrollY > 400) {
-        setShowSwipeSection(true);
-      }
-    };
+          {/* Sezione "Com'è fatto" */}
+          <section className="mb-16">
+            <h2 className="text-2xl font-semibold mb-6 text-center">Com'è fatto il nostro miele</h2>
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+            <div className="grid md:grid-cols-2 gap-8 items-center">
+              <div className="rounded-lg overflow-hidden">
+                <img
+                    src="/images/honey-production.jpg"
+                    alt="Produzione del miele"
+                    className="w-full h-auto object-cover"
+                />
+              </div>
 
-  const handleSwipe = (direction: 'left' | 'right') => {
-    console.log(`Swiped ${direction} on recipe:`, recipes[currentRecipeIndex].title);
-    setCurrentRecipeIndex((prev) => (prev + 1) % recipes.length);
-  };
+              <div className="space-y-4">
+                <p className="text-lg">
+                  Il nostro miele viene prodotto secondo metodi tradizionali, rispettando le api e la natura.
+                  Raccogliamo solo il miele in eccesso rispetto alle necessità dell'alveare, e solo quando è maturo, rispettando le api e garantendo un prodotto di alta qualità.
+                </p>
 
-  return (
-    <div className="min-h-screen bg-background">
-      <Header />
-      
+                <p>
+                  Le nostre api bottinano liberamente in zone incontaminate, lontane da inquinamento e pesticidi,
+                  permettendoci di offrire un miele puro e ricco di proprietà benefiche.
+                </p>
 
-      {/* Content Section */}
-      <section className="py-20 px-6">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <img 
-                src="/lovable-uploads/06780df9-6d0a-4396-bf44-f72800085845.png" 
-                alt="MAVA Product" 
-                className="w-full rounded-lg shadow-lg"
-              />
-            </div>
-            <div>
-              <h2 className="text-2xl font-bold text-foreground mb-6 uppercase">
-                Valeur Quotidienne
-              </h2>
-              <div className="bg-card rounded-lg p-6">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead className="font-bold text-foreground text-base">Teneur</TableHead>
-                      <TableHead className="font-bold text-foreground text-base">% Valeur quotidienne</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    <TableRow>
-                      <TableCell className="font-semibold">Calories</TableCell>
-                      <TableCell className="font-bold text-lg">50</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>Lipides</TableCell>
-                      <TableCell>0g    0%</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>Glucides</TableCell>
-                      <TableCell>13g</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>Sucres</TableCell>
-                      <TableCell>13g    13%</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>Protéines</TableCell>
-                      <TableCell>0g</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>Cholestérol</TableCell>
-                      <TableCell>0mg</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>Sodium</TableCell>
-                      <TableCell>0mg    0%</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>Potassium</TableCell>
-                      <TableCell>10mg    1%</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>Calcium</TableCell>
-                      <TableCell>10mg    1%</TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
+                <p>
+                  Ogni barattolo di miele viene controllato attentamente per garantire l'eccellenza del
+                  prodotto che arriva sulla tua tavola, conservando intatti tutti i nutrienti e il sapore naturale.
+                </p>
               </div>
             </div>
-          </div>
-        </div>
-      </section>
+          </section>
 
-      {/* Swipe Section */}
-      <section className="py-20 px-6 bg-muted/30">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl font-bold text-foreground mb-6">
-            Discover Your Next Recipe
-          </h2>
-          <p className="text-xl text-muted-foreground mb-12">
-            Swipe right to save recipes you love, swipe left to skip
-          </p>
+          {/* Sezione "Valori giornalieri" */}
+          <section className="mb-16">
+            <h2 className="text-2xl font-semibold mb-6 text-center">Valori nutrizionali</h2>
 
-          <div className="relative">
-            <SwipeCard
-              recipe={recipes[currentRecipeIndex]}
-              onSwipe={handleSwipe}
-            />
-          </div>
-
-          <div className="mt-8 flex items-center justify-center space-x-4 text-sm text-muted-foreground">
-            <div className="flex items-center space-x-2">
-              <X className="h-4 w-4 text-destructive" />
-              <span>Skip</span>
+            <div className="max-w-2xl mx-auto">
+              <Card>
+                <CardContent className="p-6">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Nutriente</TableHead>
+                        <TableHead>Quantità per 100g</TableHead>
+                        <TableHead>% Valori giornalieri</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      <TableRow>
+                        <TableCell>Calorie</TableCell>
+                        <TableCell>304 kcal</TableCell>
+                        <TableCell>15%</TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell>Carboidrati</TableCell>
+                        <TableCell>82.4 g</TableCell>
+                        <TableCell>28%</TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell>Zuccheri</TableCell>
+                        <TableCell>82.12 g</TableCell>
+                        <TableCell>-</TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell>Proteine</TableCell>
+                        <TableCell>0.3 g</TableCell>
+                        <TableCell>1%</TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell>Potassio</TableCell>
+                        <TableCell>52 mg</TableCell>
+                        <TableCell>1%</TableCell>
+                      </TableRow>
+                    </TableBody>
+                  </Table>
+                  <p className="text-sm text-muted-foreground mt-4">* Valori basati su una dieta di 2000 calorie</p>
+                </CardContent>
+              </Card>
             </div>
-            <div className="flex items-center space-x-2">
-              <Heart className="h-4 w-4 text-green-500" />
-              <span>Save</span>
-            </div>
-          </div>
-        </div>
-      </section>
+          </section>
 
-    </div>
+          {/* Sezione "Ricette" con carosello */}
+          <section className="mb-16">
+            <h2 className="text-2xl font-semibold mb-6 text-center">Ricette con il nostro miele</h2>
+
+            {recipes.length > 0 ? (
+                <div className="relative">
+                  {/* Controlli del carosello */}
+                  <div className="absolute top-1/2 left-4 transform -translate-y-1/2 z-10">
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={handlePrevious}
+                        className="rounded-full bg-background/80 hover:bg-background shadow-lg"
+                        disabled={isAnimating}
+                    >
+                      <ChevronLeft className="h-6 w-6" />
+                    </Button>
+                  </div>
+
+                  <div className="absolute top-1/2 right-4 transform -translate-y-1/2 z-10">
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={handleNext}
+                        className="rounded-full bg-background/80 hover:bg-background shadow-lg"
+                        disabled={isAnimating}
+                    >
+                      <ChevronRight className="h-6 w-6" />
+                    </Button>
+                  </div>
+
+                  {/* Card del carosello */}
+                  <div className="overflow-hidden rounded-xl">
+                    <div
+                        className="flex transition-transform duration-500 ease-in-out"
+                        style={{ transform: `translateX(-${currentRecipeIndex * 100}%)` }}
+                    >
+                      {recipes.map((recipe) => (
+                          <div
+                              key={recipe.id}
+                              className="min-w-full px-4"
+                          >
+                            <div className="bg-background rounded-xl shadow-lg overflow-hidden">
+                              <div className="relative h-80 w-full">
+                                <img
+                                    src={recipe.image_url}
+                                    alt={recipe.name}
+                                    className="w-full h-full object-cover"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex flex-col justify-end p-6">
+                                  <h3 className="text-2xl font-bold text-white mb-2">{recipe.name}</h3>
+                                  <p className="text-white/90">{recipe.description}</p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Indicatori del carosello */}
+                  <div className="flex justify-center space-x-2 mt-4">
+                    {recipes.map((_, index) => (
+                        <button
+                            key={index}
+                            className={`w-3 h-3 rounded-full transition-colors duration-300 ${
+                                index === currentRecipeIndex ? 'bg-mava-orange' : 'bg-gray-300'
+                            }`}
+                            onClick={() => {
+                              setCurrentRecipeIndex(index);
+                            }}
+                        />
+                    ))}
+                  </div>
+                </div>
+            ) : (
+                <div className="text-center text-muted-foreground">
+                  Nessuna ricetta disponibile al momento.
+                </div>
+            )}
+          </section>
+
+          {/* Sezione "Impegno ambientale" */}
+          <section>
+            <h2 className="text-2xl font-semibold mb-6 text-center">Il nostro impegno ambientale</h2>
+
+            <div className="bg-mava-green/10 rounded-xl p-8">
+              <div className="grid md:grid-cols-2 gap-8 items-center">
+                <div>
+                  <h3 className="text-xl font-medium mb-4">Proteggiamo le api</h3>
+
+                  <p className="mb-4">
+                    Le api sono fondamentali per l'ecosistema: impollinano circa l'80% delle piante da fiore nel mondo,
+                    contribuendo alla produzione di gran parte del cibo che mangiamo.
+                  </p>
+
+                  <p>
+                    Il nostro impegno va oltre la produzione di miele. Collaboriamo con associazioni locali per la
+                    conservazione delle api e la creazione di habitat favorevoli agli impollinatori.
+                  </p>
+                </div>
+
+                <div className="rounded-lg overflow-hidden">
+                  <img
+                      src="/images/beekeeper.jpg"
+                      alt="Apicoltura sostenibile"
+                      className="w-full h-auto"
+                  />
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
   );
 };
 

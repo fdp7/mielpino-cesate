@@ -44,16 +44,16 @@ const Header = () => {
 
   return (
     <header className="w-full px-6 py-4">
-      <div className="max-w-7xl mx-auto flex items-center">
-        {/* Logo (a sinistra) */}
-        <div className="flex-1">
+      <div className="max-w-7xl mx-auto flex justify-between items-center relative">
+        {/* Logo (all'estremo sinistro) */}
+        <div className="flex-none">
           <Link to="/" className="text-4xl font-bold text-foreground tracking-tight hover:text-mava-yellow transition-all duration-300">
             MIELPINO
           </Link>
         </div>
 
-        {/* Navigation (centro) */}
-        <div className="flex-1 flex justify-center">
+        {/* Navigation (esattamente al centro) */}
+        <div className="absolute left-1/2 transform -translate-x-1/2">
           <Button
             variant="ghost" 
             className="rounded-full px-6 py-2 text-foreground hover:bg-muted"
@@ -63,8 +63,8 @@ const Header = () => {
           </Button>
         </div>
 
-        {/* Right side icons (commentati) */}
-        <div className="flex items-center space-x-3">
+        {/* Carrello (all'estremo destro) */}
+        <div className="flex-none">
           <Button
             variant="ghost"
             size="icon"
@@ -73,7 +73,7 @@ const Header = () => {
           >
             <ShoppingCart className="h-5 w-5" />
             {cartItems.length > 0 && (
-                <span className="absolute top-4 right-4 bg-mava-orange text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
+                <span className="absolute top-0 right-0 bg-mava-orange text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
                 {cartItems.length}
               </span>
             )}

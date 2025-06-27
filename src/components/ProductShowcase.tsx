@@ -261,14 +261,13 @@ const ProductShowcase = ({products}: {products: Product[]}) => {
             style={{ transitionDelay: '0ms' }}
           >
             <CardContent className="p-6">
-              <h3 className="text-xl font-semibold text-mava-green mb-3">Énergie Naturelle</h3>
+              <h3 className="text-xl font-semibold text-mava-green mb-3">Natuale</h3>
               <p className="text-muted-foreground mb-4">
-                Une formule unique qui te donne de l'énergie progressive et durable,
-                sans les effets secondaires des boissons énergisantes traditionnelles.
+                Il nostro miele non contiene conservanti e non subisce trattamenti termici, così mantiene intatti enzimi, vitamine e tutte le sue preziose proprietà naturali.
               </p>
               <div className="flex items-center space-x-2">
                 <div className="w-3 h-3 bg-mava-green rounded-full"></div>
-                <span className="text-sm font-medium">100% Naturel</span>
+                <span className="text-sm font-medium">100% Naturale</span>
               </div>
             </CardContent>
           </Card>
@@ -285,14 +284,13 @@ const ProductShowcase = ({products}: {products: Product[]}) => {
             style={{ transitionDelay: '150ms' }}
           >
             <CardContent className="p-6">
-              <h3 className="text-xl font-semibold text-mava-green mb-3">Performance Optimale</h3>
+              <h3 className="text-xl font-semibold text-mava-green mb-3">Ricco di benefici</h3>
               <p className="text-muted-foreground mb-4">
-                Améliore ta concentration et tes performances sans stress ni nervosité.
-                L'énergie parfaite pour tes journées les plus intenses.
+                Fonte naturale di energia e benessere, il nostro miele contiene zuccheri semplici, vitamine e minerali, con proprietà antibatteriche e lenitive per la tua salute quotidiana.
               </p>
               <div className="flex items-center space-x-2">
                 <div className="w-3 h-3 bg-mava-orange rounded-full"></div>
-                <span className="text-sm font-medium">Longue Durée</span>
+                <span className="text-sm font-medium">Salutare</span>
               </div>
             </CardContent>
           </Card>
@@ -309,14 +307,13 @@ const ProductShowcase = ({products}: {products: Product[]}) => {
             style={{ transitionDelay: '300ms' }}
           >
             <CardContent className="p-6">
-              <h3 className="text-xl font-semibold text-mava-green mb-3">Sans Crash</h3>
+              <h3 className="text-xl font-semibold text-mava-green mb-3">Origine Garantita</h3>
               <p className="text-muted-foreground mb-4">
-                Une vague d'énergie tout en douceur pour t'activer sans contrecoup.
-                Fini les chutes d'énergie brutales.
+                Il nostro miele è genuino ed unico, proveniente da un'apicoltura sostenibile, rispettando le api e il variegato ambiente circostante.
               </p>
               <div className="flex items-center space-x-2">
                 <div className="w-3 h-3 bg-mava-blue rounded-full"></div>
-                <span className="text-sm font-medium">Énergie Stable</span>
+                <span className="text-sm font-medium">Unico</span>
               </div>
             </CardContent>
           </Card>
