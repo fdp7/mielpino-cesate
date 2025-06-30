@@ -108,13 +108,13 @@ const Learn = () => {
                         <TableCell>15%</TableCell>
                       </TableRow>
                       <TableRow>
-                        <TableCell>Carboidrati</TableCell>
-                        <TableCell>82.4 g</TableCell>
-                        <TableCell>28%</TableCell>
+                        <TableCell>Zuccheri</TableCell>
+                        <TableCell>82 g</TableCell>
+                        <TableCell>15%</TableCell>
                       </TableRow>
                       <TableRow>
-                        <TableCell>Zuccheri</TableCell>
-                        <TableCell>82.12 g</TableCell>
+                        <TableCell>Grassi</TableCell>
+                        <TableCell>0 g</TableCell>
                         <TableCell>-</TableCell>
                       </TableRow>
                       <TableRow>
@@ -129,7 +129,7 @@ const Learn = () => {
                       </TableRow>
                     </TableBody>
                   </Table>
-                  <p className="text-sm text-muted-foreground mt-4">* Valori basati su una dieta di 2000 calorie</p>
+                  <p className="text-sm text-muted-foreground mt-4">* Valori basati su una dieta di 2000 kcal</p>
                 </CardContent>
               </Card>
             </div>

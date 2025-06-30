@@ -1,6 +1,4 @@
-- inviare email conferma ordine a me: opzionale
+- inviare email conferma ordine effettuato a me: opzionale
 - inviare email conferma ordine al cliente
-- usare etichette reali
-- fix card ricette
-- contenuti reali landing page
-- contenuti reali learn
+- usare modello 3d con etichetta reale
+- contenuti reali e immagini in learn
