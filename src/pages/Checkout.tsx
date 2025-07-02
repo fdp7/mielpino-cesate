@@ -6,11 +6,12 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
-import { ArrowLeft } from "lucide-react";
+import {ArrowLeft, Check} from "lucide-react";
 import Header from "@/components/Header";
 import confetti from "canvas-confetti";
 import {Order, submitOrder, getOrderPositionInQueue} from "@/api/cart.ts";
 import { CartItem } from "@/api/cart.ts";
+import {generateOrderReceipt} from "@/services/pdf.ts";
 
 interface CheckoutData {
   email: string;
@@ -31,6 +32,7 @@ const Checkout = () => {
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [orderId, setOrderId] = useState<number | null>(null);
+  const [order, setOrder] = useState<Order | null>(null);
   const [formData, setFormData] = useState<CheckoutData>({
     email: "",
     firstName: "",
@@ -40,6 +42,7 @@ const Checkout = () => {
     postalCode: "",
     phone: ""
   });
+  const [pdfDownloaded, setPdfDownloaded] = useState(false);
 
   // Calcolo corretto dei totali
   const subtotal = cartItems.reduce((sum, item) => {
@@ -48,7 +51,7 @@ const Checkout = () => {
     return sum + (itemPrice * item.quantity * sizeValue);
   }, 0);
 
-  const shipping = subtotal > 100 ? 0 : 7.40; // Spedizione gratuita sopra i 100€
+  const shipping = subtotal > 100 ? 0 : 5.00; // Spedizione gratuita sopra i 100€
   const taxes = 0 //subtotal * 0.05; // 5% di tasse
   const total = subtotal + shipping + taxes;
 
@@ -63,7 +66,7 @@ const Checkout = () => {
       setIsSubmitting(true);
 
       // Creazione dell'ordine con i dati del cliente
-      const order: Order = {
+      const newOrder: Order = {
         total: total,
         status: 'pending',
         created_at: new Date().toISOString(),
@@ -79,8 +82,9 @@ const Checkout = () => {
       };
 
       // Invio dell'ordine all'API
-      const newOrderId = await submitOrder(order, cartItems);
+      const newOrderId = await submitOrder(newOrder, cartItems);
       setOrderId(newOrderId);
+      setOrder({...newOrder, id:newOrderId});
 
       const position = await getOrderPositionInQueue(newOrderId);
       setQueuePosition(position);
@@ -105,8 +109,14 @@ const Checkout = () => {
     }
   };
 
-  const handleBackToHome = () => {
-    navigate("/");
+  const handleDownloadReceipt = async () => {
+    if (!order || !cartItems) return;
+    try {
+      await generateOrderReceipt(order, cartItems);
+      setPdfDownloaded(true);
+    } catch (error) {
+      console.error("Errore nella generazione della ricevuta: ", error);
+    }
   };
 
   return (
@@ -298,23 +308,31 @@ const Checkout = () => {
       {/* Success Dialog */}
       <Dialog open={showSuccessDialog} onOpenChange={() => {}}>
         <DialogContent className="sm:max-w-md" onPointerDownOutside={(e) => e.preventDefault()}>
-          <DialogTitle className="text-center text-2xl font-bold text-primary">Grazie!</DialogTitle>
-          <div className="text-center space-y-4 py-6">
-            <div>
-              <p className="text-lg font-semibold">Data di consegna prevista</p>
-              <p className="text-muted-foreground">Entro 14 giorni</p>
-            </div>
-            <div>
-              <p className="text-lg font-semibold">Ordine in coda</p>
-              <p className="text-muted-foreground">#{queuePosition || "1"}</p>
-            </div>
-            <div>
-              <p className="text-lg font-semibold">Importo totale</p>
-              <p className="text-2xl font-bold">€{total.toFixed(2)}</p>
-            </div>
-            <Button 
-              onClick={handleBackToHome}
-              className="w-full bg-primary hover:bg-primary/90 mt-6"
+          <DialogTitle className="text-lg font-semibold">Ordine confermato!</DialogTitle>
+          <div className="text-center py-4">
+            {/*<div className="w-12 h-12 rounded-full bg-green-100 mx-auto flex items-center justify-center">*/}
+            {/*  <Check className="h-6 w-6 text-green-600" />*/}
+            {/*</div>*/}
+            <h3 className="mt-4 text-lg font-semibold">Ordine confermato!</h3>
+            <p className="mt-2 text-muted-foreground">
+              Il tuo ordine #{orderId} è stato registrato con successo.
+            </p>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Ti contatteremo presto per la consegna.
+            </p>
+          </div>
+          <div className="flex flex-col gap-3 mt-4">
+            <Button
+                onClick={handleDownloadReceipt}
+                className="bg-mava-orange hover:bg-mava-orange/90"
+                disabled={pdfDownloaded}
+            >
+              {pdfDownloaded ? "Ricevuta scaricata" : "Scarica ricevuta"}
+            </Button>
+            <Button
+                onClick={() => navigate('/')}
+                variant="outline"
+                disabled={!pdfDownloaded}
             >
               Torna alla home
             </Button>

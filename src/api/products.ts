@@ -33,11 +33,22 @@ export async function getProductById(id: number): Promise<Product | null> {
   return data;
 }
 
-export async function updateProductStock(productId: number, newStock: number): Promise<void> {
-  const { error } = await supabase
-    .from('products')
-    .update({ stock: newStock })
-    .eq('id', productId);
+export async function updateProductStock(productId: number, newStock: number): Promise<boolean> {
+  try {
+    // Aggiorniamo il prodotto nel database
+    const { data, error: updateError } = await supabase
+        .from('products')
+        .update({ stock: newStock })
+        .eq('id', productId)
+        .select();
 
-  if (error) throw error;
+    if (updateError) throw updateError;
+
+    console.log("Update riuscito:", data);
+
+    return true;
+  } catch (error) {
+    console.error(`Errore nell'aggiornamento dello stock per il prodotto ${productId}:`, error);
+    return false;
+  }
 }

@@ -16,7 +16,7 @@ export type CartItem = {
 export type Order = {
   id?: number;
   total: number;
-  status: 'pending' | 'completed' | 'cancelled';
+  status: 'pending' | 'processing' | 'completed' | 'cancelled';
   checkout_info: CheckoutInfo;
   created_at?: string;
 };
@@ -59,10 +59,6 @@ export async function submitOrder(order: Order, items: CartItem[]): Promise<numb
 
     // 3. Aggiornare lo stock per ogni prodotto
     for (const item of items) {
-      // Calcola la quantità effettiva in base alla dimensione
-      const sizeValue = item.size ? parseFloat(item.size) : 1;
-      const stockToRemove = item.quantity * sizeValue;
-
       // Prima ottenere lo stock corrente
       const { data: productData, error: productError } = await supabase
           .from('products')
@@ -72,11 +68,15 @@ export async function submitOrder(order: Order, items: CartItem[]): Promise<numb
 
       if (productError) throw productError;
 
+      // Calcola la quantità effettiva in base alla dimensione
+      const sizeValue = item.size ? parseFloat(item.size) : 1;
+      const stockToRemove = item.quantity * sizeValue;
       const currentStock = productData.stock;
       const newStock = Math.max(0, currentStock - stockToRemove);
 
       // Aggiornare lo stock
-      await updateProductStock(item.productId, newStock);
+      const updated = await updateProductStock(item.productId, newStock);
+      console.log("Updated: ", updated);
     }
 
     return orderData.id;
