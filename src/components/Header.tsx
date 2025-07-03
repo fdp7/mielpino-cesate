@@ -4,10 +4,12 @@ import { Link } from "react-router-dom";
 import Cart from "./Cart";
 import {useEffect, useState} from "react";
 import {CartItem} from "@/api/cart.ts";
+import {useIsMobile} from "@/hooks/use-mobile.tsx";
 
 const Header = () => {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const isMobile = useIsMobile();
 
   // Carica gli articoli del carrello dal localStorage
   useEffect(() => {
@@ -52,16 +54,18 @@ const Header = () => {
           </Link>
         </div>
 
-        {/* Navigation (esattamente al centro) */}
-        <div className="absolute left-1/2 transform -translate-x-1/2">
-          <Button
-            variant="ghost" 
-            className="rounded-full px-6 py-2 text-foreground hover:bg-muted"
-            asChild
-          >
-            <Link to="/learn">Scopri di più</Link>
-          </Button>
-        </div>
+        {/* Navigation - nascosta su mobile */}
+        {!isMobile && (
+            <div className="absolute left-1/2 transform -translate-x-1/2">
+              <Button
+                  variant="ghost"
+                  className="rounded-full px-6 py-2 text-foreground hover:bg-muted"
+                  asChild
+              >
+                <Link to="/learn">Scopri di più</Link>
+              </Button>
+            </div>
+        )}
 
         {/* Carrello (all'estremo destro) */}
         <div className="flex-none">

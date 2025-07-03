@@ -42,7 +42,7 @@ export const generateOrderReceipt = (
 
         // Tabella prodotti
         const tableColumn = ["Prodotto", "Formato", "Prezzo", "Quantità", "Totale"];
-        const tableRows= [];
+        const tableRows = [];
 
         items.forEach(item => {
             const sizeValue = item.size ? parseFloat(item.size) : 1;
@@ -58,6 +58,16 @@ export const generateOrderReceipt = (
                 `€${subtotal.toFixed(2)}`
             ]);
         });
+
+        // Aggiungi sempre la riga Spedizione come ultima voce
+        const shippingCost = 5.00; // Costo fisso spedizione
+        tableRows.push([
+            "Spedizione",
+            "-",
+            `€${shippingCost.toFixed(2)}`,
+            "-",
+            `€${shippingCost.toFixed(2)}`
+        ]);
 
         autoTable(doc, {
             head: [tableColumn],

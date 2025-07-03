@@ -8,6 +8,7 @@ import { OrbitControls } from "@react-three/drei";
 import { MieleJar3D } from "./MieleJar3D.tsx";
 import { Link } from "react-router-dom";
 import { Product } from "@/api/products";
+import {useIsMobile} from "@/hooks/use-mobile.tsx";
 
 const ProductShowcase = ({products}: {products: Product[]}) => {
   const navigate = useNavigate();
@@ -16,6 +17,7 @@ const ProductShowcase = ({products}: {products: Product[]}) => {
   const [scrollY, setScrollY] = useState(0);
   const [showCards, setShowCards] = useState(false);
   const [showBigText, setShowBigText] = useState(false);
+  const isMobile = useIsMobile();
 
   const currentProduct = products && products.length > 0 ? products[currentProductIndex] : null
 
@@ -226,12 +228,7 @@ const ProductShowcase = ({products}: {products: Product[]}) => {
         </div>
 
         {/* Product Button */}
-        <div
-          className="mt-12"
-          style={{
-            transform: `translateY(${Math.min(scrollY * 0.5, 120)}px)`
-          }}
-        >
+        <div className="mt-12">
           <Button
             onClick={() => navigate(`/product/${currentProduct.id}`)}
             className={`${currentProduct.btn_color} hover:opacity-90 text-white font-semibold px-8 py-4 rounded-full text-lg transition-all duration-500 ${
@@ -247,11 +244,21 @@ const ProductShowcase = ({products}: {products: Product[]}) => {
       <div className="h-[50vh]"></div>
 
       {/* Horizontal cards layout - ora usa un posizionamento che evita di interferire con i pulsanti di navigazione */}
-      <div className="fixed top-2/3 left-0 right-0 transform -translate-y-1/2 z-20">
-        <div className="max-w-7xl mx-auto flex justify-between px-4">
+      <div className={`fixed ${
+        isMobile ? 'top-1/2' : 'top-2/3'
+      } left-0 right-0 transform -translate-y-1/2 z-20 transition-all duration-500 ${
+        showBigText ? 'opacity-0 pointer-events-none' : 'opacity-100'
+      }`}>
+        <div className={`max-w-7xl mx-auto px-4 ${
+          isMobile 
+            ? 'flex flex-col space-y-4' 
+            : 'flex justify-between'
+        }`}>
           {/* Left Card */}
           <Card
-            className={`w-72 bg-background/95 backdrop-blur-sm shadow-lg transition-all duration-700 ease-out ${
+            className={`${
+              isMobile ? 'w-full' : 'w-72'
+            } bg-background/95 backdrop-blur-sm shadow-lg transition-all duration-700 ease-out ${
               showCards 
                 ? 'translate-x-0 opacity-100' 
                 : scrollY > window.innerHeight * 0.8 
@@ -274,7 +281,9 @@ const ProductShowcase = ({products}: {products: Product[]}) => {
 
           {/* Center Card */}
           <Card
-            className={`w-72 bg-background/95 backdrop-blur-sm shadow-lg transition-all duration-700 ease-out ${
+            className={`${
+              isMobile ? 'w-full' : 'w-72'
+            } bg-background/95 backdrop-blur-sm shadow-lg transition-all duration-700 ease-out ${
               showCards
                 ? 'translate-x-0 opacity-100'
                 : scrollY > window.innerHeight * 0.8
@@ -297,7 +306,9 @@ const ProductShowcase = ({products}: {products: Product[]}) => {
 
           {/* Right Card */}
           <Card
-            className={`w-72 bg-background/95 backdrop-blur-sm shadow-lg transition-all duration-700 ease-out ${
+            className={`${
+              isMobile ? 'w-full' : 'w-72'
+            } bg-background/95 backdrop-blur-sm shadow-lg transition-all duration-700 ease-out ${
               showCards
                 ? 'translate-x-0 opacity-100'
                 : scrollY > window.innerHeight * 0.8
@@ -333,31 +344,56 @@ const ProductShowcase = ({products}: {products: Product[]}) => {
       </div>
 
       {/* Testi grandi che appaiono quando si scorre verso il basso */}
-      <div className={`w-full transition-all duration-1000 ease-in-out ${
+      <div className={`w-full transition-all duration-1000 ease-in-out z-20 ${
         showBigText ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-32'
       }`}>
         {/* SCOPRI MIELPINO - testo grande con link a /learn */}
-        <Link
-          to="/learn"
-          className="relative z-10 w-full text-center transition-all duration-300 block"
-          onClick={() => {
-            setTimeout(() => window.scrollTo(0, 0), 0);
-          }}
-        >
-          <h2 className="text-8xl md:text-[12vw] lg:text-[15vw] font-extrabold text-foreground hover:text-mava-yellow leading-none tracking-tight">
-            SCOPRI MIELPINO
-          </h2>
-        </Link>
+        {isMobile ? (
+            <Link
+                to="/learn"
+                className="relative z-30 w-full text-center transition-all duration-300 block px-4"
+                onClick={() => {
+                  setTimeout(() => window.scrollTo(0, 0), 0);
+                }}
+            >
+              <h2 className="text-4xl sm:text-6xl md:text-8xl font-extrabold text-foreground hover:text-mava-yellow leading-none tracking-tight">
+                SCOPRI MIELPINO
+              </h2>
+            </Link>
+        ) : (
+            <Link
+                to="/learn"
+                className="relative z-30 w-full text-center transition-all duration-300 block"
+                onClick={() => {
+                  setTimeout(() => window.scrollTo(0, 0), 0);
+                }}
+            >
+              <h2 className="text-8xl md:text-[12vw] lg:text-[15vw] font-extrabold text-foreground hover:text-mava-yellow leading-none tracking-tight">
+                SCOPRI MIELPINO
+              </h2>
+            </Link>
+        )}
 
         {/* ACQUISTA - testo grande con scroll to top */}
-        <button
-          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          className="relative z-10 w-full text-center transition-all duration-300 block mt-8"
-        >
-          <h2 className="text-8xl md:text-[12vw] lg:text-[15vw] font-extrabold text-foreground hover:text-mava-yellow leading-none tracking-tight">
-            ACQUISTA
-          </h2>
-        </button>
+        {isMobile ? (
+            <button
+                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                className="relative z-30 w-full text-center transition-all duration-300 block mt-8 px-4"
+            >
+              <h2 className="text-4xl sm:text-6xl md:text-8xl font-extrabold text-foreground hover:text-mava-yellow leading-none tracking-tight">
+                ACQUISTA
+              </h2>
+            </button>
+        ) : (
+            <button
+                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                className="relative z-30 w-full text-center transition-all duration-300 block mt-8"
+            >
+              <h2 className="text-8xl md:text-[12vw] lg:text-[15vw] font-extrabold text-foreground hover:text-mava-yellow leading-none tracking-tight">
+                ACQUISTA
+              </h2>
+            </button>
+        )}
       </div>
     </div>
     </>
