@@ -245,7 +245,7 @@ const ProductShowcase = ({products}: {products: Product[]}) => {
 
       {/* Horizontal cards layout - ora usa un posizionamento che evita di interferire con i pulsanti di navigazione */}
       <div className={`fixed ${
-        isMobile ? '-bottom-1/4' : 'top-2/3'
+        isMobile ? 'top-1/2' : 'top-1/2'
       } left-0 right-0 transform -translate-y-1/2 z-50 transition-all duration-500 ${
         showBigText ? 'opacity-0 pointer-events-none' : showCards ? 'opacity-100' : 'opacity-0 pointer-events-none'
       }`}>
