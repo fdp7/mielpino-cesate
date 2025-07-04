@@ -245,9 +245,9 @@ const ProductShowcase = ({products}: {products: Product[]}) => {
 
       {/* Horizontal cards layout - ora usa un posizionamento che evita di interferire con i pulsanti di navigazione */}
       <div className={`fixed ${
-        isMobile ? 'top-1/2' : 'top-2/3'
-      } left-0 right-0 transform -translate-y-1/2 z-20 transition-all duration-500 ${
-        showBigText ? 'opacity-0 pointer-events-none' : 'opacity-100'
+        isMobile ? '-bottom-1/4' : 'top-2/3'
+      } left-0 right-0 transform -translate-y-1/2 z-50 transition-all duration-500 ${
+        showBigText ? 'opacity-0 pointer-events-none' : showCards ? 'opacity-100' : 'opacity-0 pointer-events-none'
       }`}>
         <div className={`max-w-7xl mx-auto px-4 ${
           isMobile 
@@ -261,7 +261,7 @@ const ProductShowcase = ({products}: {products: Product[]}) => {
             } bg-background/95 backdrop-blur-sm shadow-lg transition-all duration-700 ease-out ${
               showCards 
                 ? 'translate-x-0 opacity-100' 
-                : scrollY > window.innerHeight * 0.8 
+                : scrollY > window.innerHeight * 0.8
                   ? '-translate-x-full opacity-0' 
                   : '-translate-x-full opacity-0'
             }`}

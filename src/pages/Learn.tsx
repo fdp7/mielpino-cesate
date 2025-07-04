@@ -61,7 +61,7 @@ const Learn = () => {
             <div className="grid md:grid-cols-2 gap-8 items-center">
               <div className="rounded-lg overflow-hidden">
                 <img
-                    src="/images/honey-production.jpg"
+                    src="https://nbvhtdzjethfxhkwswpz.supabase.co/storage/v1/object/sign/assets/apicoltura-01.webp?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9kZGRhZmQyNi0xOGMxLTQxYTQtODA0Ny05ZjE5Nzg0OTUwODUiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJhc3NldHMvYXBpY29sdHVyYS0wMS53ZWJwIiwiaWF0IjoxNzUxNjM3MjY4LCJleHAiOjIwNjY5OTcyNjh9.QUpWgWSQL0x2aA3Yh6UqJHzuw7k7r8wsK_zYAH9k3Xs"
                     alt="Produzione del miele"
                     className="w-full h-auto object-cover"
                 />
@@ -239,7 +239,7 @@ const Learn = () => {
 
                 <div className="rounded-lg overflow-hidden">
                   <img
-                      src="/images/beekeeper.jpg"
+                      src="https://nbvhtdzjethfxhkwswpz.supabase.co/storage/v1/object/sign/assets/apicoluta-02.jpg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9kZGRhZmQyNi0xOGMxLTQxYTQtODA0Ny05ZjE5Nzg0OTUwODUiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJhc3NldHMvYXBpY29sdXRhLTAyLmpwZyIsImlhdCI6MTc1MTYzNzMxOSwiZXhwIjoyMDY2OTk3MzE5fQ.GebX6CsJKy6wKpOyZaBBI0OjdwzFMS2INz2D3dYqde4"
                       alt="Apicoltura sostenibile"
                       className="w-full h-auto"
                   />
