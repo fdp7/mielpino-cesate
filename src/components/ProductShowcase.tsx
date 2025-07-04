@@ -5,10 +5,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
-import { MieleJar3D } from "./MieleJar3D.tsx";
 import { Link } from "react-router-dom";
 import { Product } from "@/api/products";
 import {useIsMobile} from "@/hooks/use-mobile.tsx";
+import HoneyJarGLB from "@/components/HoneyJarGLB.tsx";
 
 const ProductShowcase = ({products}: {products: Product[]}) => {
   const navigate = useNavigate();
@@ -167,68 +167,94 @@ const ProductShowcase = ({products}: {products: Product[]}) => {
 
       {/* Main Content */}
       <div className="relative z-30 flex flex-col items-center justify-center min-h-screen pt-20 pb-32 sticky top-0">
-        {/* Navigation Arrows */}
-        <div className="flex items-center justify-center space-x-8 md:space-x-32 relative z-50">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={handlePrevious}
-            className={`w-12 h-12 rounded-full bg-background/80 hover:bg-background transition-all duration-300 ${
-              isAnimating ? 'opacity-50 cursor-not-allowed' : ''
-            } relative z-50`}
-            disabled={isAnimating}
-          >
-            <ChevronLeft className="h-6 w-6 text-foreground" />
-          </Button>
+        {/* Layout Desktop: frecce ai lati */}
+        {!isMobile && (
+          <div className="flex items-center justify-center space-x-12 md:space-x-48 relative z-50">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={handlePrevious}
+              className={`w-12 h-12 rounded-full bg-background/80 hover:bg-background transition-all duration-300 ${
+                isAnimating ? 'opacity-50 cursor-not-allowed' : ''
+              } relative z-50`}
+              disabled={isAnimating}
+            >
+              <ChevronLeft className="h-6 w-6 text-foreground" />
+            </Button>
 
-          {/* Product Can - 3D with scroll animation */}
-          {/*<div*/}
-          {/*  className={`transition-all duration-500 ${isAnimating ? 'scale-95 opacity-50' : 'scale-100 opacity-100'}`}*/}
-          {/*  // style={{*/}
-          {/*  //   transform: `translateY(${scrollY}px)`*/}
-          {/*  // }}*/}
-          {/*>*/}
-          {/*  <Can3D*/}
-          {/*    color={currentProduct.bg_color}*/}
-          {/*    flavor={currentProduct.description}*/}
-          {/*    isAnimating={isAnimating}*/}
-          {/*  />*/}
-          {/*</div>*/}
+            {/* Modello GLB - dimensioni complete */}
+            <div
+                className={`transition-all duration-500 h-[500px] w-96 ${isAnimating ? 'scale-95 opacity-50' : 'scale-100 opacity-100'}`}
+            >
+              <Canvas camera={{ position: [3, 2, 5], fov: 50 }}>
+                <ambientLight intensity={0.6} />
+                <directionalLight position={[20, 90, 20]} intensity={1} />
 
-          {/* MieleJar3D */}
-          <div
-              className={`transition-all duration-500 h-96 w-64 ${isAnimating ? 'scale-95 opacity-50' : 'scale-100 opacity-100'}`}
-          >
-            <Canvas camera={{ position: [3, 2, 5], fov: 50 }}>
-              <ambientLight intensity={0.6} />
-              <directionalLight position={[10, 10, 5]} intensity={1} />
-              <pointLight position={[-10, -10, -5]} intensity={0.3} color="#ffb000" />
+                <HoneyJarGLB
+                    modelPath="/assets/miele_dippi_2.glb"
+                    scale={40}
+                    honeyColor={getHoneyColor()}
+                    stockLevel={getHoneyLevel()}
+                />
 
-              <MieleJar3D
-                  honeyLevel={getHoneyLevel()}
-                  honeyColor={getHoneyColor()}
-                  labelImageUrl={currentProduct.image_url}
-              />
+                <OrbitControls
+                  enablePan={false}
+                  enableZoom={true}
+                  minDistance={3}
+                  maxDistance={8}
+                  minPolarAngle={Math.PI / 6}
+                  maxPolarAngle={Math.PI / 2.1}
+                />
+              </Canvas>
+            </div>
 
-              <OrbitControls enablePan={false} enableZoom={true} minDistance={3} maxDistance={8} />
-            </Canvas>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={handleNext}
+              className={`w-12 h-12 rounded-full bg-background/80 hover:bg-background transition-all duration-300 ${
+                isAnimating ? 'opacity-50 cursor-not-allowed' : ''
+              } relative z-50`}
+              disabled={isAnimating}
+            >
+              <ChevronRight className="h-6 w-6 text-foreground" />
+            </Button>
           </div>
+        )}
 
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={handleNext}
-            className={`w-12 h-12 rounded-full bg-background/80 hover:bg-background transition-all duration-300 ${
-              isAnimating ? 'opacity-50 cursor-not-allowed' : ''
-            } relative z-50`}
-            disabled={isAnimating}
-          >
-            <ChevronRight className="h-6 w-6 text-foreground" />
-          </Button>
-        </div>
+        {/* Layout Mobile: barattolo centrato */}
+        {isMobile && (
+          <div className="flex flex-col items-center justify-center relative z-50">
+            {/* Modello GLB - dimensioni complete anche su mobile */}
+            <div
+                className={`transition-all duration-500 h-[500px] w-96 ${isAnimating ? 'scale-95 opacity-50' : 'scale-100 opacity-100'}`}
+            >
+              <Canvas camera={{ position: [3, 2, 5], fov: 50 }}>
+                <ambientLight intensity={0.6} />
+                <directionalLight position={[20, 90, 20]} intensity={1} />
+
+                <HoneyJarGLB
+                    modelPath="/assets/miele_dippi_2.glb"
+                    scale={40}
+                    honeyColor={getHoneyColor()}
+                    stockLevel={getHoneyLevel()}
+                />
+
+                <OrbitControls
+                  enablePan={false}
+                  enableZoom={true}
+                  minDistance={3}
+                  maxDistance={8}
+                  minPolarAngle={Math.PI / 6}
+                  maxPolarAngle={Math.PI / 2.1}
+                />
+              </Canvas>
+            </div>
+          </div>
+        )}
 
         {/* Product Button */}
-        <div className="mt-12">
+        <div className="mt-12 px-4">
           <Button
             onClick={() => navigate(`/product/${currentProduct.id}`)}
             className={`${currentProduct.btn_color} hover:opacity-90 text-white font-semibold px-8 py-4 rounded-full text-lg transition-all duration-500 ${
@@ -238,6 +264,35 @@ const ProductShowcase = ({products}: {products: Product[]}) => {
             {currentProduct.name}
           </Button>
         </div>
+
+        {/* Frecce sotto il pulsante solo su mobile */}
+        {isMobile && (
+          <div className="flex items-center justify-center space-x-8 mt-6 relative z-50">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={handlePrevious}
+              className={`w-12 h-12 rounded-full bg-background/80 hover:bg-background transition-all duration-300 ${
+                isAnimating ? 'opacity-50 cursor-not-allowed' : ''
+              } relative z-50`}
+              disabled={isAnimating}
+            >
+              <ChevronLeft className="h-6 w-6 text-foreground" />
+            </Button>
+
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={handleNext}
+              className={`w-12 h-12 rounded-full bg-background/80 hover:bg-background transition-all duration-300 ${
+                isAnimating ? 'opacity-50 cursor-not-allowed' : ''
+              } relative z-50`}
+              disabled={isAnimating}
+            >
+              <ChevronRight className="h-6 w-6 text-foreground" />
+            </Button>
+          </div>
+        )}
       </div>
 
       {/* Spazio vuoto per consentire lo scorrimento - ridotto a metà */}
