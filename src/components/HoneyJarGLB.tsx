@@ -52,6 +52,7 @@ export default function HoneyJarGLB({modelPath, scale = 1, honeyColor = "#FFA500
                     distanceFactor={0.15}
                     rotation={[-Math.PI / 2, 0, 0]}
                     style={{
+                        translate: '-40% 0%',
                         pointerEvents: 'none',
                         userSelect: 'none'
                     }}
