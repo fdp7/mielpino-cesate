@@ -31,6 +31,12 @@ const ProductDetail = () => {
     return Math.min(150, Math.max(0, product.stock));
   };
 
+  // Usa direttamente lo stock dal database
+  const getStockLevel = () => {
+    if (!product) return 0;
+    return product.stock;
+  };
+
   const getHoneyColor = () => {
     if (!product || !product.honey_color) return "#ffb000"; // Colore predefinito
     return product.honey_color;
@@ -253,7 +259,7 @@ const ProductDetail = () => {
                         modelPath="/assets/miele_dippi_2.glb"
                         scale={40}
                         honeyColor={getHoneyColor()}
-                        stockLevel={getHoneyLevel()}
+                        stockLevel={getStockLevel()}
                     />
 
                     <OrbitControls

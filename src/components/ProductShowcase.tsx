@@ -21,11 +21,10 @@ const ProductShowcase = ({products}: {products: Product[]}) => {
 
   const currentProduct = products && products.length > 0 ? products[currentProductIndex] : null
 
-  // Calcola il livello di miele in base allo stock (da 0 a 100)
-  const getHoneyLevel = () => {
+  // Usa direttamente lo stock dal database
+  const getStockLevel = () => {
     if (!currentProduct) return 0;
-    // Assumiamo che lo stock massimo sia 100kg, quindi convertiamo direttamente
-    return Math.min(150, Math.max(0, currentProduct.stock));
+    return currentProduct.stock;
   };
 
   const getHoneyColor = () => {
@@ -194,7 +193,7 @@ const ProductShowcase = ({products}: {products: Product[]}) => {
                     modelPath="/assets/miele_dippi_2.glb"
                     scale={40}
                     honeyColor={getHoneyColor()}
-                    stockLevel={getHoneyLevel()}
+                    stockLevel={getStockLevel()}
                 />
 
                 <OrbitControls
@@ -237,7 +236,7 @@ const ProductShowcase = ({products}: {products: Product[]}) => {
                     modelPath="/assets/miele_dippi_2.glb"
                     scale={40}
                     honeyColor={getHoneyColor()}
-                    stockLevel={getHoneyLevel()}
+                    stockLevel={getStockLevel()}
                 />
 
                 <OrbitControls
@@ -456,4 +455,3 @@ const ProductShowcase = ({products}: {products: Product[]}) => {
 };
 
 export default ProductShowcase;
-
