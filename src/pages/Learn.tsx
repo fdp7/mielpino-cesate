@@ -1,16 +1,22 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import Header from "@/components/Header";
 import { getRecipes, Recipe } from "@/api/recipes.ts";
+import { useIsMobile } from "@/hooks/use-mobile.tsx";
 
 const Learn = () => {
-  // Risolto il problema con ESLint sostituendo 'any' con un tipo specifico
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [currentRecipeIndex, setCurrentRecipeIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
+  const isMobile = useIsMobile();
+
+  // Ref per gestire il touch/swipe
+  const carouselRef = useRef<HTMLDivElement>(null);
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
 
   useEffect(() => {
     const loadRecipes = async () => {
@@ -45,6 +51,31 @@ const Learn = () => {
       );
       setIsAnimating(false);
     }, 300);
+  };
+
+  // Gestione touch events per mobile
+  const onTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > 50;
+    const isRightSwipe = distance < -50;
+
+    if (isLeftSwipe && !isAnimating) {
+      handleNext();
+    }
+    if (isRightSwipe && !isAnimating) {
+      handlePrevious();
+    }
   };
 
   return (
@@ -141,33 +172,43 @@ const Learn = () => {
 
             {recipes.length > 0 ? (
                 <div className="relative">
-                  {/* Controlli del carosello */}
-                  <div className="absolute top-1/2 left-4 transform -translate-y-1/2 z-10">
-                    <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={handlePrevious}
-                        className="rounded-full bg-background/80 hover:bg-background shadow-lg"
-                        disabled={isAnimating}
-                    >
-                      <ChevronLeft className="h-6 w-6" />
-                    </Button>
-                  </div>
+                  {/* Controlli del carosello - nascosti su mobile */}
+                  {!isMobile && (
+                    <>
+                      <div className="absolute top-1/2 left-4 transform -translate-y-1/2 z-10">
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={handlePrevious}
+                            className="rounded-full bg-background/80 hover:bg-background shadow-lg"
+                            disabled={isAnimating}
+                        >
+                          <ChevronLeft className="h-6 w-6" />
+                        </Button>
+                      </div>
 
-                  <div className="absolute top-1/2 right-4 transform -translate-y-1/2 z-10">
-                    <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={handleNext}
-                        className="rounded-full bg-background/80 hover:bg-background shadow-lg"
-                        disabled={isAnimating}
-                    >
-                      <ChevronRight className="h-6 w-6" />
-                    </Button>
-                  </div>
+                      <div className="absolute top-1/2 right-4 transform -translate-y-1/2 z-10">
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={handleNext}
+                            className="rounded-full bg-background/80 hover:bg-background shadow-lg"
+                            disabled={isAnimating}
+                        >
+                          <ChevronRight className="h-6 w-6" />
+                        </Button>
+                      </div>
+                    </>
+                  )}
 
-                  {/* Card del carosello */}
-                  <div className="overflow-hidden rounded-xl">
+                  {/* Card del carosello con supporto touch */}
+                  <div
+                    className="overflow-hidden rounded-xl"
+                    ref={carouselRef}
+                    onTouchStart={isMobile ? onTouchStart : undefined}
+                    onTouchMove={isMobile ? onTouchMove : undefined}
+                    onTouchEnd={isMobile ? onTouchEnd : undefined}
+                  >
                     <div
                         className="flex transition-transform duration-500 ease-in-out"
                         style={{ transform: `translateX(-${currentRecipeIndex * 100}%)` }}
@@ -175,7 +216,7 @@ const Learn = () => {
                       {recipes.map((recipe) => (
                           <div
                               key={recipe.id}
-                              className="min-w-full px-4"
+                              className={`min-w-full ${isMobile ? 'px-2' : 'px-4'}`}
                           >
                             <div className="bg-background rounded-xl shadow-lg overflow-hidden">
                               <div className="relative h-80 w-full">

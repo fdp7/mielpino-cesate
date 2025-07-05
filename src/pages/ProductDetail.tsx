@@ -2,11 +2,12 @@ import {useEffect, useState} from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Card, CardContent } from "@/components/ui/card";
 import { ArrowLeft, Minus, Plus, Package } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
-import { MieleJar3D } from "@/components/MieleJar3D.tsx";
+import HoneyJarGLB from "@/components/HoneyJarGLB.tsx";
 import Header from "@/components/Header";
 import Cart from "@/components/Cart";
 import {getProductById, Product} from "@/api/products.ts";
@@ -240,34 +241,49 @@ const ProductDetail = () => {
           </Button>
 
           <div className="grid md:grid-cols-2 gap-8 items-start">
-            {/* Lato sinistro - MieleJar3D */}
-            <div className="flex justify-center">
-              <div className="h-96 w-full">
-                <Canvas camera={{ position: [3, 2, 5], fov: 50 }}>
-                  <ambientLight intensity={0.6} />
-                  <directionalLight position={[10, 10, 5]} intensity={1} />
-                  <pointLight position={[-10, -10, -5]} intensity={0.3} color="#ffb000" />
+            {/* Lato sinistro - HoneyJarGLB */}
+            <div className="space-y-6">
+              <div className="flex justify-center">
+                <div className="h-96 w-full">
+                  <Canvas camera={{ position: [3, 2, 5], fov: 50 }}>
+                    <ambientLight intensity={0.6} />
+                    <directionalLight position={[20, 90, 20]} intensity={1} />
 
-                  <MieleJar3D
-                      honeyLevel={getHoneyLevel()}
-                      honeyColor={getHoneyColor()}
-                        labelImageUrl={product.image_url || ""}
-                  />
+                    <HoneyJarGLB
+                        modelPath="/assets/miele_dippi_2.glb"
+                        scale={40}
+                        honeyColor={getHoneyColor()}
+                        stockLevel={getHoneyLevel()}
+                    />
 
-                  <OrbitControls
-                      enablePan={false}
-                      enableZoom={true}
-                      minDistance={3}
-                      maxDistance={8}
-                  />
-                </Canvas>
+                    <OrbitControls
+                        enablePan={false}
+                        enableZoom={true}
+                        minDistance={3}
+                        maxDistance={8}
+                        minPolarAngle={Math.PI / 6}
+                        maxPolarAngle={Math.PI / 2.1}
+                    />
+                  </Canvas>
+                </div>
               </div>
+
+              {/* Sezione descrizione del prodotto */}
+              {product.description && (
+                <Card className="bg-background/80 backdrop-blur-sm">
+                  <CardContent className="p-6">
+                    <h3 className="text-xl font-semibold text-mava-green mb-4">Descrizione</h3>
+                    <p className="text-muted-foreground leading-relaxed whitespace-pre-line">
+                      {product.description}
+                    </p>
+                  </CardContent>
+                </Card>
+              )}
             </div>
 
             {/* Lato destro - Dettagli prodotto e azioni */}
             <div className="bg-background/80 backdrop-blur-md rounded-lg p-6 shadow-lg">
               <h1 className="text-3xl font-bold mb-2">{product.name}</h1>
-              <p className="text-muted-foreground mb-4">{product.description}</p>
 
               {/* Informazioni su stock e prezzo al kg */}
               <div className="flex flex-col space-y-3 mb-6">

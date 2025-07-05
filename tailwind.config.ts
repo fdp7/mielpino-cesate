@@ -123,4 +123,24 @@ export default {
 		}
 	},
 	plugins: [require("tailwindcss-animate")],
+	safelist: [
+		// Aggiungi le classi di background per tutti i colori mava
+		'bg-mava-sage',
+		'bg-mava-coral',
+		'bg-mava-yellow',
+		'bg-mava-orange',
+		'bg-mava-blue',
+		'bg-mava-green',
+		'bg-mava-mint',
+		'bg-mava-pink',
+		// Aggiungi anche le classi di testo se necessarie
+		'text-mava-sage',
+		'text-mava-coral',
+		'text-mava-yellow',
+		'text-mava-orange',
+		'text-mava-blue',
+		'text-mava-green',
+		'text-mava-mint',
+		'text-mava-pink'
+	],
 } satisfies Config;

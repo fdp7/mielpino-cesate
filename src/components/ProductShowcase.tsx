@@ -39,8 +39,8 @@ const ProductShowcase = ({products}: {products: Product[]}) => {
       setScrollY(currentScrollY);
 
       // Calcola le altezze di soglia in base all'altezza della finestra
-      const cardAppearThreshold = window.innerHeight * 0.3;
-      const cardDisappearThreshold = window.innerHeight * 0.9;
+      const cardAppearThreshold = window.innerHeight * 0.7;
+      const cardDisappearThreshold = window.innerHeight * 1.2;
       const bigTextAppearThreshold = window.innerHeight * 1.1;
 
       // Prima fase: le card appaiono quando si inizia a scorrere
@@ -227,7 +227,7 @@ const ProductShowcase = ({products}: {products: Product[]}) => {
           <div className="flex flex-col items-center justify-center relative z-50">
             {/* Modello GLB - dimensioni complete anche su mobile */}
             <div
-                className={`transition-all duration-500 h-[500px] w-96 ${isAnimating ? 'scale-95 opacity-50' : 'scale-100 opacity-100'}`}
+                className={`transition-all duration-500 h-[400px] w-80 ${isAnimating ? 'scale-95 opacity-50' : 'scale-100 opacity-100'}`}
             >
               <Canvas camera={{ position: [3, 2, 5], fov: 50 }}>
                 <ambientLight intensity={0.6} />
