@@ -11,7 +11,7 @@ import {useIsMobile} from "@/hooks/use-mobile.tsx";
 import ProductGLB from "@/components/ProductGLB.tsx";
 import {getStockLevel, getHoneyColor, getProductModelPath, getProductType} from "@/services/products.ts";
 
-const ProductShowcase = ({products}: {products: Product[]}) => {
+const MielpinoShowcase = ({products}: {products: Product[]}) => {
   const navigate = useNavigate();
   const [currentProductIndex, setCurrentProductIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
@@ -398,7 +398,7 @@ const ProductShowcase = ({products}: {products: Product[]}) => {
         {/* SCOPRI MIELPINO - testo grande con link a /learn */}
         {isMobile ? (
             <Link
-                to="/learn"
+                to="/learn-mielpino"
                 className="relative z-30 w-full text-center transition-all duration-300 block px-4"
                 onClick={() => {
                   setTimeout(() => window.scrollTo(0, 0), 0);
@@ -410,7 +410,7 @@ const ProductShowcase = ({products}: {products: Product[]}) => {
             </Link>
         ) : (
             <Link
-                to="/learn"
+                to="/learn-mielpino"
                 className="relative z-30 w-full text-center transition-all duration-300 block"
                 onClick={() => {
                   setTimeout(() => window.scrollTo(0, 0), 0);
@@ -448,4 +448,4 @@ const ProductShowcase = ({products}: {products: Product[]}) => {
   );
 };
 
-export default ProductShowcase;
+export default MielpinoShowcase;

@@ -1,9 +1,9 @@
 import {getProducts, Product } from "@/api/products";
 import Header from "@/components/Header";
-import ProductShowcase from "@/components/ProductShowcase";
+import MielpinoShowcase from "@/components/MielpinoShowcase.tsx";
 import {useEffect, useState } from "react";
 
-const Index = () => {
+const Mielpino = () => {
     const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState(true);
 
@@ -41,10 +41,10 @@ const Index = () => {
                     <p>Caricamento prodotti...</p>
                 </div>
             ) : (
-                <ProductShowcase products={products} />
+                <MielpinoShowcase products={products} />
             )}
         </div>
     );
 };
 
-export default Index;
+export default Mielpino;

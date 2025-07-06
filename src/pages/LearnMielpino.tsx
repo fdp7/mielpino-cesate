@@ -7,7 +7,7 @@ import Header from "@/components/Header";
 import { getRecipes, Recipe } from "@/api/recipes.ts";
 import { useIsMobile } from "@/hooks/use-mobile.tsx";
 
-const Learn = () => {
+const LearnMielpino = () => {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [currentRecipeIndex, setCurrentRecipeIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
@@ -293,4 +293,4 @@ const Learn = () => {
   );
 };
 
-export default Learn;
+export default LearnMielpino;

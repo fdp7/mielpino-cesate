@@ -36,7 +36,7 @@ export default function ProductGLB({
             case "wax":
                 return {
                     scale: scale * 0.05,
-                    position: [0, 0.62, 0],
+                    position: [0, 0.65, 0],
                     distanceFactor: 2.5,
                     rotation: [-Math.PI / 2, 0, 0],
                     occlude: true
@@ -44,7 +44,7 @@ export default function ProductGLB({
             case "honey":
                 return {
                     scale: scale,
-                    position: [0, 0.042, 0],
+                    position: [0, 0.045, 0],
                     distanceFactor: 0.12,
                     rotation: [-Math.PI / 2, 0, 0],
                     occlude: true
@@ -67,14 +67,14 @@ export default function ProductGLB({
             if (productType === "honey") {
                 console.log(clonedScene);
                 
-                // Nascondi mesh specifici per il miele
-                const honeyMeshesToHide = ['Cylinder001', 'Cylinder002', 'Cylinder004'];
-                honeyMeshesToHide.forEach(meshName => {
-                    const mesh = clonedScene.getObjectByName(meshName);
-                    if (mesh) {
-                        mesh.visible = false;
-                    }
-                });
+                // // Nascondi mesh specifici per il miele
+                // const honeyMeshesToHide = ['Cylinder001', 'Cylinder002', 'Cylinder004'];
+                // honeyMeshesToHide.forEach(meshName => {
+                //     const mesh = clonedScene.getObjectByName(meshName);
+                //     if (mesh) {
+                //         mesh.visible = false;
+                //     }
+                // });
 
                 // Logica per il miele
                 const vetroMesh = clonedScene.getObjectByName('vetro');
