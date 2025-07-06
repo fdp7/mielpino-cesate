@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Minus, Plus, X } from "lucide-react";
 import { getProductById } from "@/api/products.ts";
 import { CartItem } from "@/api/cart.ts";
+import { formatSizeLabel } from "@/services/products.ts";
 
 interface CartProps {
   isOpen: boolean;
@@ -80,7 +81,7 @@ const Cart = ({ isOpen, onOpenChange, items, onUpdateQuantity, onRemoveItem }: C
 
   const getSizeLabel = (size: string): string => {
     const sizeValue = parseFloat(size);
-    return sizeValue === 0.5 ? "500g" : "1kg";
+    return formatSizeLabel(sizeValue);
   };
 
   return (
@@ -128,7 +129,7 @@ const Cart = ({ isOpen, onOpenChange, items, onUpdateQuantity, onRemoveItem }: C
                       <div className="flex-1">
                         <h3 className="font-medium">{item.name}</h3>
                         <p className="text-sm text-muted-foreground">
-                          {sizeLabel} × {item.quantity} = {stockRequired} kg
+                          {sizeLabel} × {item.quantity} = {formatSizeLabel(stockRequired)}
                         </p>
 
                         {/* Controlli quantità */}

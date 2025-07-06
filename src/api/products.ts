@@ -11,6 +11,8 @@ export type Product = {
   bg_color?: string;
   btn_color?: string;
   honey_color?: string;
+  sizes_kg?: number[];
+  model_path?: string;
 };
 
 export async function getProducts(): Promise<Product[]> {

@@ -68,6 +68,7 @@ export default {
 					yellow: 'hsl(var(--mava-yellow))',
 					orange: 'hsl(var(--mava-orange))',
 					blue: 'hsl(var(--mava-blue))',
+					azure: 'hsl(var(--mava-azure))',
 					green: 'hsl(var(--mava-green))',
 					mint: 'hsl(var(--mava-mint))',
 					pink: 'hsl(var(--mava-pink))'
@@ -130,6 +131,7 @@ export default {
 		'bg-mava-yellow',
 		'bg-mava-orange',
 		'bg-mava-blue',
+		'bg-mava-azure',
 		'bg-mava-green',
 		'bg-mava-mint',
 		'bg-mava-pink',
@@ -139,6 +141,7 @@ export default {
 		'text-mava-yellow',
 		'text-mava-orange',
 		'text-mava-blue',
+		'text-mava-azure',
 		'text-mava-green',
 		'text-mava-mint',
 		'text-mava-pink'

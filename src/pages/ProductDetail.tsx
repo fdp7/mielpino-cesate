@@ -7,12 +7,13 @@ import { ArrowLeft, Minus, Plus, Package } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
-import HoneyJarGLB from "@/components/HoneyJarGLB.tsx";
+import ProductGLB from "@/components/ProductGLB.tsx";
 import Header from "@/components/Header";
 import Cart from "@/components/Cart";
 import {getProductById, Product} from "@/api/products.ts";
 import { CartItem } from "@/api/cart.ts";
 import { v4 as uuidv4 } from 'uuid';
+import { getStockLevel, getHoneyColor, formatSizeLabel, getAvailableSizes, getProductModelPath, getProductType } from "@/services/products.ts";
 
 const ProductDetail = () => {
   const { productId } = useParams<{ productId: string }>();
@@ -20,27 +21,9 @@ const ProductDetail = () => {
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
-  const [selectedSize, setSelectedSize] = useState("1");
+  const [selectedSize, setSelectedSize] = useState<string>("");
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
-
-  // Funzione per calcolare il livello di miele (da 0 a 100) in base allo stock
-  const getHoneyLevel = () => {
-    if (!product) return 0;
-    // Assumiamo che lo stock massimo sia 100kg, quindi convertiamo direttamente
-    return Math.min(150, Math.max(0, product.stock));
-  };
-
-  // Usa direttamente lo stock dal database
-  const getStockLevel = () => {
-    if (!product) return 0;
-    return product.stock;
-  };
-
-  const getHoneyColor = () => {
-    if (!product || !product.honey_color) return "#ffb000"; // Colore predefinito
-    return product.honey_color;
-  };
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -53,6 +36,9 @@ const ProductDetail = () => {
         if (productData) {
           console.log("Prodotto caricato:", productData);
           setProduct(productData);
+          // Set default size to the largest available size
+          const availableSizes = getAvailableSizes(productData);
+          setSelectedSize(availableSizes[0].toString());
         } else {
           console.error("Prodotto non trovato");
           navigate("/404");
@@ -255,11 +241,13 @@ const ProductDetail = () => {
                     <ambientLight intensity={0.6} />
                     <directionalLight position={[20, 90, 20]} intensity={1} />
 
-                    <HoneyJarGLB
-                        modelPath="/assets/miele_dippi_2.glb"
+                    <ProductGLB
+                        modelPath={getProductModelPath(product)}
                         scale={40}
-                        honeyColor={getHoneyColor()}
-                        stockLevel={getStockLevel()}
+                        honeyColor={getHoneyColor(product)}
+                        stockLevel={getStockLevel(product)}
+                        productType={getProductType(product)}
+                        showStockLevel={true}
                     />
 
                     <OrbitControls
@@ -322,8 +310,11 @@ const ProductDetail = () => {
                     <SelectValue placeholder="Seleziona dimensione" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="1">1 kg</SelectItem>
-                    <SelectItem value="0.5">500 g</SelectItem>
+                    {getAvailableSizes(product).map((size) => (
+                      <SelectItem key={size} value={size.toString()}>
+                        {formatSizeLabel(size)}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>

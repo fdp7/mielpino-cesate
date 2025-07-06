@@ -2,6 +2,7 @@
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { CartItem, Order } from '@/api/cart';
+import { formatSizeLabel } from '@/services/products';
 
 interface jsPDFWithAutoTable extends jsPDF {
     lastAutoTable?: {
@@ -40,25 +41,34 @@ export const generateOrderReceipt = (
         doc.text(`Indirizzo: ${order.checkout_info.address}`, 20, 85);
         doc.text(`${order.checkout_info.postal_code}, ${order.checkout_info.city}`, 20, 90);
 
+        // Calcolo del subtotale per determinare la spedizione
+        const subtotal = items.reduce((sum, item) => {
+            const sizeValue = item.size ? parseFloat(item.size) : 1;
+            const itemPrice = typeof item.price === 'number' ? item.price : 0;
+            return sum + (itemPrice * item.quantity * sizeValue);
+        }, 0);
+
         // Tabella prodotti
-        const tableColumn = ["Prodotto", "Formato", "Prezzo", "Quantità", "Totale"];
+        const tableColumn = ["Prodotto", "Formato", "Prezzo/kg", "Quantità", "Totale"];
         const tableRows = [];
 
         items.forEach(item => {
             const sizeValue = item.size ? parseFloat(item.size) : 1;
-            const sizeLabel = sizeValue === 0.5 ? "500g" : "1kg";
+            const sizeLabel = formatSizeLabel(sizeValue);
             const price = item.price || 0;
-            const subtotal = price * item.quantity * sizeValue;
-            const shipping = subtotal >= 50 ? 0 : 5.00; // Spedizione gratuita sopra i 50€
+            const itemSubtotal = price * item.quantity * sizeValue;
 
             tableRows.push([
                 item.name || `Prodotto #${item.productId}`,
                 sizeLabel,
                 `€${price.toFixed(2)}`,
-                item.quantity,
-                `€${subtotal.toFixed(2)}`
+                item.quantity.toString(),
+                `€${itemSubtotal.toFixed(2)}`
             ]);
         });
+
+        // Calcola la spedizione basata sul subtotale dei prodotti
+        const shipping = subtotal >= 50 ? 0 : 5.00;
 
         // Aggiungi sempre la riga Spedizione come ultima voce
         tableRows.push([

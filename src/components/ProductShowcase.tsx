@@ -8,7 +8,8 @@ import { OrbitControls } from "@react-three/drei";
 import { Link } from "react-router-dom";
 import { Product } from "@/api/products";
 import {useIsMobile} from "@/hooks/use-mobile.tsx";
-import HoneyJarGLB from "@/components/HoneyJarGLB.tsx";
+import ProductGLB from "@/components/ProductGLB.tsx";
+import {getStockLevel, getHoneyColor, getProductModelPath, getProductType} from "@/services/products.ts";
 
 const ProductShowcase = ({products}: {products: Product[]}) => {
   const navigate = useNavigate();
@@ -20,17 +21,6 @@ const ProductShowcase = ({products}: {products: Product[]}) => {
   const isMobile = useIsMobile();
 
   const currentProduct = products && products.length > 0 ? products[currentProductIndex] : null
-
-  // Usa direttamente lo stock dal database
-  const getStockLevel = () => {
-    if (!currentProduct) return 0;
-    return currentProduct.stock;
-  };
-
-  const getHoneyColor = () => {
-    if (!currentProduct || !currentProduct.honey_color) return "#ffb000"; // Colore predefinito
-    return currentProduct.honey_color;
-  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -189,11 +179,13 @@ const ProductShowcase = ({products}: {products: Product[]}) => {
                 <ambientLight intensity={0.6} />
                 <directionalLight position={[20, 90, 20]} intensity={1} />
 
-                <HoneyJarGLB
-                    modelPath="/assets/miele_dippi_2.glb"
+                <ProductGLB
+                    modelPath={getProductModelPath(currentProduct)}
                     scale={40}
-                    honeyColor={getHoneyColor()}
-                    stockLevel={getStockLevel()}
+                    honeyColor={getHoneyColor(currentProduct)}
+                    stockLevel={getStockLevel(currentProduct)}
+                    productType={getProductType(currentProduct)}
+                    showStockLevel={false}
                 />
 
                 <OrbitControls
@@ -232,11 +224,11 @@ const ProductShowcase = ({products}: {products: Product[]}) => {
                 <ambientLight intensity={0.6} />
                 <directionalLight position={[20, 90, 20]} intensity={1} />
 
-                <HoneyJarGLB
+                <ProductGLB
                     modelPath="/assets/miele_dippi_2.glb"
                     scale={40}
-                    honeyColor={getHoneyColor()}
-                    stockLevel={getStockLevel()}
+                    honeyColor={getHoneyColor(currentProduct)}
+                    stockLevel={getStockLevel(currentProduct)}
                 />
 
                 <OrbitControls

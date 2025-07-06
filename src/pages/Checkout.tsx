@@ -12,6 +12,7 @@ import confetti from "canvas-confetti";
 import {Order, submitOrder, getOrderPositionInQueue} from "@/api/cart.ts";
 import { CartItem } from "@/api/cart.ts";
 import {generateOrderReceipt} from "@/services/pdf.ts";
+import { formatSizeLabel } from "@/services/products.ts";
 
 interface CheckoutData {
   email: string;
@@ -51,7 +52,7 @@ const Checkout = () => {
     return sum + (itemPrice * item.quantity * sizeValue);
   }, 0);
 
-  const shipping = subtotal >= 50 ? 0 : 5.00; // Spedizione gratuita sopra i 100€
+  const shipping = subtotal >= 50 ? 0 : 5.00;
   const taxes = 0 //subtotal * 0.05; // 5% di tasse
   const total = subtotal + shipping + taxes;
 
@@ -245,7 +246,7 @@ const Checkout = () => {
                 {/* Cart items */}
                 {cartItems.map((item) => {
                   const sizeValue = item.size ? parseFloat(item.size) : 1;
-                  const sizeLabel = sizeValue === 0.5 ? "500g" : "1kg";
+                  const sizeLabel = formatSizeLabel(sizeValue);
                   const itemPrice = typeof item.price === 'number' ? item.price : 0;
 
                   return (
