@@ -3,6 +3,7 @@ import { supabase } from '@/lib/supabase';
 export type Product = {
   id: number;
   name: string;
+  type: 'miele' | 'salume';
   description: string;
   price: number;
   image_url: string;
@@ -22,6 +23,16 @@ export async function getProducts(): Promise<Product[]> {
 
   if (error) throw error;
   return data || [];
+}
+
+export async function getProductsByType(type: 'miele' | 'salume'): Promise<Product[]> {
+    const { data, error } = await supabase
+        .from('products')
+        .select('*')
+        .eq('type', type);
+
+    if (error) throw error;
+    return data || [];
 }
 
 export async function getProductById(id: number): Promise<Product | null> {

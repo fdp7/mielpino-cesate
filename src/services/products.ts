@@ -15,13 +15,15 @@ export const getProductModelPath = (product: Product): string => {
     return product.model_path;
 }
 
-export const getProductType = (product: Product): "honey" | "wax" | "generic" => {
+export const getProductType = (product: Product): string => {
     if (!product || !product.model_path) return "generic";
 
     if (product.model_path.includes("miele") || product.model_path.includes("honey")) {
         return "honey";
     } else if (product.model_path.includes("cera") || product.model_path.includes("wax")) {
         return "wax";
+    } else if (product.model_path.includes("salame") || product.model_path.includes("sausage")) {
+        return "salame";
     }
 
     return "generic";

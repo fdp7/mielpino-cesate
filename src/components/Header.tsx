@@ -1,4 +1,4 @@
-import { ShoppingCart } from "lucide-react";
+import { ShoppingCart, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import Cart from "./Cart";
@@ -67,9 +67,10 @@ const Header = () => {
                 <DropdownMenuTrigger asChild>
                   <Button
                       variant="ghost"
-                      className="rounded-full px-6 py-2 text-foreground hover:bg-muted"
+                      className="rounded-full px-6 py-2 text-foreground hover:bg-muted flex items-center gap-2"
                   >
                     Prodotti
+                    <ChevronDown className="h-4 w-4" />
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
@@ -90,9 +91,10 @@ const Header = () => {
                 <DropdownMenuTrigger asChild>
                   <Button
                       variant="ghost"
-                      className="rounded-full px-6 py-2 text-foreground hover:bg-muted"
+                      className="rounded-full px-6 py-2 text-foreground hover:bg-muted flex items-center gap-2"
                   >
                     Scopri di più
+                    <ChevronDown className="h-4 w-4" />
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>

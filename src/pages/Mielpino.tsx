@@ -1,4 +1,4 @@
-import {getProducts, Product } from "@/api/products";
+import {getProductsByType, Product } from "@/api/products";
 import Header from "@/components/Header";
 import MielpinoShowcase from "@/components/MielpinoShowcase.tsx";
 import {useEffect, useState } from "react";
@@ -13,7 +13,7 @@ const Mielpino = () => {
                 setLoading(true); // Indica che il caricamento è in corso
 
                 // Chiamata all'API per recuperare i prodotti
-                const productsData = await getProducts();
+                const productsData = await getProductsByType('miele');
 
                 // Verifica dei dati ricevuti
                 console.log("Prodotti caricati:", productsData);

@@ -22,7 +22,7 @@ export default function ProductGLB({
     scale?: number;
     honeyColor?: string;
     stockLevel?: number;
-    productType?: "honey" | "wax" | "generic";
+    productType?: string; // "wax", "honey", "salame", "generic"
     showStockLevel?: boolean;
 }) {
     const { scene } = useGLTF(modelPath);
@@ -46,6 +46,14 @@ export default function ProductGLB({
                     scale: scale,
                     position: [0, 0.045, 0],
                     distanceFactor: 0.12,
+                    rotation: [-Math.PI / 2, 0, 0],
+                    occlude: true
+                };
+            case "salame":
+                return {
+                    scale: scale * 0.05,
+                    position: [0, 0.65, 0],
+                    distanceFactor: 2.5,
                     rotation: [-Math.PI / 2, 0, 0],
                     occlude: true
                 };
