@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useMemo } from 'react'
 import { MeshTransmissionMaterial, useGLTF, Html } from "@react-three/drei";
 import { Color, Mesh } from 'three';
+import * as THREE from 'three';
 
 export default function HoneyJarGLB({modelPath, scale = 1, honeyColor = "#FFA500", stockLevel = 0}: {modelPath: string; scale?: number; honeyColor?: string; stockLevel?: number}){
     const { scene } = useGLTF(modelPath);
@@ -45,24 +46,25 @@ export default function HoneyJarGLB({modelPath, scale = 1, honeyColor = "#FFA500
 
             {/* Quantity Indicator */}
             {stockLevel > 0 && (
-                <Html
-                    position={[0, 0.04, 0]}
-                    transform
-                    occlude={false}
-                    distanceFactor={0.15}
-                    rotation={[-Math.PI / 2, 0, 0]}
-                    style={{
-                        translate: '-40% 0%',
-                        pointerEvents: 'none',
-                        userSelect: 'none'
-                    }}
-                >
-                    <div className="flex items-center justify-center">
-                        <div className="bg-amber-50 border-2 border-amber-600 px-3 py-1 rounded-full text-sm font-bold text-amber-800 shadow-lg whitespace-nowrap">
-                            {stockLevel} kg
+                <group position={[0, 0.042, 0]}>
+                    <Html
+                        transform
+                        occlude={true}
+                        distanceFactor={0.12}
+                        rotation={[-Math.PI / 2, 0, 0]}
+                        // style={{
+                        //     translate: '0% 0%',
+                        //     pointerEvents: 'none',
+                        //     userSelect: 'none'
+                        // }}
+                    >
+                        <div className="flex items-center justify-center">
+                            <div className="bg-amber-50 border-2 border-amber-600 px-3 py-1 rounded-full text-sm font-bold text-amber-800 shadow-lg whitespace-nowrap">
+                                {stockLevel} kg
+                            </div>
                         </div>
-                    </div>
-                </Html>
+                    </Html>
+                </group>
             )}
         </group>
     );

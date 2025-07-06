@@ -49,6 +49,7 @@ export const generateOrderReceipt = (
             const sizeLabel = sizeValue === 0.5 ? "500g" : "1kg";
             const price = item.price || 0;
             const subtotal = price * item.quantity * sizeValue;
+            const shipping = subtotal >= 50 ? 0 : 5.00; // Spedizione gratuita sopra i 50€
 
             tableRows.push([
                 item.name || `Prodotto #${item.productId}`,
@@ -60,13 +61,12 @@ export const generateOrderReceipt = (
         });
 
         // Aggiungi sempre la riga Spedizione come ultima voce
-        const shippingCost = 5.00; // Costo fisso spedizione
         tableRows.push([
             "Spedizione",
             "-",
-            `€${shippingCost.toFixed(2)}`,
+            `€${shipping.toFixed(2)}`,
             "-",
-            `€${shippingCost.toFixed(2)}`
+            `€${shipping.toFixed(2)}`
         ]);
 
         autoTable(doc, {

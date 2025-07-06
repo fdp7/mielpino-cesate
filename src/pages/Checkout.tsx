@@ -51,7 +51,7 @@ const Checkout = () => {
     return sum + (itemPrice * item.quantity * sizeValue);
   }, 0);
 
-  const shipping = subtotal > 100 ? 0 : 5.00; // Spedizione gratuita sopra i 100€
+  const shipping = subtotal >= 50 ? 0 : 5.00; // Spedizione gratuita sopra i 100€
   const taxes = 0 //subtotal * 0.05; // 5% di tasse
   const total = subtotal + shipping + taxes;
 

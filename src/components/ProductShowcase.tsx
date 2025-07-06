@@ -322,7 +322,7 @@ const ProductShowcase = ({products}: {products: Product[]}) => {
             style={{ transitionDelay: '0ms' }}
           >
             <CardContent className="p-6">
-              <h3 className="text-xl font-semibold text-mava-green mb-3">Natuale</h3>
+              <h3 className="text-xl font-semibold text-mava-green mb-3">Naturale</h3>
               <p className="text-muted-foreground mb-4">
                 Il nostro miele non contiene conservanti e non subisce trattamenti termici, così mantiene intatti enzimi, vitamine e tutte le sue preziose proprietà naturali.
               </p>
@@ -347,7 +347,7 @@ const ProductShowcase = ({products}: {products: Product[]}) => {
             style={{ transitionDelay: '150ms' }}
           >
             <CardContent className="p-6">
-              <h3 className="text-xl font-semibold text-mava-green mb-3">Ricco di benefici</h3>
+              <h3 className="text-xl font-semibold text-mava-orange mb-3">Ricco di benefici</h3>
               <p className="text-muted-foreground mb-4">
                 Fonte naturale di energia e benessere, il nostro miele contiene zuccheri semplici, vitamine e minerali, con proprietà antibatteriche e lenitive per la tua salute quotidiana.
               </p>
@@ -372,7 +372,7 @@ const ProductShowcase = ({products}: {products: Product[]}) => {
             style={{ transitionDelay: '300ms' }}
           >
             <CardContent className="p-6">
-              <h3 className="text-xl font-semibold text-mava-green mb-3">Origine Garantita</h3>
+              <h3 className="text-xl font-semibold text-mava-blue mb-3">Origine Garantita</h3>
               <p className="text-muted-foreground mb-4">
                 Il nostro miele è genuino ed unico, proveniente da un'apicoltura sostenibile, rispettando le api e il variegato ambiente circostante.
               </p>
