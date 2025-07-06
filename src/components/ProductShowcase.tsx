@@ -225,10 +225,12 @@ const ProductShowcase = ({products}: {products: Product[]}) => {
                 <directionalLight position={[20, 90, 20]} intensity={1} />
 
                 <ProductGLB
-                    modelPath="/assets/miele_dippi_2.glb"
+                    modelPath={getProductModelPath(currentProduct)}
                     scale={40}
                     honeyColor={getHoneyColor(currentProduct)}
                     stockLevel={getStockLevel(currentProduct)}
+                    productType={getProductType(currentProduct)}
+                    showStockLevel={false}
                 />
 
                 <OrbitControls

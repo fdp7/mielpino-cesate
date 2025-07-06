@@ -1,13 +1,13 @@
 import React, { useRef, useEffect, useMemo } from 'react'
 import { useGLTF, Html } from "@react-three/drei";
-import { Color, Mesh } from 'three';
+import { Color, Mesh, Material } from 'three';
 
 type ModelProps = {
-    scale?: number;
-    position?: [number, number, number];
-    distanceFactor?: number;
-    rotation?: [number, number, number];
-    occlude?: boolean;
+    scale: number;
+    position: [number, number, number];
+    distanceFactor: number;
+    rotation: [number, number, number];
+    occlude: boolean;
 }
 
 export default function ProductGLB({
@@ -61,45 +61,88 @@ export default function ProductGLB({
         }
     }, [scale, productType]);
 
-    // Estrai la scala finale dalle proprietà del modello
-    const finalScale = modelProps.scale;
-
     // Effetto per applicare proprietà ai materiali basato sul tipo di prodotto
     useEffect(() => {
         if (clonedScene) {
             if (productType === "honey") {
-                // Logica esistente per il miele
+                console.log(clonedScene);
+                
+                // Nascondi mesh specifici per il miele
+                const honeyMeshesToHide = ['Cylinder001', 'Cylinder002', 'Cylinder004'];
+                honeyMeshesToHide.forEach(meshName => {
+                    const mesh = clonedScene.getObjectByName(meshName);
+                    if (mesh) {
+                        mesh.visible = false;
+                    }
+                });
+
+                // Logica per il miele
                 const vetroMesh = clonedScene.getObjectByName('vetro');
                 if (vetroMesh && vetroMesh instanceof Mesh) {
-                    if (vetroMesh.material) {
-                        vetroMesh.material.color = new Color(0xffffff);
-                        vetroMesh.material.transparent = true;
-                        vetroMesh.material.opacity = 0.1;
+                    const material = vetroMesh.material as Material;
+                    if (material && 'color' in material) {
+                        material.color = new Color(0xffffff);
+                        material.transparent = true;
+                        material.opacity = 0.1;
                     }
                 }
 
                 const mieleMesh = clonedScene.getObjectByName('miele');
                 if (mieleMesh && mieleMesh instanceof Mesh) {
-                    if (mieleMesh.material) {
-                        const originalMaterial = mieleMesh.material.clone();
-                        originalMaterial.transparent = true;
-                        originalMaterial.opacity = 0.8;
-                        originalMaterial.metalness = 0.1;
-                        originalMaterial.roughness = 0.2;
-                        originalMaterial.color = new Color(honeyColor);
-                        mieleMesh.material = originalMaterial;
+                    const material = mieleMesh.material as Material;
+                    if (material) {
+                        const clonedMaterial = material.clone() as any;
+                        clonedMaterial.transparent = true;
+                        clonedMaterial.opacity = 0.8;
+                        clonedMaterial.metalness = 0.1;
+                        clonedMaterial.roughness = 0.2;
+                        clonedMaterial.color = new Color(honeyColor);
+                        mieleMesh.material = clonedMaterial;
+                    }
+                }
+
+                const tappoMesh = clonedScene.getObjectByName('tappo');
+                if (tappoMesh && tappoMesh instanceof Mesh) {
+                    const material = tappoMesh.material as Material;
+                    if (material) {
+                        const clonedMaterial = material.clone() as any;
+                        // Modifica il colore che viene moltiplicato con la texture
+                        clonedMaterial.color = new Color("#FFD700"); // Oro più brillante per influenzare la texture
+                        clonedMaterial.metalness = 0.8;
+                        clonedMaterial.roughness = 0.3;
+
+                        // Aggiusta la texture
+                        if (clonedMaterial.map) {
+                            clonedMaterial.map.repeat.set(2, 3);
+                            clonedMaterial.map.wrapS = clonedMaterial.map.wrapT = 1000; // RepeatWrapping
+                            clonedMaterial.map.needsUpdate = true;
+                        }
+                        tappoMesh.material = clonedMaterial;
+                    }
+                }
+
+                const etichettaMesh = clonedScene.getObjectByName('etichetta');
+                if (etichettaMesh && etichettaMesh instanceof Mesh) {
+                    const material = etichettaMesh.material as Material;
+                    if (material) {
+                        const clonedMaterial = material.clone() as any;
+                        //clonedMaterial.color = new Color("#FFD700"); // Oro più brillante per influenzare la texture
+                        clonedMaterial.metalness = 0;
+                        clonedMaterial.roughness = 3;
+                        etichettaMesh.material = clonedMaterial;
                     }
                 }
             } else if (productType === "wax") {
-                // Logica per la cera - adatta i nomi degli oggetti nel tuo modello cera.glb
+                // Logica per la cera
                 const ceraMesh = clonedScene.getObjectByName('cera') || clonedScene.getObjectByName('wax');
                 if (ceraMesh && ceraMesh instanceof Mesh) {
-                    if (ceraMesh.material) {
-                        const material = ceraMesh.material.clone();
-                        material.color = new Color(honeyColor); // usa lo stesso parametro colore
-                        material.metalness = 0.05;
-                        material.roughness = 0.8;
-                        ceraMesh.material = material;
+                    const material = ceraMesh.material as Material;
+                    if (material) {
+                        const clonedMaterial = material.clone() as any;
+                        clonedMaterial.color = new Color(honeyColor);
+                        clonedMaterial.metalness = 0.05;
+                        clonedMaterial.roughness = 0.8;
+                        ceraMesh.material = clonedMaterial;
                     }
                 }
             }
@@ -108,7 +151,7 @@ export default function ProductGLB({
     }, [clonedScene, honeyColor, productType]);
 
     return (
-        <group ref={groupRef} scale={finalScale}>
+        <group ref={groupRef} scale={modelProps.scale}>
             <primitive object={clonedScene} />
 
             {/* Quantity Indicator */}
