@@ -316,7 +316,7 @@ const Checkout = () => {
             {/*</div>*/}
             <h3 className="mt-4 text-lg font-semibold">Ordine confermato!</h3>
             <p className="mt-2 text-muted-foreground">
-              Il tuo ordine #{orderId} è stato registrato con successo.
+              Il tuo ordine è stato registrato con successo.
             </p>
             <p className="mt-1 text-sm text-muted-foreground">
               Ti contatteremo presto per la consegna.

@@ -102,7 +102,7 @@ export const generateOrderReceipt = (
         doc.text('Il pagamento sarà effettuato al momento della consegna.', 105, finalY + 35, { align: 'center' });
 
         // Salvataggio del PDF
-        doc.save(`Ricevuta-Ordine-${order.id}.pdf`);
+        doc.save(`Ricevuta-Ordine-${order.checkout_info.last_name}-${order.created_at}.pdf`);
         resolve();
     });
 };

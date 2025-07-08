@@ -53,36 +53,32 @@ const Header = () => {
   return (
     <header className="w-full px-6 py-4">
       <div className="max-w-7xl mx-auto flex justify-between items-center relative">
-        {/* Logo (all'estremo sinistro) */}
+        {/* Logo con dropdown (all'estremo sinistro) */}
         <div className="flex-none">
-          <Link to="/" className="text-4xl font-bold text-foreground tracking-tight hover:text-mava-yellow transition-all duration-300">
-            AGROPINO
-          </Link>
-        </div>
-
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
                 variant="ghost"
-                className="rounded-full px-6 py-2 text-foreground hover:bg-muted flex items-center gap-2"
-            >
-              Prodotti
-              <ChevronDown className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuItem asChild>
-              <Link to="/mielpino" className="w-full">
-                Mielpino
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link to="/salumipino" className="w-full">
-                Salumipino
-              </Link>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+                className="text-4xl font-bold text-foreground tracking-tight hover:text-mava-yellow transition-all duration-300 p-0 h-auto flex items-center gap-2"
+              >
+                AGROPINO
+                <ChevronDown className="h-6 w-6" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuItem asChild>
+                <Link to="/mielpino" className="w-full">
+                  Mielpino
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link to="/salumipino" className="w-full">
+                  Salumipino
+                </Link>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
 
         {/* Nascosto su mobile */}
         {!isMobile && (
