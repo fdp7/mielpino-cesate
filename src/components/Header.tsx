@@ -60,33 +60,33 @@ const Header = () => {
           </Link>
         </div>
 
-        {/* Navigation - nascosta su mobile */}
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+                variant="ghost"
+                className="rounded-full px-6 py-2 text-foreground hover:bg-muted flex items-center gap-2"
+            >
+              Prodotti
+              <ChevronDown className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem asChild>
+              <Link to="/mielpino" className="w-full">
+                Mielpino
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link to="/salumipino" className="w-full">
+                Salumipino
+              </Link>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+
+        {/* Nascosto su mobile */}
         {!isMobile && (
             <div className="absolute left-1/2 transform -translate-x-1/2 flex items-center space-x-4">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                      variant="ghost"
-                      className="rounded-full px-6 py-2 text-foreground hover:bg-muted flex items-center gap-2"
-                  >
-                    Prodotti
-                    <ChevronDown className="h-4 w-4" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuItem asChild>
-                    <Link to="/mielpino" className="w-full">
-                      Mielpino
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link to="/salumipino" className="w-full">
-                      Salumipino
-                    </Link>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button

@@ -20,7 +20,7 @@ export const generateOrderReceipt = (
         // Intestazione
         doc.setFontSize(22);
         doc.setTextColor(33, 33, 33);
-        doc.text('MIELPINO', 105, 20, { align: 'center' });
+        doc.text('AGROPINO', 105, 20, { align: 'center' });
 
         doc.setFontSize(14);
         doc.text('Ricevuta di Acquisto', 105, 30, { align: 'center' });
@@ -98,7 +98,7 @@ export const generateOrderReceipt = (
 
         // Note finali
         doc.setFontSize(9);
-        doc.text('Grazie per aver scelto MIELPINO!', 105, finalY + 30, { align: 'center' });
+        doc.text('Grazie per aver scelto AGROPINO!', 105, finalY + 30, { align: 'center' });
         doc.text('Il pagamento sarà effettuato al momento della consegna.', 105, finalY + 35, { align: 'center' });
 
         // Salvataggio del PDF
