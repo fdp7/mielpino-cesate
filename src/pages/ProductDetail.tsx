@@ -322,7 +322,7 @@ const ProductDetail = () => {
               {/* Selettore quantità */}
               <div className="mb-8">
                 <label className="block text-sm font-medium mb-2">
-                  Quantità <span className="text-muted-foreground">({getStockConsumption()} kg totali)</span>
+                  Quantità <span className="text-muted-foreground">({getStockConsumption().toFixed(2)} kg totali)</span>
                 </label>
                 <div className="flex items-center space-x-3">
                   <Button

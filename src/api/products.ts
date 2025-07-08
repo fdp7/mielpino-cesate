@@ -30,7 +30,8 @@ export async function getProductsByType(type: 'miele' | 'salume'): Promise<Produ
     const { data, error } = await supabase
         .from('products')
         .select('*')
-        .eq('type', type);
+        .eq('type', type)
+        .order('id', { ascending: true });
 
     if (error) throw error;
     return data || [];
