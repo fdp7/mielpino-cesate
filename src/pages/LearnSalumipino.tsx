@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import Header from "@/components/Header";
-import { getRecipes, Recipe } from "@/api/recipes.ts";
+import { getRecipesByType, Recipe } from "@/api/recipes.ts";
 import { useIsMobile } from "@/hooks/use-mobile.tsx";
 
 const LearnSalumipino = () => {
@@ -21,7 +21,7 @@ const LearnSalumipino = () => {
   useEffect(() => {
     const loadRecipes = async () => {
       try {
-        const recipesData = await getRecipes();
+        const recipesData = await getRecipesByType('salume');
         setRecipes(recipesData);
       } catch (error) {
         console.error("Errore nel caricamento delle ricette:", error);
@@ -92,7 +92,7 @@ const LearnSalumipino = () => {
             <div className="grid md:grid-cols-2 gap-8 items-center">
               <div className="rounded-lg overflow-hidden">
                 <img
-                    src="https://nbvhtdzjethfxhkwswpz.supabase.co/storage/v1/object/sign/assets/apicoltura-01.webp?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9kZGRhZmQyNi0xOGMxLTQxYTQtODA0Ny05ZjE5Nzg0OTUwODUiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJhc3NldHMvYXBpY29sdHVyYS0wMS53ZWJwIiwiaWF0IjoxNzUxNjM3MjY4LCJleHAiOjIwNjY5OTcyNjh9.QUpWgWSQL0x2aA3Yh6UqJHzuw7k7r8wsK_zYAH9k3Xs"
+                    src="https://nbvhtdzjethfxhkwswpz.supabase.co/storage/v1/object/sign/assets/salumi_1.jpg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9kZGRhZmQyNi0xOGMxLTQxYTQtODA0Ny05ZjE5Nzg0OTUwODUiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJhc3NldHMvc2FsdW1pXzEuanBnIiwiaWF0IjoxNzUxOTAzNzk5LCJleHAiOjIwNjcyNjM3OTl9.g5xJG4fxHgwM2oi2qOWwO81X6pjt9_FmNMn9P04angI"
                     alt="Produzione dei salumi"
                     className="w-full h-auto object-cover"
                 />
@@ -280,7 +280,7 @@ const LearnSalumipino = () => {
 
                 <div className="rounded-lg overflow-hidden">
                   <img
-                      src="https://nbvhtdzjethfxhkwswpz.supabase.co/storage/v1/object/sign/assets/apicoluta-02.jpg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9kZGRhZmQyNi0xOGMxLTQxYTQtODA0Ny05ZjE5Nzg0OTUwODUiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJhc3NldHMvYXBpY29sdXRhLTAyLmpwZyIsImlhdCI6MTc1MTYzNzMxOSwiZXhwIjoyMDY2OTk3MzE5fQ.GebX6CsJKy6wKpOyZaBBI0OjdwzFMS2INz2D3dYqde4"
+                      src="https://nbvhtdzjethfxhkwswpz.supabase.co/storage/v1/object/sign/assets/mucche.webp?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9kZGRhZmQyNi0xOGMxLTQxYTQtODA0Ny05ZjE5Nzg0OTUwODUiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJhc3NldHMvbXVjY2hlLndlYnAiLCJpYXQiOjE3NTE5MDQxNjIsImV4cCI6MjA2NzI2NDE2Mn0.Ippx9s2IUDCD_XWeNJ8lJ0VXQibzYOWuKVFUOTBFOlA"
                       alt="Produzione sostenibile"
                       className="w-full h-auto"
                   />

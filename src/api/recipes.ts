@@ -17,6 +17,16 @@ export async function getRecipes(): Promise<Recipe[]> {
   return data || [];
 }
 
+export async function getRecipesByType(type: string): Promise<Recipe[]> {
+  const { data, error } = await supabase
+    .from('recipes')
+    .select('*')
+    .eq('product_type', type);
+
+  if (error) throw error;
+  return data || [];
+}
+
 export async function getRecipeById(id: number): Promise<Recipe | null> {
   const { data, error } = await supabase
     .from('recipes')

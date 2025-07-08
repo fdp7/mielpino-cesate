@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import Header from "@/components/Header";
-import { getRecipes, Recipe } from "@/api/recipes.ts";
+import { getRecipesByType, Recipe } from "@/api/recipes.ts";
 import { useIsMobile } from "@/hooks/use-mobile.tsx";
 
 const LearnMielpino = () => {
@@ -21,7 +21,7 @@ const LearnMielpino = () => {
   useEffect(() => {
     const loadRecipes = async () => {
       try {
-        const recipesData = await getRecipes();
+        const recipesData = await getRecipesByType('miele');
         setRecipes(recipesData);
       } catch (error) {
         console.error("Errore nel caricamento delle ricette:", error);
