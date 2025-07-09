@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent } from "@/components/ui/card";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { ArrowLeft, Minus, Plus, Package } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Canvas } from "@react-three/fiber";
@@ -148,7 +149,8 @@ const ProductDetail = () => {
           stock: product.stock,
           image_url: product.image_url || "",
           bg_color: product.bg_color,
-          btn_color: product.btn_color
+          btn_color: product.btn_color,
+          type: product.type,
         }
       };
 
@@ -354,15 +356,41 @@ const ProductDetail = () => {
               </div>
 
               {/* Pulsante Aggiungi al carrello */}
-              <Button
-                  className={`w-full text-white ${getButtonClass()}`}
-                  style={getButtonStyle()}
-                  onClick={handleAddToCart}
-                  disabled={product.stock < getSizeValue() || quantity < 1}
-              >
-                <Package className="h-4 w-4 mr-2" />
-                Aggiungi al carrello
-              </Button>
+              {product.id !== 1 && product.id !== 2 ? (
+                  <Button
+                      className={`w-full text-white ${getButtonClass()}`}
+                      style={getButtonStyle()}
+                      onClick={handleAddToCart}
+                      disabled={product.stock < getSizeValue() || quantity < 1}
+                  >
+                    <Package className="h-4 w-4 mr-2" />
+                    Aggiungi al carrello
+                  </Button>
+              ) : (
+                <TooltipProvider delayDuration={0}>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <div>
+                        <Button
+                            className={`w-full text-white ${getButtonClass()}`}
+                            style={getButtonStyle()}
+                            onClick={handleAddToCart}
+                            disabled={true}
+                            title="Il miele è stato raccolto, ma raggiungerà la maturazione e la migliore qualità a Settembre"
+                        >
+                          <Package className="h-4 w-4 mr-2" />
+                          Disponibile da Settembre
+                        </Button>
+                      </div>
+                    </TooltipTrigger>
+                    <TooltipContent side="top" className="max-w-xs">
+                      <p>Il miele è stato raccolto, ma raggiungerà la maturazione e la migliore qualità a Settembre</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              )
+              }
+
             </div>
           </div>
         </div>
