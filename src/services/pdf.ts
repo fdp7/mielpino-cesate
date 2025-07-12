@@ -99,7 +99,7 @@ export const generateOrderReceipt = (
         // Note finali
         doc.setFontSize(9);
         doc.text('Grazie per aver scelto AGROPINO!', 105, finalY + 30, { align: 'center' });
-        doc.text('Il pagamento sarà effettuato al momento della consegna.', 105, finalY + 35, { align: 'center' });
+        doc.text('Lascia un commento su agropino.it/recensioni per aiutarci a migliorare!', 105, finalY + 35, { align: 'center' });
 
         // Salvataggio del PDF
         doc.save(`Ricevuta-Ordine-${order.checkout_info.last_name}-${order.created_at}.pdf`);

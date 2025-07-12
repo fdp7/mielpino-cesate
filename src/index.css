@@ -55,6 +55,16 @@
     --mava-green: 130 60% 45%;
     --mava-mint: 150 50% 75%;
     --mava-pink: 340 70% 75%;
+
+    /* AGROPINO Brand Colors */
+    --agropino-cyclamen: #FE71AC;
+    --agropino-mauve: #CAAAFF;
+    --agropino-blackbean: #490E0277;
+    --agropino-crayola: #3F7ADE;
+    --agropino-jasmine: #F9D677;
+    --agropino-gunmetal: #022B3A;
+    --agropino-darkpurple: #2B193D;
+
   }
 
   .dark {

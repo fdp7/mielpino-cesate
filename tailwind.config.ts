@@ -72,7 +72,16 @@ export default {
 					green: 'hsl(var(--mava-green))',
 					mint: 'hsl(var(--mava-mint))',
 					pink: 'hsl(var(--mava-pink))'
-				}
+				},
+				agropino: {
+					cyclamen: 'var(--agropino-cyclamen)',
+					mauve: 'var(--agropino-mauve)',
+					blackbeen: 'var(--agropino-blackbean)',
+					crayola: 'var(--agropino-crayola)',
+					jasmine: 'var(--agropino-jasmine)',
+					gunmetal: 'var(--agropino-gunmetal)',
+					darkpurple: 'var(--agropino-darkpurple)',
+				},
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
@@ -135,7 +144,6 @@ export default {
 		'bg-mava-green',
 		'bg-mava-mint',
 		'bg-mava-pink',
-		// Aggiungi anche le classi di testo se necessarie
 		'text-mava-sage',
 		'text-mava-coral',
 		'text-mava-yellow',
@@ -144,6 +152,21 @@ export default {
 		'text-mava-azure',
 		'text-mava-green',
 		'text-mava-mint',
-		'text-mava-pink'
+		'text-mava-pink',
+		// Aggiungi le classi AGROPINO
+		'bg-agropino-cyclamen',
+		'bg-agropino-mauve',
+		'bg-agropino-blackbean',
+		'bg-agropino-crayola',
+		'bg-agropino-jasmine',
+		'bg-agropino-gunmetal',
+		'bg-agropino-darkpurple',
+		'text-agropino-cyclamen',
+		'text-agropino-mauve',
+		'text-agropino-blackbean',
+		'text-agropino-crayola',
+		'text-agropino-jasmine',
+		'text-agropino-gunmetal',
+		'text-agropino-darkpurple',
 	],
 } satisfies Config;

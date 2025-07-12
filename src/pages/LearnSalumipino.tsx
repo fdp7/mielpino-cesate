@@ -35,9 +35,11 @@ const LearnSalumipino = () => {
     if (isAnimating || recipes.length === 0) return;
     setIsAnimating(true);
     setTimeout(() => {
-      setCurrentRecipeIndex((prev) =>
-          prev === 0 ? recipes.length - 1 : prev - 1
-      );
+      setCurrentRecipeIndex((prev) => {
+        const step = isMobile ? 1 : 2;
+        const maxIndex = Math.max(0, recipes.length - step);
+        return prev === 0 ? maxIndex : Math.max(0, prev - step);
+      });
       setIsAnimating(false);
     }, 300);
   };
@@ -46,9 +48,11 @@ const LearnSalumipino = () => {
     if (isAnimating || recipes.length === 0) return;
     setIsAnimating(true);
     setTimeout(() => {
-      setCurrentRecipeIndex((prev) =>
-          (prev + 1) % recipes.length
-      );
+      setCurrentRecipeIndex((prev) => {
+        const step = isMobile ? 1 : 2;
+        const maxIndex = Math.max(0, recipes.length - step);
+        return prev >= maxIndex ? 0 : Math.min(maxIndex, prev + step);
+      });
       setIsAnimating(false);
     }, 300);
   };
@@ -172,84 +176,138 @@ const LearnSalumipino = () => {
 
             {recipes.length > 0 ? (
                 <div className="relative">
-                  {/* Controlli del carosello - nascosti su mobile */}
-                  {!isMobile && (
-                    <>
-                      <div className="absolute top-1/2 left-4 transform -translate-y-1/2 z-10">
-                        <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={handlePrevious}
-                            className="rounded-full bg-background/80 hover:bg-background shadow-lg"
-                            disabled={isAnimating}
-                        >
-                          <ChevronLeft className="h-6 w-6" />
-                        </Button>
-                      </div>
+                  {/* Controlli del carosello */}
+                  <div className="absolute top-1/2 left-4 transform -translate-y-1/2 z-10">
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={handlePrevious}
+                        className="rounded-full bg-background/80 hover:bg-background shadow-lg"
+                        disabled={isAnimating || recipes.length <= (isMobile ? 1 : 2)}
+                    >
+                      <ChevronLeft className="h-6 w-6" />
+                    </Button>
+                  </div>
 
-                      <div className="absolute top-1/2 right-4 transform -translate-y-1/2 z-10">
-                        <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={handleNext}
-                            className="rounded-full bg-background/80 hover:bg-background shadow-lg"
-                            disabled={isAnimating}
-                        >
-                          <ChevronRight className="h-6 w-6" />
-                        </Button>
-                      </div>
-                    </>
-                  )}
+                  <div className="absolute top-1/2 right-4 transform -translate-y-1/2 z-10">
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={handleNext}
+                        className="rounded-full bg-background/80 hover:bg-background shadow-lg"
+                        disabled={isAnimating || recipes.length <= (isMobile ? 1 : 2)}
+                    >
+                      <ChevronRight className="h-6 w-6" />
+                    </Button>
+                  </div>
 
-                  {/* Card del carosello con supporto touch */}
+                  {/* Container del carosello con supporto touch */}
                   <div
-                    className="overflow-hidden rounded-xl"
+                    className="overflow-hidden rounded-xl mx-12"
                     ref={carouselRef}
-                    onTouchStart={isMobile ? onTouchStart : undefined}
-                    onTouchMove={isMobile ? onTouchMove : undefined}
-                    onTouchEnd={isMobile ? onTouchEnd : undefined}
+                    onTouchStart={onTouchStart}
+                    onTouchMove={onTouchMove}
+                    onTouchEnd={onTouchEnd}
                   >
                     <div
                         className="flex transition-transform duration-500 ease-in-out"
-                        style={{ transform: `translateX(-${currentRecipeIndex * 100}%)` }}
+                        style={{
+                          transform: isMobile
+                            ? `translateX(-${currentRecipeIndex * 100}%)`
+                            : `translateX(-${(currentRecipeIndex / 2) * 100}%)`
+                        }}
                     >
-                      {recipes.map((recipe) => (
-                          <div
-                              key={recipe.id}
-                              className={`min-w-full ${isMobile ? 'px-2' : 'px-4'}`}
-                          >
-                            <div className="bg-background rounded-xl shadow-lg overflow-hidden">
-                              <div className="relative h-80 w-full">
+                      {isMobile ? (
+                        // Mobile: una ricetta per volta
+                        recipes.map((recipe) => (
+                          <div key={recipe.id} className="min-w-full px-2">
+                            <div className="bg-background rounded-xl shadow-lg overflow-hidden group cursor-pointer">
+                              <div className="relative aspect-square w-full">
                                 <img
                                     src={recipe.image_url}
                                     alt={recipe.name}
-                                    className="w-full h-full object-cover"
+                                    className="w-full h-full object-cover transition-all duration-700 grayscale brightness-75 group-hover:grayscale-0 group-hover:brightness-100 group-hover:scale-105"
                                 />
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex flex-col justify-end p-6">
-                                  <h3 className="text-2xl font-bold text-white mb-2">{recipe.name}</h3>
-                                  <p className="text-white/90">{recipe.description}</p>
+                                {/* Overlay con gradiente */}
+                                <div className="absolute inset-0 bg-gradient-to-b from-black/90 to-black/30 opacity-95 group-hover:opacity-60 transition-opacity duration-700"></div>
+
+                                {/* Container del testo con animazione */}
+                                <div className="absolute inset-0 flex flex-col justify-start p-4 transition-all duration-700">
+                                  {/* Titolo sempre visibile */}
+                                  <h3 className="text-xl font-bold text-white mb-1 transition-all duration-700">
+                                    {recipe.name}
+                                  </h3>
+
+                                  {/* Descrizione visibile normalmente, sparisce al hover */}
+                                  <p className="text-white/90 text-base line-clamp-3 opacity-100 mt-2 transition-all duration-700 group-hover:opacity-0 flex-1">
+                                    {recipe.description}
+                                  </p>
                                 </div>
                               </div>
                             </div>
                           </div>
-                      ))}
+                        ))
+                      ) : (
+                        // Desktop: due ricette per volta
+                        Array.from({ length: Math.ceil(recipes.length / 2) }).map((_, groupIndex) => (
+                          <div key={groupIndex} className="min-w-full flex gap-4 px-2">
+                            {recipes.slice(groupIndex * 2, groupIndex * 2 + 2).map((recipe) => (
+                              <div key={recipe.id} className="flex-1">
+                                <div className="bg-background rounded-xl shadow-lg overflow-hidden group cursor-pointer">
+                                  <div className="relative aspect-square w-full">
+                                    <img
+                                        src={recipe.image_url}
+                                        alt={recipe.name}
+                                        className="w-full h-full object-cover transition-all duration-700 grayscale brightness-75 group-hover:grayscale-0 group-hover:brightness-100 group-hover:scale-105"
+                                    />
+                                    {/* Overlay con gradiente */}
+                                    <div className="absolute inset-0 bg-gradient-to-b from-black/90 to-black/30 opacity-95 group-hover:opacity-60 transition-opacity duration-700"></div>
+
+                                    {/* Container del testo con animazione */}
+                                    <div className="absolute inset-0 flex flex-col justify-start p-4 transition-all duration-700">
+                                      {/* Titolo sempre visibile */}
+                                      <h3 className="text-xl font-bold text-white mb-1 transition-all duration-700">
+                                        {recipe.name}
+                                      </h3>
+
+                                      {/* Descrizione visibile normalmente, sparisce al hover */}
+                                      <p className="text-white/90 text-base line-clamp-3 opacity-100 mt-2 transition-all duration-700 group-hover:opacity-0 flex-1">
+                                        {recipe.description}
+                                      </p>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            ))}
+                            {/* Placeholder se il gruppo ha solo una ricetta */}
+                            {recipes.slice(groupIndex * 2, groupIndex * 2 + 2).length === 1 && (
+                              <div className="flex-1"></div>
+                            )}
+                          </div>
+                        ))
+                      )}
                     </div>
                   </div>
 
                   {/* Indicatori del carosello */}
-                  <div className="flex justify-center space-x-2 mt-4">
-                    {recipes.map((_, index) => (
-                        <button
-                            key={index}
-                            className={`w-3 h-3 rounded-full transition-colors duration-300 ${
-                                index === currentRecipeIndex ? 'bg-mava-orange' : 'bg-gray-300'
-                            }`}
-                            onClick={() => {
-                              setCurrentRecipeIndex(index);
-                            }}
-                        />
-                    ))}
-                  </div>
+                  {recipes.length > (isMobile ? 1 : 2) && (
+                    <div className="flex justify-center space-x-2 mt-4">
+                      {Array.from({
+                        length: isMobile ? recipes.length : Math.ceil(recipes.length / 2)
+                      }).map((_, index) => (
+                          <button
+                              key={index}
+                              className={`w-3 h-3 rounded-full transition-colors duration-300 ${
+                                  (isMobile ? currentRecipeIndex === index : Math.floor(currentRecipeIndex / 2) === index) 
+                                    ? 'bg-mava-orange' : 'bg-gray-300'
+                              }`}
+                              onClick={() => {
+                                setCurrentRecipeIndex(isMobile ? index : index * 2);
+                              }}
+                          />
+                      ))}
+                    </div>
+                  )}
                 </div>
             ) : (
                 <div className="text-center text-muted-foreground">

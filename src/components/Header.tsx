@@ -59,7 +59,7 @@ const Header = () => {
             <DropdownMenuTrigger asChild>
               <Button
                 variant="ghost"
-                className="text-4xl font-bold text-foreground tracking-tight hover:text-mava-yellow transition-all duration-300 p-0 h-auto flex items-center gap-2"
+                className="text-4xl font-bold text-foreground tracking-tight transition-all duration-300 p-0 h-auto flex items-center gap-2"
               >
                 AGROPINO
                 <ChevronDown className="h-6 w-6" />
@@ -67,12 +67,12 @@ const Header = () => {
             </DropdownMenuTrigger>
             <DropdownMenuContent>
               <DropdownMenuItem asChild>
-                <Link to="/mielpino" className="w-full">
+                <Link to="/mielpino" className="w-full transition-colors duration-200">
                   Mielpino
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
-                <Link to="/salumipino" className="w-full">
+                <Link to="/salumipino" className="w-full transition-colors duration-200">
                   Salumipino
                 </Link>
               </DropdownMenuItem>
@@ -95,12 +95,12 @@ const Header = () => {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
                   <DropdownMenuItem asChild>
-                    <Link to="/learn-mielpino" className="w-full">
+                    <Link to="/learn-mielpino" className="w-full hover:bg-yellow-100 hover:text-yellow-800 transition-colors duration-200">
                       Mielpino
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Link to="/learn-salumipino" className="w-full">
+                    <Link to="/learn-salumipino" className="w-full hover:bg-amber-900 hover:text-amber-100 transition-colors duration-200">
                       Salumipino
                     </Link>
                   </DropdownMenuItem>

@@ -89,7 +89,7 @@ const MielpinoShowcase = ({products}: {products: Product[]}) => {
         <div className="absolute top-20 left-10 w-56 h-56 transform rotate-12 animate-bounce-gentle">
           <div className="w-full h-full bg-mava-coral rounded-full relative overflow-hidden">
             {/* Pattern elements inside strawberry */}
-            <div className="absolute top-8 left-8 text-mava-yellow text-2xl">✦</div>
+            <div className="absolute top-8 left-8 text-agropino-jasmine text-2xl">✦</div>
             <div className="absolute top-16 right-12 text-background text-xl">❋</div>
             <div className="absolute bottom-12 left-12 text-mava-pink text-lg">♡</div>
             <div className="absolute bottom-20 right-8 text-mava-orange text-sm">✿</div>
@@ -404,7 +404,7 @@ const MielpinoShowcase = ({products}: {products: Product[]}) => {
                   setTimeout(() => window.scrollTo(0, 0), 0);
                 }}
             >
-              <h2 className="text-4xl sm:text-6xl md:text-8xl font-extrabold text-foreground hover:text-mava-yellow leading-none tracking-tight">
+              <h2 className="text-4xl sm:text-6xl md:text-8xl font-extrabold text-foreground hover:text-agropino-jasmine leading-none tracking-tight">
                 SCOPRI MIELPINO
               </h2>
             </Link>
@@ -416,7 +416,7 @@ const MielpinoShowcase = ({products}: {products: Product[]}) => {
                   setTimeout(() => window.scrollTo(0, 0), 0);
                 }}
             >
-              <h2 className="text-8xl md:text-[12vw] lg:text-[15vw] font-extrabold text-foreground hover:text-mava-yellow leading-none tracking-tight">
+              <h2 className="text-8xl md:text-[12vw] lg:text-[15vw] font-extrabold text-foreground hover:text-agropino-jasmine leading-none tracking-tight">
                 SCOPRI MIELPINO
               </h2>
             </Link>
@@ -428,7 +428,7 @@ const MielpinoShowcase = ({products}: {products: Product[]}) => {
                 onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                 className="relative z-30 w-full text-center transition-all duration-300 block mt-8 px-4"
             >
-              <h2 className="text-4xl sm:text-6xl md:text-8xl font-extrabold text-foreground hover:text-mava-yellow leading-none tracking-tight">
+              <h2 className="text-4xl sm:text-6xl md:text-8xl font-extrabold text-foreground hover:text-agropino-jasmine leading-none tracking-tight">
                 ACQUISTA
               </h2>
             </button>
@@ -437,7 +437,7 @@ const MielpinoShowcase = ({products}: {products: Product[]}) => {
                 onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                 className="relative z-30 w-full text-center transition-all duration-300 block mt-8"
             >
-              <h2 className="text-8xl md:text-[12vw] lg:text-[15vw] font-extrabold text-foreground hover:text-mava-yellow leading-none tracking-tight">
+              <h2 className="text-8xl md:text-[12vw] lg:text-[15vw] font-extrabold text-foreground hover:text-agropino-jasmine leading-none tracking-tight">
                 ACQUISTA
               </h2>
             </button>

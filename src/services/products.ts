@@ -24,6 +24,8 @@ export const getProductType = (product: Product): string => {
         return "wax";
     } else if (product.model_path.includes("salame") || product.model_path.includes("sausage")) {
         return "salame";
+    } else if (product.model_path.includes("pancetta") || product.model_path.includes("bacon")) {
+        return "pancetta";
     }
 
     return "generic";
