@@ -1,5 +1,6 @@
 import {getProductsByType, Product } from "@/api/products";
 import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 import MielpinoShowcase from "@/components/MielpinoShowcase.tsx";
 import {useEffect, useState } from "react";
 
@@ -35,14 +36,15 @@ const Mielpino = () => {
 
     return (
         <div className="min-h-screen">
-          <Header />
-            {loading ? (
-                <div className="flex items-center justify-center h-screen">
-                    <p>Caricamento prodotti...</p>
-                </div>
-            ) : (
-                <MielpinoShowcase products={products} />
-            )}
+            <Header />
+                {loading ? (
+                    <div className="flex items-center justify-center h-screen">
+                        <p>Caricamento prodotti...</p>
+                    </div>
+                ) : (
+                    <MielpinoShowcase products={products} />
+                )}
+            <Footer />
         </div>
     );
 };

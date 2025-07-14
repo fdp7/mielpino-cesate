@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 import { Product } from "@/api/products";
 import {useIsMobile} from "@/hooks/use-mobile.tsx";
 import ProductGLB from "@/components/ProductGLB.tsx";
+import Footer from "@/components/Footer";
 import {getStockLevel, getHoneyColor, getProductModelPath, getProductType} from "@/services/products.ts";
 
 const SalumipinoShowcase = ({products}: {products: Product[]}) => {
@@ -416,7 +417,7 @@ const SalumipinoShowcase = ({products}: {products: Product[]}) => {
                                 setTimeout(() => window.scrollTo(0, 0), 0);
                             }}
                         >
-                            <h2 className="text-8xl md:text-[8vw] lg:text-[12vw] font-extrabold text-foreground hover:text-agropino-jasmine leading-none tracking-tight">
+                            <h2 className="text-8xl md:text-[10vw] lg:text-[12vw] font-extrabold text-foreground hover:text-agropino-jasmine leading-none tracking-tight">
                                 SCOPRI SALUMIPINO
                             </h2>
                         </Link>
@@ -439,13 +440,15 @@ const SalumipinoShowcase = ({products}: {products: Product[]}) => {
                             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                             className="relative z-30 w-full text-center transition-all duration-300 block mt-8"
                         >
-                            <h2 className="text-8xl md:text-[12vw] lg:text-[15vw] font-extrabold text-foreground hover:text-agropino-jasmine leading-none tracking-tight">
+                            <h2 className="text-8xl md:text-[10vw] lg:text-[12vw] font-extrabold text-foreground hover:text-agropino-jasmine leading-none tracking-tight">
                                 ACQUISTA
                             </h2>
                         </button>
                     )}
                 </div>
             </div>
+
+            <Footer />
         </>
     );
 };

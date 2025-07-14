@@ -11,6 +11,7 @@ import { OrbitControls } from "@react-three/drei";
 import ProductGLB from "@/components/ProductGLB.tsx";
 import Header from "@/components/Header";
 import Cart from "@/components/Cart";
+import Footer from "@/components/Footer";
 import {getProductById, Product} from "@/api/products.ts";
 import { CartItem } from "@/api/cart.ts";
 import { v4 as uuidv4 } from 'uuid';
@@ -219,6 +220,20 @@ const ProductDetail = () => {
     return "bg-red-500";
   };
 
+  // Funzione per determinare la pagina di ritorno in base al tipo di prodotto
+  const getBackPath = () => {
+    if (!product) return "/";
+
+    switch (product.type) {
+      case "miele":
+        return "/mielpino";
+      case "salume":
+        return "/salumipino";
+      default:
+        return "/";
+    }
+  };
+
   return (
       <div className="min-h-screen" style={{ backgroundColor: product.bg_color }}>
         <Header />
@@ -227,7 +242,7 @@ const ProductDetail = () => {
           {/* Pulsante Indietro */}
           <Button
               variant="ghost"
-              onClick={() => navigate("/")}
+              onClick={() => navigate(getBackPath())}
               className="mb-6 bg-background/50 hover:bg-background/70"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
@@ -403,6 +418,8 @@ const ProductDetail = () => {
             onUpdateQuantity={handleUpdateCartQuantity}
             onRemoveItem={handleRemoveCartItem}
         />
+
+        <Footer />
       </div>
   );
 };

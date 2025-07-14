@@ -416,7 +416,7 @@ const MielpinoShowcase = ({products}: {products: Product[]}) => {
                   setTimeout(() => window.scrollTo(0, 0), 0);
                 }}
             >
-              <h2 className="text-8xl md:text-[12vw] lg:text-[15vw] font-extrabold text-foreground hover:text-agropino-jasmine leading-none tracking-tight">
+              <h2 className="text-8xl md:text-[10vw] lg:text-[12vw] font-extrabold text-foreground hover:text-agropino-jasmine leading-none tracking-tight">
                 SCOPRI MIELPINO
               </h2>
             </Link>
@@ -437,7 +437,7 @@ const MielpinoShowcase = ({products}: {products: Product[]}) => {
                 onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                 className="relative z-30 w-full text-center transition-all duration-300 block mt-8"
             >
-              <h2 className="text-8xl md:text-[12vw] lg:text-[15vw] font-extrabold text-foreground hover:text-agropino-jasmine leading-none tracking-tight">
+              <h2 className="text-8xl md:text-[10vw] lg:text-[12vw] font-extrabold text-foreground hover:text-agropino-jasmine leading-none tracking-tight">
                 ACQUISTA
               </h2>
             </button>

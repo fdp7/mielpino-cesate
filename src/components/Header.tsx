@@ -51,7 +51,7 @@ const Header = () => {
   };
 
   return (
-    <header className="w-full px-6 py-4">
+    <header className="w-full px-6 py-4 border-b border-border">
       <div className="max-w-7xl mx-auto flex justify-between items-center relative">
         {/* Logo con dropdown (all'estremo sinistro) */}
         <div className="flex-none">

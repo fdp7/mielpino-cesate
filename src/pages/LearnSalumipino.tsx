@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 import { getRecipesByType, Recipe } from "@/api/recipes.ts";
 import { useIsMobile } from "@/hooks/use-mobile.tsx";
 
@@ -347,6 +348,8 @@ const LearnSalumipino = () => {
             </div>
           </section>
         </div>
+
+        <Footer />
       </div>
   );
 };
