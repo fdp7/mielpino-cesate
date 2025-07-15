@@ -81,7 +81,6 @@ export default function ProductGLB({
     useEffect(() => {
         if (clonedScene) {
             if (productType === "honey") {
-                console.log(clonedScene);
 
                 // Logica per il miele
                 const vetroMesh = clonedScene.getObjectByName('vetro');

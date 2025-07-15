@@ -76,7 +76,6 @@ export async function submitOrder(order: Order, items: CartItem[]): Promise<numb
 
       // Aggiornare lo stock
       const updated = await updateProductStock(item.productId, newStock);
-      console.log("Updated: ", updated);
     }
 
     // 4. Inviare email ricezione ordine a me
@@ -127,7 +126,7 @@ export async function submitOrder(order: Order, items: CartItem[]): Promise<numb
         return `• ${item.name} - Quantità: ${quantity} - €${(price * quantity * sizeValue).toFixed(2)}`;
       }).join('\n');
 
-      const emailContentForMe = `
+      const emailContentForCustomer = `
         Caro ${order.checkout_info.first_name} ${order.checkout_info.last_name},
         
         Abbiamo ricevuto il tuo ordine e sarà processato al più presto.
@@ -139,14 +138,14 @@ export async function submitOrder(order: Order, items: CartItem[]): Promise<numb
         Per qualsiasi richiesta riguardo l'ordine effettuato e la spedizione, rispondi a questa email.
         
         ---
-        Agropino
+        Agropino Support Team
           `;
 
       await supabase.functions.invoke('send-email', {
         body: JSON.stringify({
           to: 'fdpierro@gmail.com',
           subject: `Conferma ordine ${order.id} - Agropino`,
-          message: emailContentForMe,
+          message: emailContentForCustomer,
         })
       });
     } catch (emailError) {

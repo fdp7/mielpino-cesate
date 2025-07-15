@@ -36,7 +36,6 @@ const ProductDetail = () => {
         const productData = await getProductById(parseInt(productId, 10));
 
         if (productData) {
-          console.log("Prodotto caricato:", productData);
           setProduct(productData);
           // Set default size to the largest available size
           const availableSizes = getAvailableSizes(productData);

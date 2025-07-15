@@ -187,14 +187,17 @@ const MielpinoShowcase = ({products}: {products: Product[]}) => {
                     productType={getProductType(currentProduct)}
                     showStockLevel={false}
                 />
-
+                
                 <OrbitControls
-                  enablePan={false}
-                  enableZoom={true}
-                  minDistance={3}
-                  maxDistance={8}
-                  minPolarAngle={Math.PI / 6}
-                  maxPolarAngle={Math.PI / 2.1}
+                    enablePan={false}
+                    enableZoom={true}
+                    enableDamping={true}
+                    dampingFactor={0.03}
+                    minDistance={3}
+                    maxDistance={8}
+                    minPolarAngle={Math.PI / 6}
+                    maxPolarAngle={Math.PI / 2.1}
+                    autoRotate={false}
                 />
               </Canvas>
             </div>
@@ -234,12 +237,15 @@ const MielpinoShowcase = ({products}: {products: Product[]}) => {
                 />
 
                 <OrbitControls
-                  enablePan={false}
-                  enableZoom={true}
-                  minDistance={3}
-                  maxDistance={8}
-                  minPolarAngle={Math.PI / 6}
-                  maxPolarAngle={Math.PI / 2.1}
+                    enablePan={false}
+                    enableZoom={true}
+                    enableDamping={true}
+                    dampingFactor={0.03}
+                    minDistance={3}
+                    maxDistance={8}
+                    minPolarAngle={Math.PI / 6}
+                    maxPolarAngle={Math.PI / 2.1}
+                    autoRotate={false}
                 />
               </Canvas>
             </div>

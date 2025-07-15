@@ -16,9 +16,6 @@ const Mielpino = () => {
                 // Chiamata all'API per recuperare i prodotti
                 const productsData = await getProductsByType('miele');
 
-                // Verifica dei dati ricevuti
-                console.log("Prodotti caricati:", productsData);
-
                 if (productsData && productsData.length > 0) {
                     setProducts(productsData);
                 } else {

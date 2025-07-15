@@ -10,6 +10,7 @@ import LearnMielpino from "./pages/LearnMielpino.tsx";
 import NotFound from "./pages/NotFound";
 import Salumipino from "@/pages/Salumipino.tsx";
 import LearnSalumipino from "@/pages/LearnSalumipino.tsx";
+import Faq from "./pages/Faq.tsx";
 
 const queryClient = new QueryClient();
 
@@ -27,7 +28,9 @@ const App = () => (
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/learn-mielpino" element={<LearnMielpino />} />
           <Route path="/learn-salumipino" element={<LearnSalumipino />} />
+          <Route path="/faq" element={<Faq />}/>
           <Route path="*" element={<NotFound />} />
+
         </Routes>
       </BrowserRouter>
     </TooltipProvider>

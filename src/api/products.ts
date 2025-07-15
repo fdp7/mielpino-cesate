@@ -59,8 +59,6 @@ export async function updateProductStock(productId: number, newStock: number): P
 
     if (updateError) throw updateError;
 
-    console.log("Update riuscito:", data);
-
     return true;
   } catch (error) {
     console.error(`Errore nell'aggiornamento dello stock per il prodotto ${productId}:`, error);
