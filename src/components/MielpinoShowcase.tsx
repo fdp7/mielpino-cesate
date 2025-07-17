@@ -347,12 +347,12 @@ const MielpinoShowcase = ({products}: {products: Product[]}) => {
             style={{ transitionDelay: '150ms' }}
           >
             <CardContent className="p-6">
-              <h3 className="text-xl font-semibold text-mava-orange mb-3">Ricco di benefici</h3>
+              <h3 className="text-xl font-semibold text-mava-coral mb-3">Ricco di benefici</h3>
               <p className="text-muted-foreground mb-4">
                 Fonte naturale di energia e benessere, il nostro miele contiene zuccheri semplici, vitamine e minerali, con proprietà antibatteriche e lenitive per la tua salute quotidiana.
               </p>
               <div className="flex items-center space-x-2">
-                <div className="w-3 h-3 bg-mava-orange rounded-full"></div>
+                <div className="w-3 h-3 bg-mava-coral rounded-full"></div>
                 <span className="text-sm font-medium">Salutare</span>
               </div>
             </CardContent>

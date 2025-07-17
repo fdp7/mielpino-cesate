@@ -348,12 +348,12 @@ const SalumipinoShowcase = ({products}: {products: Product[]}) => {
                             style={{ transitionDelay: '150ms' }}
                         >
                             <CardContent className="p-6">
-                                <h3 className="text-xl font-semibold text-mava-orange mb-3">Fatto in casa</h3>
+                                <h3 className="text-xl font-semibold text-mava-coral mb-3">Fatto in casa</h3>
                                 <p className="text-muted-foreground mb-4">
                                     I nostri salumi sono preparati con cura e passione, seguendo ricette tradizionali tramandate da 4 generazioni per offrire un'esperienza di gusto unica e autentica.
                                 </p>
                                 <div className="flex items-center space-x-2">
-                                    <div className="w-3 h-3 bg-mava-orange rounded-full"></div>
+                                    <div className="w-3 h-3 bg-mava-coral rounded-full"></div>
                                     <span className="text-sm font-medium">Fatto in casa</span>
                                 </div>
                             </CardContent>
