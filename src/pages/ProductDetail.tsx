@@ -381,27 +381,17 @@ const ProductDetail = () => {
                     Aggiungi al carrello
                   </Button>
               ) : (
-                <TooltipProvider delayDuration={0}>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <div>
-                        <Button
-                            className={`w-full text-white ${getButtonClass()}`}
-                            style={getButtonStyle()}
-                            onClick={handleAddToCart}
-                            disabled={true}
-                            title="Il miele è stato raccolto, ma raggiungerà la maturazione e la migliore qualità a Settembre"
-                        >
-                          <Package className="h-4 w-4 mr-2" />
-                          Disponibile da Settembre
-                        </Button>
-                      </div>
-                    </TooltipTrigger>
-                    <TooltipContent side="top" className="max-w-xs">
-                      <p>Il miele è stato raccolto, ma raggiungerà la maturazione e la migliore qualità a Settembre</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
+                  <div>
+                    <Button
+                        className={`w-full text-white ${getButtonClass()}`}
+                        style={getButtonStyle()}
+                        onClick={handleAddToCart}
+                        disabled={false}
+                    >
+                      <Package className="h-4 w-4 mr-2" />
+                      Aggiungi al carrello
+                    </Button>
+                  </div>
               )
               }
 
