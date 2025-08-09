@@ -15,7 +15,7 @@ const faqData: FAQItem[] = [
     },
     {
         question: "Quando effettuare il pagamento?",
-        answer: "Al momento della consegna il prodotto verrà nuovamente pesato per aggiornare (solo al ribasso) il prezzo in totale trasparenza. Solo allora si accetterà il pagamento da parte vostra. Accettiamo tutti i principali metodi di pagamento."
+        answer: "Al momento della consegna il prodotto verrà nuovamente pesato per aggiornare (solo al ribasso) il prezzo in totale trasparenza. Solo allora si accetterà il pagamento da parte vostra."
     },
     {
         question: "Come funziona la consegna?",
