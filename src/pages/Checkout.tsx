@@ -34,6 +34,8 @@ const Checkout = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [orderId, setOrderId] = useState<number | null>(null);
   const [order, setOrder] = useState<Order | null>(null);
+  const [discountCode, setDiscountCode] = useState("");
+  const [discount, setDiscount] = useState<number>(0);
   const [formData, setFormData] = useState<CheckoutData>({
     email: "",
     firstName: "",
@@ -45,6 +47,15 @@ const Checkout = () => {
   });
   const [pdfDownloaded, setPdfDownloaded] = useState(false);
 
+  // Funzione per applicare il codice sconto
+  const applyDiscount = () => {
+    if (discountCode.toLowerCase() === "dippièundiobuono"){
+      setDiscount(5);
+    } else {
+      setDiscount(0);
+    }
+  }
+
   // Calcolo corretto dei totali
   const subtotal = cartItems.reduce((sum, item) => {
     const sizeValue = item.size ? parseFloat(item.size) : 1;
@@ -54,7 +65,7 @@ const Checkout = () => {
 
   const shipping = subtotal >= 50 ? 0 : 5.00;
   const taxes = 0 //subtotal * 0.05; // 5% di tasse
-  const total = subtotal + shipping + taxes;
+  const total = subtotal + shipping + taxes - discount;
 
   const handleInputChange = (field: keyof CheckoutData, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -276,8 +287,15 @@ const Checkout = () => {
 
                 {/* Gift card/discount code */}
                 <div className="flex gap-2">
-                  <Input placeholder="Codice sconto" className="flex-1" />
-                  <Button variant="outline">Applica</Button>
+                  <Input
+                      placeholder="Codice sconto"
+                      className="flex-1"
+                      value={discountCode}
+                      onChange={(e) => setDiscountCode(e.target.value)}
+                  />
+                  <Button variant="outline" onClick={applyDiscount}>
+                    Applica
+                  </Button>
                 </div>
 
                 <hr />
@@ -294,6 +312,12 @@ const Checkout = () => {
                       {shipping === 0 ? "Gratuita" : `€${shipping.toFixed(2)}`}
                     </span>
                   </div>
+                  {discount > 0 && (
+                      <div className="flex justify-between">
+                        <span>Sconto</span>
+                        <span className="text-green-600">-€{discount.toFixed(2)}</span>
+                      </div>
+                  )}
                   <hr />
                   <div className="flex justify-between text-lg font-semibold">
                     <span>Totale</span>
