@@ -339,7 +339,7 @@ const LearnMielpino = () => {
 
                 <div className="rounded-lg overflow-hidden">
                   <img
-                      src="https://nbvhtdzjethfxhkwswpz.supabase.co/storage/v1/object/sign/assets/apicoluta-02.jpg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9kZGRhZmQyNi0xOGMxLTQxYTQtODA0Ny05ZjE5Nzg0OTUwODUiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJhc3NldHMvYXBpY29sdXRhLTAyLmpwZyIsImlhdCI6MTc1MTYzNzMxOSwiZXhwIjoyMDY2OTk3MzE5fQ.GebX6CsJKy6wKpOyZaBBI0OjdwzFMS2INz2D3dYqde4"
+                      src="https://nbvhtdzjethfxhkwswpz.supabase.co/storage/v1/object/sign/assets/apicoluta-02.jpg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9mYWVhMDkzMC1iMmI0LTQ2ODYtOTZiNi1jOTQ0NDY3ODcyZjgiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJhc3NldHMvYXBpY29sdXRhLTAyLmpwZyIsImlhdCI6MTc1NDc0NzUwOSwiZXhwIjoyMDcwMTA3NTA5fQ.GURtx4DuLltzJptgkcUjzc1LzZ1Cnl1UEbfFcV3-40E"
                       alt="Apicoltura sostenibile"
                       className="w-full h-auto"
                   />

@@ -97,7 +97,7 @@ const LearnSalumipino = () => {
             <div className="grid md:grid-cols-2 gap-8 items-center">
               <div className="rounded-lg overflow-hidden">
                 <img
-                    src="https://nbvhtdzjethfxhkwswpz.supabase.co/storage/v1/object/sign/assets/salumi_1.jpg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9kZGRhZmQyNi0xOGMxLTQxYTQtODA0Ny05ZjE5Nzg0OTUwODUiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJhc3NldHMvc2FsdW1pXzEuanBnIiwiaWF0IjoxNzUxOTAzNzk5LCJleHAiOjIwNjcyNjM3OTl9.g5xJG4fxHgwM2oi2qOWwO81X6pjt9_FmNMn9P04angI"
+                    src="https://nbvhtdzjethfxhkwswpz.supabase.co/storage/v1/object/sign/assets/salumi_1.jpg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9mYWVhMDkzMC1iMmI0LTQ2ODYtOTZiNi1jOTQ0NDY3ODcyZjgiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJhc3NldHMvc2FsdW1pXzEuanBnIiwiaWF0IjoxNzU0NzQ3ODEwLCJleHAiOjIwNzAxMDc4MTB9.R9lEHdc-gmCO8b01CeUYy5ylxZGqXF-ureJ9LIh93Kw"
                     alt="Produzione dei salumi"
                     className="w-full h-auto object-cover"
                 />
@@ -339,7 +339,7 @@ const LearnSalumipino = () => {
 
                 <div className="rounded-lg overflow-hidden">
                   <img
-                      src="https://nbvhtdzjethfxhkwswpz.supabase.co/storage/v1/object/sign/assets/mucche.webp?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9kZGRhZmQyNi0xOGMxLTQxYTQtODA0Ny05ZjE5Nzg0OTUwODUiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJhc3NldHMvbXVjY2hlLndlYnAiLCJpYXQiOjE3NTE5MDQxNjIsImV4cCI6MjA2NzI2NDE2Mn0.Ippx9s2IUDCD_XWeNJ8lJ0VXQibzYOWuKVFUOTBFOlA"
+                      src="https://nbvhtdzjethfxhkwswpz.supabase.co/storage/v1/object/sign/assets/mucche.webp?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9mYWVhMDkzMC1iMmI0LTQ2ODYtOTZiNi1jOTQ0NDY3ODcyZjgiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJhc3NldHMvbXVjY2hlLndlYnAiLCJpYXQiOjE3NTQ3NDc4MzYsImV4cCI6MjA3MDEwNzgzNn0.rUYfziily7hFgMnI3nRIU58fqLD3tTNcaCxPeCAHZVc"
                       alt="Produzione sostenibile"
                       className="w-full h-auto"
                   />
