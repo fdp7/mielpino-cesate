@@ -97,7 +97,7 @@ const LearnMielpino = () => {
             <div className="grid md:grid-cols-2 gap-8 items-center">
               <div className="rounded-lg overflow-hidden">
                 <img
-                    src="https://nbvhtdzjethfxhkwswpz.supabase.co/storage/v1/object/sign/assets/apicoltura-01.webp?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9kZGRhZmQyNi0xOGMxLTQxYTQtODA0Ny05ZjE5Nzg0OTUwODUiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJhc3NldHMvYXBpY29sdHVyYS0wMS53ZWJwIiwiaWF0IjoxNzUxNjM3MjY4LCJleHAiOjIwNjY5OTcyNjh9.QUpWgWSQL0x2aA3Yh6UqJHzuw7k7r8wsK_zYAH9k3Xs"
+                    src="https://nbvhtdzjethfxhkwswpz.supabase.co/storage/v1/object/sign/assets/apicoltura-01.webp?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9mYWVhMDkzMC1iMmI0LTQ2ODYtOTZiNi1jOTQ0NDY3ODcyZjgiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJhc3NldHMvYXBpY29sdHVyYS0wMS53ZWJwIiwiaWF0IjoxNzU2MjQwMTU3LCJleHAiOjIwNzE2MDAxNTd9.nmnAIi3WPP1FZCbks_l3xHiUBe44FwXXfChMb_saMUo"
                     alt="Produzione del miele"
                     className="w-full h-auto object-cover"
                 />

@@ -49,7 +49,7 @@ const Checkout = () => {
 
   // Funzione per applicare il codice sconto
   const applyDiscount = () => {
-    if (discountCode.toLowerCase() === "dippièundiobuono"){
+    if (discountCode.toLowerCase() === "pinopino"){
       setDiscount(5);
     } else {
       setDiscount(0);
@@ -263,7 +263,7 @@ const Checkout = () => {
                   return (
                     <div key={item.id} className="flex items-center gap-4">
                       <div className="relative">
-                        <div className="w-16 h-16 rounded-lg bg-muted flex items-center justify-center">
+                        <div className="w-32 h-32 rounded-lg bg-muted flex items-center justify-center">
                             <img src={item.image_url} className="w-full h-full object-cover rounded-lg" />
                         </div>
                         <div className="absolute -top-1 -right-1 w-6 h-6 bg-mava-orange rounded-full flex items-center justify-center text-xs font-medium">

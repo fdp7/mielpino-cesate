@@ -117,10 +117,10 @@ const Cart = ({ isOpen, onOpenChange, items, onUpdateQuantity, onRemoveItem }: C
                           <img
                               src={item.image_url}
                               alt={item.name}
-                              className="w-16 h-16 rounded-lg object-cover flex-shrink-0"
+                              className="w-32 h-32 rounded-lg object-cover flex-shrink-0"
                           />
                       ) : (
-                          <div className="w-16 h-16 rounded-lg bg-mava-orange flex items-center justify-center flex-shrink-0">
+                          <div className="w-32 h-32 rounded-lg bg-mava-orange flex items-center justify-center flex-shrink-0">
                             <span className="text-2xl font-bold text-white">{item.name.charAt(0)}</span>
                           </div>
                       )}
