@@ -28,10 +28,10 @@ const SalumipinoShowcase = ({products}: {products: Product[]}) => {
             const currentScrollY = window.scrollY;
             setScrollY(currentScrollY);
 
-            // Calcola le altezze di soglia in base all'altezza della finestra
-            const cardAppearThreshold = window.innerHeight * 0.7;
-            const cardDisappearThreshold = window.innerHeight * 1.2;
-            const bigTextAppearThreshold = window.innerHeight * 1.1;
+            // Calcola le altezze di soglia in base all'altezza della finestra - adattate per la sezione più lunga
+            const cardAppearThreshold = window.innerHeight * 0.6;
+            const cardDisappearThreshold = window.innerHeight * 1.8;
+            const bigTextAppearThreshold = window.innerHeight * 1.7;
 
             // Prima fase: le card appaiono quando si inizia a scorrere
             if (currentScrollY > cardAppearThreshold && currentScrollY < cardDisappearThreshold) {
@@ -83,7 +83,7 @@ const SalumipinoShowcase = ({products}: {products: Product[]}) => {
 
     return (
         <>
-            <div className={`min-h-[150vh] relative overflow-hidden ${currentProduct.bg_color}`}>
+            <div className={`min-h-[200vh] relative overflow-hidden ${currentProduct.bg_color}`}>
                 {/* Background Decorative Elements */}
                 <div className="absolute inset-0 overflow-hidden">
                     {/* Strawberry-like shape with patterns */}
@@ -295,8 +295,8 @@ const SalumipinoShowcase = ({products}: {products: Product[]}) => {
                     )}
                 </div>
 
-                {/* Spazio vuoto per consentire lo scorrimento - ridotto a metà */}
-                <div className="h-[50vh]"></div>
+                {/* Spazio vuoto per consentire lo scorrimento - aumentato */}
+                <div className="h-[100vh]"></div>
 
                 {/* Horizontal cards layout - ora usa un posizionamento che evita di interferire con i pulsanti di navigazione */}
                 <div className={`fixed ${

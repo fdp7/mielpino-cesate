@@ -11,30 +11,35 @@ import NotFound from "./pages/NotFound";
 import Salumipino from "@/pages/Salumipino.tsx";
 import LearnSalumipino from "@/pages/LearnSalumipino.tsx";
 import Faq from "./pages/Faq.tsx";
+import {CookiesProvider} from "react-cookie";
+import CookieBanner from "./components/CookieBanner.tsx";
 
 const queryClient = new QueryClient();
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Mielpino />} />
-          <Route path="/mielpino" element={<Mielpino />} />
+  <CookiesProvider>
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Mielpino />} />
+            <Route path="/mielpino" element={<Mielpino />} />
             <Route path="/salumipino" element={<Salumipino />} />
-          <Route path="/product/:productId" element={<ProductDetail />} />
-          <Route path="/checkout" element={<Checkout />} />
-          <Route path="/learn-mielpino" element={<LearnMielpino />} />
-          <Route path="/learn-salumipino" element={<LearnSalumipino />} />
-          <Route path="/faq" element={<Faq />}/>
-          <Route path="*" element={<NotFound />} />
+            <Route path="/product/:productId" element={<ProductDetail />} />
+            <Route path="/checkout" element={<Checkout />} />
+            <Route path="/learn-mielpino" element={<LearnMielpino />} />
+            <Route path="/learn-salumipino" element={<LearnSalumipino />} />
+            <Route path="/faq" element={<Faq />}/>
+            <Route path="*" element={<NotFound />} />
 
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
+          </Routes>
+        </BrowserRouter>
+        <CookieBanner />
+      </TooltipProvider>
+    </QueryClientProvider>
+  </CookiesProvider>
 );
 
 export default App;

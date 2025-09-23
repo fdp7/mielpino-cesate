@@ -19,6 +19,11 @@ const LearnSalumipino = () => {
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
 
+  // Variabili per il drag to scroll
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStartX, setDragStartX] = useState(0);
+  const [dragDistance, setDragDistance] = useState(0);
+
   useEffect(() => {
     const loadRecipes = async () => {
       try {
@@ -80,6 +85,46 @@ const LearnSalumipino = () => {
     }
     if (isRightSwipe && !isAnimating) {
       handlePrevious();
+    }
+  };
+
+  // Gestione mouse events per desktop
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (isAnimating || recipes.length === 0) return;
+
+    setIsDragging(true);
+    setDragStartX(e.clientX);
+    setDragDistance(0);
+
+    // Previene la selezione del testo durante il trascinamento
+    e.preventDefault();
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging) return;
+
+    const distance = e.clientX - dragStartX;
+    setDragDistance(distance);
+  };
+
+  const handleMouseUp = () => {
+    if (!isDragging) return;
+
+    setIsDragging(false);
+
+    // Se il trascinamento è abbastanza lungo, naviga
+    if (Math.abs(dragDistance) > 50) {
+      if (dragDistance > 0) {
+        handlePrevious();
+      } else {
+        handleNext();
+      }
+    }
+  };
+
+  const handleMouseLeave = () => {
+    if (isDragging) {
+      setIsDragging(false);
     }
   };
 
@@ -202,20 +247,25 @@ const LearnSalumipino = () => {
                     </Button>
                   </div>
 
-                  {/* Container del carosello con supporto touch */}
+                  {/* Container del carosello con supporto touch e mouse drag */}
                   <div
                     className="overflow-hidden rounded-xl mx-12"
                     ref={carouselRef}
                     onTouchStart={onTouchStart}
                     onTouchMove={onTouchMove}
                     onTouchEnd={onTouchEnd}
+                    onMouseDown={handleMouseDown}
+                    onMouseMove={handleMouseMove}
+                    onMouseUp={handleMouseUp}
+                    onMouseLeave={handleMouseLeave}
+                    style={{ cursor: isDragging ? 'grabbing' : 'grab' }}
                   >
                     <div
-                        className="flex transition-transform duration-500 ease-in-out"
+                        className={`flex ${isDragging ? '' : 'transition-transform duration-500 ease-in-out'}`}
                         style={{
                           transform: isMobile
-                            ? `translateX(-${currentRecipeIndex * 100}%)`
-                            : `translateX(-${(currentRecipeIndex / 2) * 100}%)`
+                            ? `translateX(calc(-${currentRecipeIndex * 100}% + ${isDragging ? dragDistance : 0}px))`
+                            : `translateX(calc(-${(currentRecipeIndex / 2) * 100}% + ${isDragging ? dragDistance : 0}px))`
                         }}
                     >
                       {isMobile ? (
