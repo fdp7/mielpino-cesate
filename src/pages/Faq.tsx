@@ -14,12 +14,12 @@ const faqData: FAQItem[] = [
         answer: "Puoi annullare o modificare il tuo ordine entro 24 ore prima della consegna contattandoci via email a support@agropino.it. Riceverai in tal caso in risposta una conferma dell'approvazione tua richiesta."
     },
     {
-        question: "Quando effettuare il pagamento?",
-        answer: "Al momento della consegna il prodotto verrà nuovamente pesato per aggiornare (solo al ribasso) il prezzo in totale trasparenza. Solo allora si accetterà il pagamento da parte vostra."
+        question: "Quando e come effettuare il pagamento?",
+        answer: "Trattandosi di un Proof of Concept, non sono previsti pagamenti reali."
     },
     {
         question: "Come funziona la consegna?",
-        answer: "Una volta confermato l'ordine organizzeremo la consegna in accordo con voi, contattandovi via email o telefonicamente. Offriamo spedizione gratuita per ordini superiori a €50."
+        answer: "Una volta confermato l'ordine organizzeremo insieme la consegna, contattandovi via email o telefonicamente."
     }
 ];
 
