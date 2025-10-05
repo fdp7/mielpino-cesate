@@ -16,11 +16,6 @@ const CookieBanner = () => {
         setVisible(false);
     };
 
-    const declineCookies = () => {
-        setCookie('cookieConsent', 'declined', { path: '/', maxAge: 60 * 60 * 24 * 365 });
-        setVisible(false);
-    };
-
     if (!visible) return null;
 
     return (
@@ -33,21 +28,21 @@ const CookieBanner = () => {
             <div className="max-w-7xl mx-auto p-4 md:p-6">
                 <div className="flex flex-col md:flex-row items-center justify-between gap-4">
                     <div className="text-gray-800 text-sm md:text-base">
-                        <p className="font-medium mb-1">Utilizziamo i cookie 🍪</p>
-                        <p>Questo sito utilizza i cookie per migliorare l'esperienza utente. Per maggiori informazioni consulta la nostra Privacy Policy.</p>
+                        <p className="font-medium mb-1">Informativa Cookie 🍪</p>
+                        <p className="mb-2">Questo sito utilizza esclusivamente cookie tecnici necessari per il funzionamento del carrello e per salvare le tue preferenze sui cookie.</p>
+                        <p className="text-xs">
+                            <strong>Dati raccolti:</strong> Durante l'acquisto vengono memorizzati solo i dati inseriti nel modulo di checkout per processare l'ordine.
+                        </p>
+                        <p className="text-xs mt-1">
+                            <strong>Privacy garantita:</strong> I tuoi dati NON vengono condivisi con terze parti; inoltre NON tracciamo i visitatori del sito.
+                        </p>
                     </div>
                     <div className="flex gap-3">
                         <button
                             onClick={acceptCookies}
                             className="px-5 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md transition-colors font-medium min-w-[100px]"
                         >
-                            Accetta
-                        </button>
-                        <button
-                            onClick={declineCookies}
-                            className="px-5 py-2 bg-white border border-gray-300 hover:bg-gray-100 text-gray-800 rounded-md transition-colors font-medium min-w-[100px]"
-                        >
-                            Rifiuta
+                            Accetta solo essenziali
                         </button>
                     </div>
                 </div>
