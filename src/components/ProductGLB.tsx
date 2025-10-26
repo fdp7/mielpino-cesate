@@ -135,6 +135,7 @@ export default function ProductGLB({
                         //clonedMaterial.color = new Color("#FFD700"); // Oro più brillante per influenzare la texture
                         clonedMaterial.metalness = 0;
                         clonedMaterial.roughness = 3;
+                        clonedMaterial.visible = false; // Nasconde l'etichetta
                         etichettaMesh.material = clonedMaterial;
                     }
                 }
