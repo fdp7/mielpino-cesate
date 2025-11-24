@@ -49,7 +49,7 @@ const Checkout = () => {
 
   // Funzione per applicare il codice sconto
   const applyDiscount = () => {
-    if (discountCode.toLowerCase() === "pinopino"){
+    if (discountCode.toLowerCase() === "amicididippi"){
       setDiscount(5);
     } else {
       setDiscount(0);
@@ -63,7 +63,7 @@ const Checkout = () => {
     return sum + (itemPrice * item.quantity * sizeValue);
   }, 0);
 
-  const shipping = subtotal >= 50 ? 0 : 5.00;
+  const shipping = 0;
   const taxes = 0 //subtotal * 0.05; // 5% di tasse
   const total = subtotal + shipping + taxes - discount;
 
