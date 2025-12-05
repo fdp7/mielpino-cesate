@@ -68,7 +68,7 @@ export const generateOrderReceipt = (
         });
 
         // Calcola la spedizione basata sul subtotale dei prodotti
-        const shipping = subtotal >= 50 ? 0 : 5.00;
+        const shipping = subtotal >= 50 ? 0 : 0;
 
         // Aggiungi sempre la riga Spedizione come ultima voce
         tableRows.push([

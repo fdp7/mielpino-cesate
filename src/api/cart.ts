@@ -143,8 +143,8 @@ export async function submitOrder(order: Order, items: CartItem[]): Promise<numb
 
       await supabase.functions.invoke('send-email', {
         body: JSON.stringify({
-          to: 'fdpierro@gmail.com',
-          subject: `Conferma ordine ${order.id} - Agropino`,
+          to: order.checkout_info.email,
+          subject: `Conferma ordine Agropino`,
           message: emailContentForCustomer,
         })
       });
